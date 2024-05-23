@@ -1,0 +1,58 @@
+.ezy__signup14 {
+    /* Bootstrap variables */
+    --bs-body-color: #1c1c1f;
+    --bs-body-bg: rgb(255, 255, 255);
+  
+    /* Easy Frontend variables */
+    --ezy-theme-color: rgb(13, 110, 253);
+    --ezy-theme-color-rgb: 13, 110, 253;
+    --ezy-form-card-bg: #ffffff;
+    --ezy-form-card-shadow: 6px 0px 118px rgba(0, 0, 0, 0.08);
+  
+    color: var(--bs-body-color);
+    background-image: url(/assets/pexels-knownasovan-62693.jpg);
+    background-size: cover;
+    background-position: right;
+    padding: 60px 0;
+  }
+  
+  @media (min-width: 991px) {
+    .ezy__signup14 {
+      padding: 100px 0;
+    }
+  }
+  
+  .ezy__signup14-heading {
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--bs-body-color);
+  }
+  
+  .ezy__signup14 img {
+    max-height: 300px;
+    width: 100%;
+    object-fit: cover;
+  }
+  @media (min-width: 991px) {
+    .ezy__signup14 img {
+      max-height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .ezy__signup14-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .ezy__signup14-form-card {
+    background-color: var(--ezy-form-card-bg);
+    box-shadow: var(--ezy-form-card-shadow);
+    border: none;
+  }
+  

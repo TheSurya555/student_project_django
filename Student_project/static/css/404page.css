@@ -1,0 +1,85 @@
+.ezy__httpcodes6 {
+  /* Bootstrap variables */
+  --bs-body-color: #333333;
+  --bs-body-bg: #fff;
+
+  /* Easy Frontend variables */
+  --ezy-theme-color: rgb(13, 110, 253);
+  --ezy-theme-color-rgb: 13, 110, 253;
+  --ezy-svg-color: #fffaea;
+
+  background-color: var(--bs-body-bg);
+  display: flex;
+  align-items: center;
+  padding: 120px 0;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .ezy__httpcodes6 {
+    padding: 200px 0;
+  }
+}
+
+/* Gray Block Style */
+.gray .ezy__httpcodes6,
+.ezy__httpcodes6.gray {
+  /* Bootstrap variables */
+  --bs-body-bg: rgb(246, 246, 246);
+}
+
+/* Dark Gray Block Style */
+.dark-gray .ezy__httpcodes6,
+.ezy__httpcodes6.dark-gray {
+  /* Bootstrap variables */
+  --bs-body-color: #ffffff;
+  --bs-body-bg: rgb(30, 39, 53);
+
+  /* Easy Frontend variables */
+  --ezy-svg-color: rgb(11, 23, 39);
+}
+
+/* Dark Block Style */
+.dark .ezy__httpcodes6,
+.ezy__httpcodes6.dark {
+  /* Bootstrap variables */
+  --bs-body-color: #ffffff;
+  --bs-body-bg: rgb(11, 23, 39);
+
+  /* Easy Frontend variables */
+  --ezy-svg-color: rgb(30, 39, 53);
+}
+
+/* heading and sub-heading */
+.ezy__httpcodes6-heading {
+  font-weight: 700;
+  font-size: 100px;
+  line-height: 1;
+  color: var(--bs-body-color);
+}
+
+.ezy__httpcodes6-sub-heading {
+  font-size: 25px;
+  line-height: 1;
+  color: var(--bs-body-color);
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .ezy__httpcodes6-heading {
+    font-size: 160px;
+  }
+
+  .ezy__httpcodes6-sub-heading {
+    font-size: 50px;
+  }
+}
+
+/* svg */
+.ezy__httpcodes6 svg,
+.ezy__httpcodes6 img {
+  z-index: -1;
+  color: var(--ezy-svg-color);
+}

@@ -1,0 +1,44 @@
+.sidebar {
+    background-color: #ffffff;
+    padding: 20px;
+    border-right: 1px solid #e4e4e4;
+  }
+  .sidebar a {
+    display: block;
+    padding: 10px 0;
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  
+  .sidebar a:hover {
+    color: #70dcc5;
+  }
+  
+  .content-section { display: none; }
+  .content-section.active { display: block; }
+  .sidebar a.active { font-weight: bold; color: #70dcc5; }
+  
+.card-custom{
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.profile-photo {
+    position: relative;
+    display: inline-block;
+}
+.profile-photo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.upload-button {
+    display: inline-block;
+    margin-top: 10px;
+}
+.upload-input {
+    display: none;
+}
