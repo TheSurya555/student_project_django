@@ -1,0 +1,194 @@
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+talents
+{% endblock %}
+
+{% block content %}
+<body>
+    <section class="specified_skills light">
+        <div class="container my-3">
+            <div class="text-center mb-4">
+                <h2 class="section-heading">Specialized design and creative experts you can count on</h2>
+            </div>
+            <div class="row text-center mb-4 mt-md-5">
+                <div class="col-md-4 stat">
+                    <h3>⭐ 4.92</h3>
+                    <p>Average rating for work with design and creative talent.</p>
+                </div>
+                <div class="col-md-4 stat">
+                    <h3>184K+ contracts</h3>
+                    <p>Involving design and creative work in the past year.</p>
+                </div>
+                <div class="col-md-4 stat">
+                    <h3>468 skills</h3>
+                    <p>Represented by talent on Upwork.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">UX/UI Designers</h5>
+                            <div class="rating">⭐ 4.8 average rating</div>
+                            <div class="profile-pics">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Motion Designers</h5>
+                            <div class="rating">⭐ 4.9 average rating</div>
+                            <div class="profile-pics">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Animators</h5>
+                            <div class="rating">⭐ 4.8 average rating</div>
+                            <div class="profile-pics">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
+                    <div class="card card-custom h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Voice Artists</h5>
+                            <div class="rating">⭐ 4.9 average rating</div>
+                            <div class="profile-pics">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
+                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile 3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center see-more-btn mt-md-5 mt-sm-2">
+                <button class="px-3"><span>See more skills</span></button>
+            </div>        
+        </div>
+    </section>
+    <section>
+        <div class="container my-5 mt-lg-1">
+            <div class="mb-5 mb-md-5">
+                <h2 class="section-heading">Other Skills</h2>
+            </div>
+            <div id="skillsCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-4 mb-4 d-flex justify-content-center ">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 1</h5>
+                                        <div class="rating">⭐ 4.5 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4 d-flex justify-content-center ">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 2</h5>
+                                        <div class="rating">⭐ 4.6 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4 d-flex justify-content-center ">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 3</h5>
+                                        <div class="rating">⭐ 4.7 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 4</h5>
+                                        <div class="rating">⭐ 4.5 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 5</h5>
+                                        <div class="rating">⭐ 4.6 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 6</h5>
+                                        <div class="rating">⭐ 4.7 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 7</h5>
+                                        <div class="rating">⭐ 4.5 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 8</h5>
+                                        <div class="rating">⭐ 4.6 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                                <div class="card card-custom h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Skill 9</h5>
+                                        <div class="rating">⭐ 4.7 average rating</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#skillsCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                    <span><i class="fa-solid fa-angle-right"></i></span>
+                </a>
+                <a class="carousel-control-next" href="#skillsCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                    <span><i class="fa-solid fa-angle-right"></i></span>
+                </a>
+            </div>            
+        </div>
+    </section>
+{% endblock %}

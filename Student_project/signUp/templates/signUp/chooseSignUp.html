@@ -7,6 +7,12 @@
 signUp
 {% endblock %}
 
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container text-center mt-5">
     <h1>Join Our Community</h1>
@@ -28,7 +34,7 @@ signUp
                 <div class="card-body">
                     <h2 class="card-title">Sign Up as a Recruiter</h2>
                     <p class="card-text signup-description">Post job openings, search for candidates, and manage your recruitment process efficiently. Find the right talent to drive your company's success.</p>
-                    <a href="#" class="button"><button class="px-3"><span>Sign Up as a Recruiter</span></button></a>
+                    <a href="{% url 'requiterSignUp' %}" class="button"><button class="px-3"><span>Sign Up as a Recruiter</span></button></a>
                 </div>
             </div>
         </div>

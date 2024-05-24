@@ -1,0 +1,395 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+contactus
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 sidebar">
+          <h3 class="mb-4">Profile</h3>
+          <a href="#" id="myInfoLink" class="active">My Info</a>
+          <a href="#" id="projectsLink">Projects / Experience</a>
+          <a href="#" id="billingLink">Billing & Payments</a>
+          <a href="#" id="projectcompleteLink">project completed</a>
+          <a href="#" id="testLink">Take your Test</a>
+          <a href="#" id="connectLink">Connect With</a>
+        </div>
+        <div class="col-md-9 main-content">
+        
+          <div id="myInfoSection" class="content-section active">
+            <h4 class="section-heading">My Info</h4>
+            <p>Student Account</p>
+
+            <div class="card card-custom mb-4">
+              <h5>Account</h5>
+              <div class="d-flex align-items-center">
+                <div class="profile" style="margin-right: 15px;">
+                  <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile">
+                </div>
+                <div>
+                  <p class="mb-1 profile_name">Surya Prasad Sahoo</p>
+                  <p class="mb-1 ">Python Developer</p>
+                  <small>Email: suryaprasad9@gmail.com</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-custom mb-4">
+              <h5>Profile details</h5>
+              <div class="d-flex">
+                <div class="profile " style="margin-right: 15px;">
+                  <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Company" >
+                </div>
+                <div>
+                  <p class="profile_detailes"> <span>Name :</span> <br> Surya Prasad Sahoo</p>
+                  <p class="profile_detailes"> <span>D.O.B :</span> <br> 05 / 04 / 2003</p>
+                  <p class="profile_detailes"> <span>Phone :</span> <br> 9999999999</p>
+                  <p class="profile_detailes"> <span>Address :</span> <br> 123, XYZ, India</p>
+                  <p class="profile_detailes"> <span>Role :</span> <br> Python Developer</p>
+                  <p class="profile_detailes"> <span>Experience :</span> <br> 1 Year</p>
+                  <p class="profile_detailes"> <span>Skills :</span> <br> Python, Django, Flask</p>
+                  <p class="profile_detailes"> <span>Language :</span> <br> Hindi, English</p>
+                  <p class="profile_detailes"> <span>Education :</span> <br> B.Tech, Computer Science</p>
+                  <p class="profile_detailes"> <span>VAT ID No:</span> <br> 45689*******56</p>
+                </div>
+                <div class="ml-auto">
+                  <span class="edit-icon"><i class="fa-regular fa-pen-to-square"></i></span>
+                </div>
+              </div>
+              <div >
+                <h5 class="balance m-3">Attempts left : <span>3</span> </h5>
+              </div>
+            </div>
+
+            <div class="card card-custom mb-4">
+              <h5>Resume</h5>
+              <div class="d-flex justify-content-between">
+                <div>
+                  <button type="submit" class="px-3" data-toggle="modal" data-target="#resumeModal"><span>View Resume</span></button>
+                </div>
+                <div class="ml-auto">
+                  <input type="file" id="fileInput" style="display:none;">
+                  <button type="uploadButton" id="uploadButton" class="px-3"><span><i class="fa-solid fa-upload"></i></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="projectsSection" class="content-section">
+            <h4 class="section-heading">Projects / Experience</h4>
+            <p>Below is a summary of my professional projects and experiences:</p>
+
+            <div class="card card-custom mb-4">
+              <h5>Project 1: E-commerce Website</h5>
+              <div class="d-flex align-items-center">
+                <div class="profile" style="margin-right: 15px;">
+                  <img src="{% static 'assets/a-chic-contemporary-logo-design-for-a-student-hiri-th-nP3_tQ0isSdvjETBCjg-SRT2RGXlSq2Ha3KuTMgLCQ.jpeg' %}" alt="Project 1 Image" class="project-image">
+                </div>
+                <div>
+                  <p><strong>Role:</strong> Full Stack Developer</p>
+                  <p><strong>Technologies:</strong> HTML, CSS, JavaScript, Django, PostgreSQL</p>
+                  <p><strong>Description:</strong> Developed a fully functional e-commerce website with features such as product listing, user authentication, shopping cart, and payment integration. Implemented both front-end and back-end functionalities, ensuring a seamless user experience.</p>
+                </div>
+              </div>
+            </div>
+        
+            <div class="card card-custom mb-4">
+              <h5>Project 2: Social Media Platform</h5>
+              <div class="d-flex align-items-center">
+                <div class="profile" style="margin-right: 15px;">
+                  <img src="{% static 'assets/a-tastefully-designed-logo-for-the-church-name-ceo-GV3Qm2oOQZq8P56iOmHfSA-9fg6CRdVSLi2qm8fKIDTag.jpeg' %}" alt="Project 2 Image" class="project-image">
+                </div>
+                <div>
+                  <p><strong>Role:</strong> Back-end Developer</p>
+                  <p><strong>Technologies:</strong> Python, Flask, MongoDB</p>
+                  <p><strong>Description:</strong> Collaborated on the development of a social media platform, focusing on server-side logic and database management. Designed RESTful APIs for user interaction, real-time messaging, and media sharing. Enhanced database performance and ensured data security.</p>
+                </div>
+              </div>
+            </div>
+        
+            <div class="card card-custom mb-4">
+              <h5>Project 3: Machine Learning Model for Predictive Analytics</h5>
+              <div class="d-flex align-items-center">
+                <div class="profile" style="margin-right: 15px;">
+                  <img src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}" alt="Project 3 Image" class="project-image">
+                </div>
+                <div>
+                  <p><strong>Role:</strong> Data Scientist</p>
+                  <p><strong>Technologies:</strong> Python, TensorFlow, Pandas</p>
+                  <p><strong>Description:</strong> Developed a machine learning model to predict customer churn for a telecom company. Analyzed large datasets to identify key indicators, built and trained the model using TensorFlow, and achieved a high accuracy rate. Implemented the model into the company's CRM system for real-time predictions.</p>
+                </div>
+              </div>
+            </div>
+        
+            <div class="card card-custom mb-4">
+              <h5>Experience: Internship at Tech Solutions Inc.</h5>
+              <div class="d-flex align-items-center">
+                <div class="profile" style="margin-right: 15px;">
+                  <img src="{% static 'assets/draw-the-english-capital-letter-yulsys-in-the-form-b7an0XjoSVa6JlQM783pMw-8N5er-HtQHG4Thb73t2M3A.jpeg' %}" alt="Internship Image" class="project-image">
+                </div>
+                <div>
+                  <p><strong>Role:</strong> Software Engineering Intern</p>
+                  <p><strong>Duration:</strong> June 2022 - August 2022</p>
+                  <p><strong>Description:</strong> Participated in the development of web applications, working closely with senior developers. Gained hands-on experience in coding, debugging, and testing. Contributed to project meetings and provided innovative solutions to technical challenges.</p>
+                </div>
+              </div>
+            </div>
+        
+            <div class="card card-custom mb-4">
+              <h5>Experience: Freelance Python Developer</h5>
+              <div class="d-flex align-items-center">
+                <div class="profile" style="margin-right: 15px;">
+                  <img src="{% static 'assets/pexels-knownasovan-62693.jpg' %}" alt="Freelance Work Image" class="project-image">
+                </div>
+                <div>
+                  <p><strong>Role:</strong> Python Developer</p>
+                  <p><strong>Duration:</strong> January 2021 - Present</p>
+                  <p><strong>Description:</strong> Worked with various clients to develop custom software solutions, automate workflows, and provide data analysis services. Projects include developing web applications, creating data visualizations, and optimizing algorithms for performance.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div id="billingSection" class="content-section">
+            <h4 class="section-heading">Billing & Payments</h4>
+            <p>Manage your billing information and payment methods here:</p>
+            <!-- Add your billing and payments content here -->
+
+            <div class="card card-custom mb-4">
+              <h3 class="balance mb-5">Balance : <span>10.00$</span> </h3>
+              <div class="d-flex align-items-center">
+                <div class="withdraw">
+                  <button type="button"  class="px-3"><span>Withdraw</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-custom mb-4">
+              <h5 class="mb-4">Payment Methods</h5>
+              <div class="d-flex flex-column">
+                <div class="mb-4">
+                  <p>You haven’t set up any billing methods yet. Add a method so you can hire when you’re ready.</p>
+                </div>
+                <div>
+                  <button type="button" class="px-3" data-toggle="modal" data-target="#paymentMethodModal"><span>+ Add Payment Method</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Completed start -->
+          <div id="projectcompleteSection" class="content-section">
+            <h4 class="section-heading">Project Completed</h4>
+            <p>Submit the link to your completed project:</p>
+
+            <form id="completedProjectForm">
+              <div class="form-group mb-4">
+                <label for="projectLink" class="mb-2">Project Link</label>
+                <input type="url" class="form-control" id="projectLink" placeholder="Enter your project link" required>
+              </div>
+              <div>
+                <button type="submit" class="px-3"><span>Submit</span></button>
+              </div>
+            </form>
+          </div>
+          <!-- Project Completed end -->
+
+          <!-- test section start -->
+          <div id="testSection" class="content-section">
+            <h4 class="section-heading">Take your Test</h4>
+            <p>Start your test and submit your answer link below:</p>
+
+            <!-- Start Test Button -->
+            <div class="card card-custom mb-4">
+              <div class="d-flex align-items-center">
+                <button type="button" class="px-3" id="startTestButton"><span>Start Test</span></button>
+              </div>
+            </div>
+
+            <!-- Submit Answer Link -->
+            <div class="card card-custom mb-4">
+              <div class="form-group mb-4">
+                <label for="answerLink" class="mb-2">Submit your answer link:</label>
+                <input type="url" class="form-control" id="answerLink" placeholder="Enter the link to your test answer">
+              </div>
+              <div class="d-flex align-items-center">
+                <button type="button" class="px-3" id="submitAnswerLinkButton"><span>Submit Link</span></button>
+              </div>
+            </div>
+          </div>
+          <!-- test section end -->
+
+
+          <!-- Connect With -->
+
+          <div id="connectSection" class="content-section">
+            <h4 class="section-heading">Connect With</h4>
+            <p>Add your social media links here:</p>
+            <div class="card card-custom mb-4">
+              <h5 class="mb-4">Social Media Links</h5>
+              <div id="socialMediaLinksContainer" class="d-flex flex-column mb-4">
+                <p id="noLinksMessage">No social media links added yet. Add your social media links to connect with others.</p>
+              </div>
+              <div>
+                <button type="button" class="px-3" data-toggle="modal" data-target="#socialMediaModal"><span>+ Add Social Media Link</span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Resume Modal -->
+    <div class="modal fade" id="resumeModal" tabindex="-1" aria-labelledby="resumeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="resumeModalLabel">Your Resume</h5>
+            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
+              <span><i class="fa-solid fa-xmark"></i></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Assuming the resume is a PDF embedded in the modal -->
+            <embed src="/path/to/your/resume.pdf" type="application/pdf" width="100%" height="600px" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="px-3" data-dismiss="modal"><span>Close</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Method Modal -->
+    <div class="modal fade" id="paymentMethodModal" tabindex="-1" aria-labelledby="paymentMethodModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="paymentMethodModalLabel">Add Payment Method</h5>
+            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
+              <span><i class="fa-solid fa-xmark"></i></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="list-group">
+              <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#debitCardModal" data-dismiss="modal">Add Debit Card</a>
+              <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#onlinePaymentModal" data-dismiss="modal">Online Payment Method</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debit Card Modal -->
+    <div class="modal fade" id="debitCardModal" tabindex="-1" aria-labelledby="debitCardModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="debitCardModalLabel">Add Debit Card</h5>
+            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
+              <span><i class="fa-solid fa-xmark"></i></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="number" class="form-control" id="cardNumber" placeholder="Enter card number">
+              </div>
+              <div class="form-group">
+                <label for="cardName">Name on Card</label>
+                <input type="text" class="form-control" id="cardName" placeholder="Enter name on card">
+              </div>
+              <div class="form-group">
+                <label for="expiryDate">Expiry Date</label>
+                <input type="date" class="form-control" id="expiryDate" placeholder="MM/YY">
+              </div>
+              <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" class="form-control" id="cvv" placeholder="CVV">
+              </div>
+              <button type="submit" class="px-3 "><span>Add Card</span></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Online Payment Modal -->
+    <div class="modal fade" id="onlinePaymentModal" tabindex="-1" aria-labelledby="onlinePaymentModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="onlinePaymentModalLabel">Online Payment Method</h5>
+            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
+              <span><i class="fa-solid fa-xmark"></i></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="paymentMethod">Select Payment Method</label>
+                <select class="form-control" id="paymentMethod">
+                  <option>PayPal</option>
+                  <option>Google Pay</option>
+                  <option>Apple Pay</option>
+                  <option>Stripe</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="paymentId">Payment ID</label>
+                <input type="text" class="form-control" id="paymentId" placeholder="Enter payment ID">
+              </div>
+              <button type="submit" class="px-3"><span>Add Payment Method</span></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Media Modal -->
+    <div class="modal fade" id="socialMediaModal" tabindex="-1" aria-labelledby="socialMediaModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="socialMediaModalLabel">Add Social Media Link</h5>
+            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
+              <span><i class="fa-solid fa-xmark"></i></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="socialMediaForm">
+              <div class="form-group">
+                <label for="socialMediaPlatform">Select Platform</label>
+                <select class="form-control" id="socialMediaPlatform">
+                  <option>GitHub</option>
+                  <option>LinkedIn</option>
+                  <option>Twitter</option>
+                  <option>Facebook</option>
+                  <option>Instagram</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="socialMediaLink">Profile Link</label>
+                <input type="url" class="form-control" id="socialMediaLink" placeholder="Enter your profile link">
+              </div>
+              <button type="submit" class="px-3"><span>Add Link</span></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

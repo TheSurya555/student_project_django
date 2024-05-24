@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'main',
     'login',
     'signUp',
-    
+    'services',
+    'talents',
+    'contactus',
+    'profiles',
     
 ]
 

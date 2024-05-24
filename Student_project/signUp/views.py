@@ -7,3 +7,6 @@ def signUP_View(request):
 
 def candidate_SignUp_View(request):
     return render(request,'signUp/candidateSignup.html')
+
+def requiter_SignUp_View(request):
+    return render(request,'signUp/requiterSignup.html')
