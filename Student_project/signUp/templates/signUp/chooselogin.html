@@ -1,0 +1,42 @@
+
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Login to your Account</h1>
+    <div class="row mt-5">
+        <div class="col-md-6 mb-4">
+            <div class="card signup-option d-flex align-items-center">
+                <img src="{% static 'assets/candidate2.jpg' %}" class="card-img-top mt-3" alt="Candidate Image">
+                <div class="card-body">
+                    <h2 class="card-title">Login as a Candidate</h2>
+                    <a href="{% url 'candidatelogin' %}" class="button"><button class="px-3"><span>Log in as a Candidate</span></button></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card signup-option d-flex align-items-center">
+                <img src="{% static 'assets/requiter2.jpg' %}" class="card-img-top mt-3" alt="Recruiter Image">
+                <div class="card-body">
+                    <h2 class="card-title">Login as a Client</h2>
+                    <a href="{% url 'recruiterlogin' %}" class="button"><button class="px-3"><span>Login as a Client</span></button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}    
+
+

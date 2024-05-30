@@ -57,7 +57,7 @@
     .ezy__nav2 .navbar-brand img {
         width: 80px;
         height: auto;
-        margin-left: 10px;
+        margin-left: 30px;
     }
     
     .ezy__nav2 .navbar-toggler {
@@ -126,7 +126,8 @@
         color: var(--bs-body-color);
         opacity: 1;
     }
-    
+
+
     .navbar-nav li{
       margin: 10px 0;
     }
@@ -279,6 +280,7 @@
         border-radius: 390px;
         z-index: -1;
       }
+
       @media (min-width: 991px) {
         .ezy__header41-shape {
           left: -50px;

@@ -145,4 +145,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-AUTH_USER_MODEL = 'signUp.CustomUser'  
+
+
+
+AUTH_USER_MODEL = 'signUp.CustomUser'
+
+# AUTH_USER_MODEL = 'signUp.RequiterUser'

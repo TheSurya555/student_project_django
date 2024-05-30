@@ -33,7 +33,7 @@
     {% comment %} navbar section {% endcomment %}
     <div class="ezy__nav2 light ">
         <nav class="navbar navbar-expand-lg fixed-top py-3">
-            <div class="container nav shadow-sm rounded">
+            <div class="container-fluid nav shadow-sm rounded">
                 <a class="navbar-brand" href="/">
                     <img src="{% static 'assets/logoo.png' %}" alt="logo">
                 </a>
@@ -46,17 +46,12 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                   <ul class="navbar-nav ms-auto mb-2 align-items-center  mb-lg-0 mt-4 mt-lg-0">
                       {% if user.is_authenticated %}
-                      {% if request.session.user_role == "Recruiter"%}
-                        <li class="nav-item"><a class="nav-link" href="{% url "studentpost" %}">Posts</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
-                      {% else %}
-                            <li class="nav-item text-dark"><a class="nav-link" href="{% url "services" %}">Services</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
-                        {% endif %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user"></i>
+                        {% if request.session.user_role == "Candidate"%}
+                          <li class="nav-item"><a class="nav-link" href="{% url "studentpost" %}">Posts</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" style=" border: 2px solid #70dcc5; border-radius: 50px;" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 32px;"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
@@ -65,7 +60,26 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
-                        </li>
+                          </li>
+                        {% endif %}
+
+                        {% if request.session.user_role == "Recruiter" %}
+                          <li class="nav-item text-dark"><a class="nav-link" href="{% url "services" %}">Services</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link" style=" border: 2px solid #70dcc5; border-radius: 50px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 32px;"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url "settings" %}">Setting</a></li>
+                                <li><a class="dropdown-item" href="{% url "messages" %}">Message</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                          </li>
+                        {% endif %}
                       {% else %}
                           <li class="nav-item"><a class="nav-link" href="{% url "services" %}">Services</a></li>
                           <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
@@ -106,6 +120,7 @@
                 <li><a href="#">Home</a></li>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Services</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
               </ul>
             </div>
             <div class="col-sm-6 col-lg-2 mt-4 mt-lg-0">

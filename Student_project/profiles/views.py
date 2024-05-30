@@ -1,12 +1,12 @@
 from django.shortcuts import render
 
-# Create your views here.
 def profiles_View(request):
-    return render(request,'profiles/profiles.html')
-
+    return render(request, 'profiles/profiles.html')
 
 def settings_View(request):
-    return render(request,'profiles/settings.html')
+    # Retrieve user settings data from the database
+    return render(request, 'profiles/settings.html')
 
 def messages_View(request):
-    return render(request,'profiles/messages.html')
+    # Retrieve user messages data from the database
+    return render(request, 'profiles/messages.html')

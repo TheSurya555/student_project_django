@@ -45,3 +45,4 @@ class Migration(migrations.Migration):
             name='CandidateUser',
         ),
     ]
+    
