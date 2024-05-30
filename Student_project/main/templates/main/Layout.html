@@ -46,12 +46,12 @@
                 <div class="collapse navbar-collapse" id="navbarText">
                   <ul class="navbar-nav ms-auto mb-2 align-items-center  mb-lg-0 mt-4 mt-lg-0">
                       {% if user.is_authenticated %}
-                        {% if request.session.user_role == "Candidate"%}
+                        {% if request.session.user_role == "Candidate" %}
                           <li class="nav-item"><a class="nav-link" href="{% url "studentpost" %}">Posts</a></li>
                           <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
                           <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" style=" border: 2px solid #70dcc5; border-radius: 50px;" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 32px;"></i>
+                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
@@ -69,7 +69,7 @@
                           <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
                           <li class="nav-item dropdown">
                             <a class="nav-link" style=" border: 2px solid #70dcc5; border-radius: 50px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 32px;"></i>
+                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>

@@ -28,37 +28,36 @@
                 </div> {% endcomment %}
 
 
-# def login_user(request):
-#     if not request.user.is_authenticated:
-#         if request.method == 'POST':
-#             form = EmailOrPhoneLoginForm(request=request, data=request.POST)
-#             if form.is_valid():
-#                 uname = form.cleaned_data['username']
-#                 upass = form.cleaned_data['password']
-#                 user = authenticate(username=uname, password=upass)
-#                 print('user is :',user)
-#                 if user is not None:
-#                     login(request, user)
-#                     # Determine the user's role and store it in the session
-#                     if user.groups.filter(name='Candidate').exists():
-#                         request.session['user_role'] = 'Candidate'
-#                         print('Candidate logged in')
-#                         messages.success(request, 'Logged in successfully as Candidate!!')
-#                         return HttpResponseRedirect('/')  # Redirect to Candidate dashboard
-                    
-#                     elif user.groups.filter(name='Recruiter').exists():
-#                         request.session['user_role'] = 'Recruiter'
-#                         print('Recruiter logged in')
-#                         messages.success(request, 'Logged in successfully as Recruiter!!')
-#                         return HttpResponseRedirect('/')  # Redirect to Recruiter dashboard
-#                     else:
-#                         messages.error(request, 'Unknown user role!!')
-#                 else:
-#                     messages.error(request, 'Bad credentials!!')
-#             else:
-#                 messages.error(request, 'Bad credentials!!')
-#         else:
-#             form = EmailOrPhoneLoginForm()
-#         return render(request, 'signup/login.html', {'form': form})
-#     else:
-#         return HttpResponseRedirect('/')  # Redirect to home or appropriate URL if already authenticated
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from signUp.models import CustomUser, CandidateProfile, RecruiterProfile
+
+@login_required
+def profiles_View(request):
+    if request.user.is_authenticated:
+        user = request.user
+        context = {'user': user}
+
+        if user.role == CustomUser.CANDIDATE:
+            try:
+                candidate_profile = CandidateProfile.objects.get(user=user)
+                context['profile'] = candidate_profile
+                context['role'] = 'candidate'
+                print(context)
+            except CandidateProfile.DoesNotExist:
+                context['error_message'] = 'No CandidateProfile found for your account.'
+                
+        elif user.role == CustomUser.RECRUITER:
+            try:
+                recruiter_profile = RecruiterProfile.objects.get(user=user)
+                context['profile'] = recruiter_profile
+                context['role'] = 'recruiter'
+                print(context)
+            except RecruiterProfile.DoesNotExist:
+                context['error_message'] = 'No RecruiterProfile found for your account.'
+        else:
+            context['error_message'] = 'Invalid user role.'
+
+        return render(request, 'profiles/profiles.html', context)
+    else:
+        return redirect('login')

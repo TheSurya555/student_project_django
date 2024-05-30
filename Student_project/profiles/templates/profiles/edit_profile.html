@@ -1,0 +1,70 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+User Profile Form
+{% endblock %}
+
+{% block content %}
+<section class="ezy__signup14 light d-flex align-items-center justify-content-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+          <div class="ezy__signup14-form-card p-3">
+            <div class="row">
+              <div class="col-12 mt-4 mt-lg-0">
+                <div class="d-flex flex-column justify-content-center align-items-center text-center h-100 p-2">
+                  <h2 class="ezy__signup14-heading">USER PROFILE FORM</h2>
+                  <form class="mt-4" method="post">
+                    {% csrf_token %}
+                    <div class="form-group position-relative mb-3">
+                      {{ form.dob }}
+                      <label class="user-label" for="dob">Date of Birth</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.phone }}
+                      <label class="user-label" for="phone">Phone</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.address }}
+                      <label class="user-label" for="address">Address</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.role }}
+                      <label class="user-label" for="role">Role</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.experience }}
+                      <label class="user-label" for="experience">Experience</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.skills }}
+                      <label class="user-label" for="skills">Skills</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.languages }}
+                      <label class="user-label" for="languages">Languages</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.education }}
+                      <label class="user-label" for="education">Education</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                      {{ form.vat_id }}
+                      <label class="user-label" for="vat_id">VAT ID No</label>
+                    </div>
+                    <button type="submit" class="px-3"><span>Save</span></button>
+                    <!-- Messages -->
+                    {% for message in messages %}
+                    <div class="text-red-500">{{ message }}</div> <br>
+                    {% endfor %}                    
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock %}

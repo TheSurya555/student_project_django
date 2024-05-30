@@ -16,73 +16,88 @@ contactus
       <div class="row">
         <div class="col-md-3 sidebar">
           <h3 class="mb-4">Profile</h3>
+          {% if request.session.user_role == "Candidate" %}
           <a href="#" id="myInfoLink" class="active">My Info</a>
           <a href="#" id="projectsLink">Projects / Experience</a>
-          <a href="#" id="billingLink">Billing & Payments</a>
-          <a href="#" id="projectcompleteLink">project completed</a>
           <a href="#" id="testLink">Take your Test</a>
+          <a href="#" id="projectcompleteLink">Projects Completed</a>
           <a href="#" id="connectLink">Connect With</a>
+          {% elif request.session.user_role == "Recruiter" %}
+          <a href="#" id="billingLink">Billing & Payments</a>
+          {% endif %}
         </div>
         <div class="col-md-9 main-content">
-        
           <div id="myInfoSection" class="content-section active">
             <h4 class="section-heading">My Info</h4>
-            <p>Student Account</p>
-
+            <p>{{ user.role }} Account</p>
             <div class="card card-custom mb-4">
-              <h5>Account</h5>
-              <div class="d-flex align-items-center">
-                <div class="profile" style="margin-right: 15px;">
-                  <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile">
+                <h5>Account</h5>
+                <div class="d-flex align-items-center">
+                    <div class="profile" style="margin-right: 15px;">
+                        <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile">
+                    </div>
+                    <div>
+                        <p class="mb-1 profile_name">{{ user.first_name }} {{ user.last_name }}</p>
+                        <p class="mb-1 ">Python Developer</p>
+                        <small>Email: {{ user.email }}</small>
+                    </div>
                 </div>
-                <div>
-                  <p class="mb-1 profile_name">Surya Prasad Sahoo</p>
-                  <p class="mb-1 ">Python Developer</p>
-                  <small>Email: suryaprasad9@gmail.com</small>
-                </div>
-              </div>
             </div>
 
             <div class="card card-custom mb-4">
-              <h5>Profile details</h5>
-              <div class="d-flex">
-                <div class="profile " style="margin-right: 15px;">
-                  <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Company" >
+                <h5>Profile details</h5>
+                <div class="d-flex">
+                    <div class="profile " style="margin-right: 15px;">
+                        <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Company">
+                    </div>
+                    <div>
+                        <p class="profile_detailes"><span>Name :</span><br>{{ user.first_name }} {{ user.last_name }}</p>
+                        <!-- Add other profile details specific to candidate or recruiter -->
+                        {% if request.session.user_role == "Candidate" %}
+                        <p class="profile_detailes"> <span>D.O.B :</span> <br> 05 / 04 / 2003</p>
+                        <p class="profile_detailes"> <span>Phone :</span> <br> {{user.phone}}</p>
+                        <p class="profile_detailes"> <span>Address :</span> <br> 123, XYZ, India</p>
+                        <p class="profile_detailes"> <span>Role :</span> <br> Python Developer</p>
+                        <p class="profile_detailes"> <span>Experience :</span> <br> 1 Year</p>
+                        <p class="profile_detailes"> <span>Skills :</span> <br> Python, Django, Flask</p>
+                        <p class="profile_detailes"> <span>Language :</span> <br> Hindi, English</p>
+                        <p class="profile_detailes"> <span>Education :</span> <br> B.Tech, Computer Science</p>
+                        <p class="profile_detailes"> <span>VAT ID No:</span> <br> 45689*******56</p>
+                        <!-- Candidate specific details -->
+                        {% elif request.session.user_role == "Recruiter" %}
+                        <!-- Recruiter specific details -->
+                        {% endif %}
+                    </div>
+                    <div class="ml-auto" style="display: flex; right: 20px; position: absolute;">
+                        <a href="{% url "profile_edit" %}"><span class="edit-icon"><i class="fa-regular fa-pen-to-square"></i></span></a>
+                    </div>
                 </div>
                 <div>
-                  <p class="profile_detailes"> <span>Name :</span> <br> Surya Prasad Sahoo</p>
-                  <p class="profile_detailes"> <span>D.O.B :</span> <br> 05 / 04 / 2003</p>
-                  <p class="profile_detailes"> <span>Phone :</span> <br> 9999999999</p>
-                  <p class="profile_detailes"> <span>Address :</span> <br> 123, XYZ, India</p>
-                  <p class="profile_detailes"> <span>Role :</span> <br> Python Developer</p>
-                  <p class="profile_detailes"> <span>Experience :</span> <br> 1 Year</p>
-                  <p class="profile_detailes"> <span>Skills :</span> <br> Python, Django, Flask</p>
-                  <p class="profile_detailes"> <span>Language :</span> <br> Hindi, English</p>
-                  <p class="profile_detailes"> <span>Education :</span> <br> B.Tech, Computer Science</p>
-                  <p class="profile_detailes"> <span>VAT ID No:</span> <br> 45689*******56</p>
+                    <!-- Display attempts left only for candidates -->
+                    {% if request.session.user_role == "Candidate" %}
+                    <h5 class="balance m-3">Attempts left : <span>3</span></h5>
+                    {% endif %}
                 </div>
-                <div class="ml-auto">
-                  <span class="edit-icon"><i class="fa-regular fa-pen-to-square"></i></span>
-                </div>
-              </div>
-              <div >
-                <h5 class="balance m-3">Attempts left : <span>3</span> </h5>
-              </div>
             </div>
 
             <div class="card card-custom mb-4">
-              <h5>Resume</h5>
-              <div class="d-flex justify-content-between">
-                <div>
-                  <button type="submit" class="px-3" data-toggle="modal" data-target="#resumeModal"><span>View Resume</span></button>
+                <!-- Display resume upload only for candidates -->
+                {% if request.session.user_role == "Candidate" %}
+                <h5>Resume</h5>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <button type="submit" class="px-3" data-toggle="modal" data-target="#resumeModal"><span>View Resume</span></button>
+                    </div>
+                    <div class="ml-auto">
+                        <input type="file" id="fileInput" style="display:none;">
+                        <button type="uploadButton" id="uploadButton" class="px-3"><span><i class="fa-solid fa-upload"></i></span></button>
+                    </div>
                 </div>
-                <div class="ml-auto">
-                  <input type="file" id="fileInput" style="display:none;">
-                  <button type="uploadButton" id="uploadButton" class="px-3"><span><i class="fa-solid fa-upload"></i></span></button>
-                </div>
-              </div>
+                {% endif %}
             </div>
           </div>
+
+          {% comment %} project section start {% endcomment %}
 
           <div id="projectsSection" class="content-section">
             <h4 class="section-heading">Projects / Experience</h4>
