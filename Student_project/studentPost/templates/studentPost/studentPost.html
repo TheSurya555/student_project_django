@@ -1,0 +1,101 @@
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Post Detailes
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/services.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="ezy__blog7 light">
+    <img src="https://cdn.easyfrontend.com/pictures/blog/wide-banner.png" alt="" class="img-fluid w-100" />
+
+    <div class="ezy__blog7-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <h2 class="ezy__blog7-heading mb-3 mt-0">Let's Now make an impression.</h2>
+            <p class="ezy__blog7-sub-heading mb-4">
+              Wildebeest that irksomely hippopotamus along ubiquitously scallop oh up much and some while convulsive
+              far laconically.
+            </p>
+            <a href="" class="btn ezy__blog7-btn">Load All Posts</a>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col-12 col-md-6 col-lg-4 mb-3">
+            <article class="ezy__blog7-post">
+              <div class="position-relative">
+                <img
+                  src="https://cdn.easyfrontend.com/pictures/blog/blog_3.jpg"
+                  alt=""
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                <div class="px-4 py-3 ezy__blog7-calendar">26<br />Oct<br />2016</div>
+              </div>
+              <div class="p-3 p-md-4">
+                <p class="ezy__blog7-author">By <a href="" class="text-decoration-none">Ben Stokes</a></p>
+                <h4 class="mt-3 ezy__blog7-title fs-4">Beautiful Woman Smiling With Hands In Hair</h4>
+                <p class="ezy__blog7-description mt-3 mb-4">
+                  It’s no secret that the digital industry is booming. From exciting startups to global brands.
+                </p>
+                <a href="{% url "postdetail" 1 %}" class="btn ezy__blog7-btn-read-more">Read More</a>
+              </div>
+            </article>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4 mb-3">
+            <article class="ezy__blog7-post">
+              <div class="position-relative">
+                <img
+                  src="https://cdn.easyfrontend.com/pictures/blog/blog_13_1.jpg"
+                  alt=""
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                <div class="px-4 py-3 ezy__blog7-calendar">11<br />May<br />2020</div>
+              </div>
+              <div class="p-3 p-md-4">
+                <p class="ezy__blog7-author">By <a href="" class="text-decoration-none">Moein Ali</a></p>
+                <h4 class="mt-3 ezy__blog7-title fs-4">Not Your Regular Home Decoration?</h4>
+                <p class="ezy__blog7-description mt-3 mb-4">
+                  Urna molestie at eleme ntum eu facilisis sed odio Male suada fames .
+                </p>
+                <a href="{% url "postdetail" 2 %}" class="btn ezy__blog7-btn-read-more">Read More</a>
+              </div>
+            </article>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4 mb-3">
+            <article class="ezy__blog7-post">
+              <div class="position-relative">
+                <img
+                  src="https://cdn.easyfrontend.com/pictures/blog/blog_9.jpg"
+                  alt=""
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                <div class="px-4 py-3 ezy__blog7-calendar">19<br />Mar<br />2021</div>
+              </div>
+              <div class="p-3 p-md-4">
+                <p class="ezy__blog7-author">By <a href="" class="text-decoration-none">Maxy Paulo</a></p>
+                <h4 class="mt-3 ezy__blog7-title fs-4">Fashion Essentials All Men Should Know</h4>
+                <p class="ezy__blog7-description mt-3 mb-4">
+                  Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores.
+                </p>
+                <a href="{% url "postdetail" 2 %}" class="btn ezy__blog7-btn-read-more">Read More</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock %}

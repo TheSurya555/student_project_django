@@ -44,32 +44,41 @@
                     </span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarText">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 mt-4 mt-lg-0">
-                        <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url "services" %}">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
+                  <ul class="navbar-nav ms-auto mb-2 align-items-center  mb-lg-0 mt-4 mt-lg-0">
+                      {% if user.is_authenticated %}
+                      {% if request.session.user_role == "Recruiter"%}
+                        <li class="nav-item"><a class="nav-link" href="{% url "studentpost" %}">Posts</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                      {% else %}
+                            <li class="nav-item text-dark"><a class="nav-link" href="{% url "services" %}">Services</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                        {% endif %}
                         <li class="nav-item dropdown">
-                          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user"></i>
-                        </a>
-                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                              <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
-                              <li><a class="dropdown-item" href="{% url "settings" %}">Setting</a></li>
-                              <li><a class="dropdown-item" href="{% url "messages" %}">Message</a></li>
-                              <li><hr class="dropdown-divider"></li>
-                              <li><a class="dropdown-item" href="./logout.html">Logout</a></li>
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url "settings" %}">Setting</a></li>
+                                <li><a class="dropdown-item" href="{% url "messages" %}">Message</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                      {% else %}
+                          <li class="nav-item"><a class="nav-link" href="{% url "services" %}">Services</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                          <ul class="navbar-nav flex-row mb-2 mb-lg-0 ms-lg-3">
+                              <li class="nav-item me-2">
+                                  <a href="{% url 'signup' %}"><button class="px-3"> <span>Sign Up</span></button></a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{% url 'login' %}"><button class="px-3"> <span>Log In</span></button></a>
+                              </li>
                           </ul>
-                      </li>
-                    </ul>
-                    <ul class="navbar-nav flex-row mb-2 mb-lg-0 ms-lg-3">
-                        <li class="nav-item me-2">
-                            <a href="{% url 'signup' %}"><button class="px-3"> <span>Sign Up</span></button></a>
-                        </li>
-                        <li class="nav-item" >
-                            <a href="{% url 'login' %}"><button class="px-3"> <span>Log In</span></button></a>
-                        </li>
-                    </ul>
+                      {% endif %}
+                  </ul>
                 </div>
             </div>
         </nav>

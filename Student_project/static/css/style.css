@@ -127,6 +127,10 @@
         opacity: 1;
     }
     
+    .navbar-nav li{
+      margin: 10px 0;
+    }
+
     @media (min-width: 992px) {
         .ezy__nav2 .navbar-nav .nav-link {
             padding-right: 16px;
