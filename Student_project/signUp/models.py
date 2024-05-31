@@ -11,7 +11,7 @@ class CustomUser(AbstractUser):
     )
 
     role = models.CharField(max_length=10, choices=ROLE_CHOICES ,default=CANDIDATE)
-    phone = models.CharField(max_length=15, unique=True)
+    phone = models.CharField(max_length=15,null=True , unique=True)
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = 'username'

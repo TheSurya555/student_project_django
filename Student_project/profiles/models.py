@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -17,3 +18,14 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+
+
+class ProjectExperience(models.Model):
+    title = models.CharField(max_length=100)
+    contribution = models.CharField(max_length=100)
+    technologies = models.CharField(max_length=200, blank=True, null=True)
+    duration = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title

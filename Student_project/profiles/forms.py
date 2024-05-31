@@ -1,10 +1,12 @@
 from django import forms
 from .models import UserProfile
+from .models import ProjectExperience
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['dob', 'phone', 'address', 'role','position', 'experience', 'skills', 'languages', 'education', 'vat_id', 'profile_image']
+        
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -20,3 +22,13 @@ class UserProfileForm(forms.ModelForm):
         self.fields['education'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['vat_id'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['profile_image'].widget.attrs.update({'class': 'input', 'type': 'file'})
+
+
+
+class ProjectExperienceForm(forms.ModelForm):
+    class Meta:
+        model = ProjectExperience
+        fields = ['title', 'contribution', 'technologies', 'duration', 'description']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }

@@ -1,0 +1,49 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Add Project / Experience
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 p-3">
+        <div id="composeSection" class="content-section">
+            <h4 class="section-heading">Compose</h4>
+            <div class="card card-custom mb-4 p-3">
+                <h5 class="mb-4">New Message</h5>
+                <form id="postBlogForm">
+                    <div class="mb-3">
+                        <label for="blogTitle" class="form-label">Blog Title</label>
+                        <input type="text" class="form-control" id="blogTitle" name="blogTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="authorName" class="form-label">Author Name</label>
+                        <input type="text" class="form-control" id="authorName" name="authorName" required readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="publicationDate" class="form-label">Publication Date</label>
+                        <input type="date" class="form-control" id="publicationDate" name="publicationDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="blogContent" class="form-label">Blog Content</label>
+                        <textarea class="form-control" id="blogContent" name="blogContent" rows="10" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="blogImage" class="form-label">Upload Image</label>
+                        <input class="form-control" type="file" id="blogImage" name="blogImage" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

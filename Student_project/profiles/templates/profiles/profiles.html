@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-contactus
+Profile
 {% endblock %}
 
 {% block head_css %}
@@ -36,11 +36,11 @@ contactus
                 <h5>Account</h5>
                 <div class="d-flex align-items-center">
                     <div class="profile" style="margin-right: 15px;">
-                        <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile">
+                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
                     </div>
                     <div>
                         <p class="mb-1 profile_name">{{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="mb-1 ">Python Developer</p>
+                        <p class="mb-1 ">{{ user_profile.position }}</p>
                         <small>Email: {{ user.email }}</small>
                     </div>
                 </div>
@@ -50,11 +50,11 @@ contactus
                 <h5>Account</h5>
                 <div class="d-flex align-items-center">
                     <div class="profile" style="margin-right: 15px;">
-                        <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile">
+                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
                     </div>
                     <div>
                         <p class="mb-1 profile_name">{{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="mb-1 ">Role : {{user.company}}</p>
+                        <p class="mb-1 ">Role : {{ user_profile.position }}</p>
                         <small>Email: {{ user.email }}</small>
                     </div>
                 </div>
@@ -64,8 +64,8 @@ contactus
             <div class="card card-custom mb-4">
                 <h5>Profile details</h5>
                 <div class="d-flex">
-                    <div class="profile " style="margin-right: 15px;">
-                        <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Company">
+                    <div class="profile" style="margin-right: 15px;">
+                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
                     </div>
                     <div>
                         <p class="profile_detailes"><span>Name :</span><br>{{ user.first_name }} {{ user.last_name }}</p>
@@ -118,84 +118,39 @@ contactus
             </div>
           </div>
 
+            
           {% comment %} project section start {% endcomment %}
-
           <div id="projectsSection" class="content-section">
-            <h4 class="section-heading">Projects / Experience</h4>
-            <p>Below is a summary of my professional projects and experiences:</p>
-
-            <div class="card card-custom mb-4">
-              <h5>Project 1: E-commerce Website</h5>
-              <div class="d-flex align-items-center">
-                <div class="profile" style="margin-right: 15px;">
-                  <img src="{% static 'assets/a-chic-contemporary-logo-design-for-a-student-hiri-th-nP3_tQ0isSdvjETBCjg-SRT2RGXlSq2Ha3KuTMgLCQ.jpeg' %}" alt="Project 1 Image" class="project-image">
+              <h4 class="section-heading">Projects / Experience</h4>
+              <p>Below is a summary of my professional projects and experiences:</p>
+            {% if projects %}
+              <div class="row">
+                {% for project in projects %}
+                <div class="col-md-4">
+                  <div class="card project-card">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ project.title }}</h5>
+                      <p class="card-text">{{ project.role }}</p>
+                      <p class="card-text">{{ project.technologies }}</p>
+                      <p class="card-text">{{ project.description }}</p>
+                      {% if project.image %}
+                      <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                      {% endif %}
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p><strong>Role:</strong> Full Stack Developer</p>
-                  <p><strong>Technologies:</strong> HTML, CSS, JavaScript, Django, PostgreSQL</p>
-                  <p><strong>Description:</strong> Developed a fully functional e-commerce website with features such as product listing, user authentication, shopping cart, and payment integration. Implemented both front-end and back-end functionalities, ensuring a seamless user experience.</p>
-                </div>
+                {% endfor %}
               </div>
-            </div>
-        
-            <div class="card card-custom mb-4">
-              <h5>Project 2: Social Media Platform</h5>
-              <div class="d-flex align-items-center">
-                <div class="profile" style="margin-right: 15px;">
-                  <img src="{% static 'assets/a-tastefully-designed-logo-for-the-church-name-ceo-GV3Qm2oOQZq8P56iOmHfSA-9fg6CRdVSLi2qm8fKIDTag.jpeg' %}" alt="Project 2 Image" class="project-image">
-                </div>
-                <div>
-                  <p><strong>Role:</strong> Back-end Developer</p>
-                  <p><strong>Technologies:</strong> Python, Flask, MongoDB</p>
-                  <p><strong>Description:</strong> Collaborated on the development of a social media platform, focusing on server-side logic and database management. Designed RESTful APIs for user interaction, real-time messaging, and media sharing. Enhanced database performance and ensured data security.</p>
-                </div>
+            {% else %}
+              <div class="no-projects">
+                <p>No projects or experiences to display.</p>
+                <a href="{% url "add_project" %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
               </div>
-            </div>
-        
-            <div class="card card-custom mb-4">
-              <h5>Project 3: Machine Learning Model for Predictive Analytics</h5>
-              <div class="d-flex align-items-center">
-                <div class="profile" style="margin-right: 15px;">
-                  <img src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}" alt="Project 3 Image" class="project-image">
-                </div>
-                <div>
-                  <p><strong>Role:</strong> Data Scientist</p>
-                  <p><strong>Technologies:</strong> Python, TensorFlow, Pandas</p>
-                  <p><strong>Description:</strong> Developed a machine learning model to predict customer churn for a telecom company. Analyzed large datasets to identify key indicators, built and trained the model using TensorFlow, and achieved a high accuracy rate. Implemented the model into the company's CRM system for real-time predictions.</p>
-                </div>
-              </div>
-            </div>
-        
-            <div class="card card-custom mb-4">
-              <h5>Experience: Internship at Tech Solutions Inc.</h5>
-              <div class="d-flex align-items-center">
-                <div class="profile" style="margin-right: 15px;">
-                  <img src="{% static 'assets/draw-the-english-capital-letter-yulsys-in-the-form-b7an0XjoSVa6JlQM783pMw-8N5er-HtQHG4Thb73t2M3A.jpeg' %}" alt="Internship Image" class="project-image">
-                </div>
-                <div>
-                  <p><strong>Role:</strong> Software Engineering Intern</p>
-                  <p><strong>Duration:</strong> June 2022 - August 2022</p>
-                  <p><strong>Description:</strong> Participated in the development of web applications, working closely with senior developers. Gained hands-on experience in coding, debugging, and testing. Contributed to project meetings and provided innovative solutions to technical challenges.</p>
-                </div>
-              </div>
-            </div>
-        
-            <div class="card card-custom mb-4">
-              <h5>Experience: Freelance Python Developer</h5>
-              <div class="d-flex align-items-center">
-                <div class="profile" style="margin-right: 15px;">
-                  <img src="{% static 'assets/pexels-knownasovan-62693.jpg' %}" alt="Freelance Work Image" class="project-image">
-                </div>
-                <div>
-                  <p><strong>Role:</strong> Python Developer</p>
-                  <p><strong>Duration:</strong> January 2021 - Present</p>
-                  <p><strong>Description:</strong> Worked with various clients to develop custom software solutions, automate workflows, and provide data analysis services. Projects include developing web applications, creating data visualizations, and optimizing algorithms for performance.</p>
-                </div>
-              </div>
-            </div>
-
+            {% endif %}
           </div>
+          {% comment %} project section end {% endcomment %}
 
+          {% comment %}  BILL AND PAYMENT SECTION {% endcomment %}
           <div id="billingSection" class="content-section">
             <h4 class="section-heading">Billing & Payments</h4>
             <p>Manage your billing information and payment methods here:</p>
