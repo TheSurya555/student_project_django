@@ -118,29 +118,3 @@ def logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to the login page after logout
 
-
-
-def users_with_roles_view(request):
-    users = CustomUser.objects.all()
-    user_roles = []
-
-    for user in users:
-        # Check if the user is a candidate
-        if user.groups.filter(name='Candidate').exists():
-            role = 'Candidate'
-        # Check if the user is a recruiter
-        elif user.groups.filter(name='Recruiter').exists():
-            role = 'Recruiter'
-        else:
-            role = 'Unknown'
-
-        user_roles.append({
-            'username': user.username,
-            'email': user.email,
-            'role': role
-        })
-
-    context = {'user_roles': user_roles}
-    return render(request, 'signup/user_roles.html', context)
-
-

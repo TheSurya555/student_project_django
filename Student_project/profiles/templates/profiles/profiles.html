@@ -23,6 +23,7 @@ contactus
           <a href="#" id="projectcompleteLink">Projects Completed</a>
           <a href="#" id="connectLink">Connect With</a>
           {% elif request.session.user_role == "Recruiter" %}
+          <a href="#" id="myInfoLink" class="active">My Info</a>
           <a href="#" id="billingLink">Billing & Payments</a>
           {% endif %}
         </div>
@@ -30,6 +31,7 @@ contactus
           <div id="myInfoSection" class="content-section active">
             <h4 class="section-heading">My Info</h4>
             <p>{{ user.role }} Account</p>
+            {% if request.session.user_role == "Candidate" %}
             <div class="card card-custom mb-4">
                 <h5>Account</h5>
                 <div class="d-flex align-items-center">
@@ -43,6 +45,21 @@ contactus
                     </div>
                 </div>
             </div>
+            {% elif request.session.user_role == "Recruiter" %}
+            <div class="card card-custom mb-4">
+                <h5>Account</h5>
+                <div class="d-flex align-items-center">
+                    <div class="profile" style="margin-right: 15px;">
+                        <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile">
+                    </div>
+                    <div>
+                        <p class="mb-1 profile_name">{{ user.first_name }} {{ user.last_name }}</p>
+                        <p class="mb-1 ">Role : {{user.company}}</p>
+                        <small>Email: {{ user.email }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
             <div class="card card-custom mb-4">
                 <h5>Profile details</h5>
@@ -54,17 +71,21 @@ contactus
                         <p class="profile_detailes"><span>Name :</span><br>{{ user.first_name }} {{ user.last_name }}</p>
                         <!-- Add other profile details specific to candidate or recruiter -->
                         {% if request.session.user_role == "Candidate" %}
-                        <p class="profile_detailes"> <span>D.O.B :</span> <br> 05 / 04 / 2003</p>
-                        <p class="profile_detailes"> <span>Phone :</span> <br> {{user.phone}}</p>
-                        <p class="profile_detailes"> <span>Address :</span> <br> 123, XYZ, India</p>
-                        <p class="profile_detailes"> <span>Role :</span> <br> Python Developer</p>
-                        <p class="profile_detailes"> <span>Experience :</span> <br> 1 Year</p>
-                        <p class="profile_detailes"> <span>Skills :</span> <br> Python, Django, Flask</p>
-                        <p class="profile_detailes"> <span>Language :</span> <br> Hindi, English</p>
-                        <p class="profile_detailes"> <span>Education :</span> <br> B.Tech, Computer Science</p>
-                        <p class="profile_detailes"> <span>VAT ID No:</span> <br> 45689*******56</p>
+                        <p class="profile_detailes"> <span>Date of Birth :</span> <br>{{ user_profile.dob }}</p>
+                        <p class="profile_detailes"> <span>Phone :</span> <br> {{ user.phone }}</p>
+                        <p class="profile_detailes"> <span>Address :</span> <br> {{ user_profile.address }}</p>
+                        <p class="profile_detailes"> <span>Position:</span> <br> {{ user_profile.position }}</p>
+                        <p class="profile_detailes"> <span>Experience :</span> <br>  {{ user_profile.experience }}</p>
+                        <p class="profile_detailes"> <span>Skills :</span> <br>  {{ user_profile.skills }}</p>
+                        <p class="profile_detailes"> <span>Language :</span> <br>  {{ user_profile.languages }}</p>
+                        <p class="profile_detailes"> <span>Education :</span> <br>  {{ user_profile.education }}</p>
+                        <p class="profile_detailes"> <span>VAT ID No:</span> <br> {{ user_profile.vat_id }}</p>
                         <!-- Candidate specific details -->
                         {% elif request.session.user_role == "Recruiter" %}
+                        <p class="profile_detailes"> <span>Phone :</span> <br> {{user.phone}}</p>
+                        <p class="profile_detailes"> <span>Address :</span> <br> {{ user_profile.address }}</p>
+                        <p class="profile_detailes"> <span>Position:</span> <br> {{ user_profile.position }}</p>
+                        <p class="profile_detailes"> <span>VAT ID No:</span> <br> {{ user_profile.vat_id }}</p>
                         <!-- Recruiter specific details -->
                         {% endif %}
                     </div>
