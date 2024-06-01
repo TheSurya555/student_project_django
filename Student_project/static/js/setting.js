@@ -1,23 +1,13 @@
-$(document).ready(function() {
-  $('#editPersonalInfoForm').on('submit', function(event) {
+document.getElementById('editPersonalInfoForm').addEventListener('submit', function(event) {
     event.preventDefault();
+    // Add any custom form validation here if needed
     
-    // Get the updated values from the form
-    var updatedName = $('#editName').val();
-    var updatedEmail = $('#editEmail').val();
-    var updatedPhone = $('#editPhone').val();
+    // Submit the form using fetch or XMLHttpRequest for AJAX submission
+    // or simply call form.submit() for a standard form submission
+    this.submit();
+});
 
-    // Update the profile details on the page
-    $('#profileName').text(updatedName);
-    $('#profileEmail').text(updatedEmail);
-    $('#profilePhone').text(updatedPhone);
 
-    // Close the modal
-    $('#editPersonalInfoModal').modal('hide');
-  });
-});  
-  
-  
   $(document).ready(function() {
     $('.sidebar a').click(function(e) {
       e.preventDefault();

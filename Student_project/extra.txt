@@ -85,3 +85,66 @@ def add_project(request):
     else:
         form = ProjectExperienceForm()
     return render(request, 'profiles/project_experience.html', {'form': form})
+
+
+@login_required
+def settings_View(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    user = request.user
+
+    if user.role == CustomUser.RECRUITER:
+        profile = get_object_or_404(RecruiterProfile, user=user)
+    else:
+        profile = get_object_or_404(CandidateProfile, user=user)
+
+    user_profile_form = UserProfileForm(instance=user_profile)
+    project_experience_form = ProjectExperienceForm()
+    
+    context = {
+        'user_profile_form': user_profile_form,
+        'project_experience_form': project_experience_form,
+        'user_profile': user_profile,
+        'custom_user': user,
+        'profile': profile,
+    }
+    
+    return render(request, 'profiles/settings.html', context)
+
+
+@login_required
+def update_personal_info(request):
+    if request.method == 'POST':
+        user = request.user
+        user_profile_form = UserProfileForm(request.POST, instance=user.userprofile)
+        if user_profile_form.is_valid():
+            user_profile_form.save()
+            # Update additional fields based on user role
+            if user.role == CustomUser.RECRUITER:
+                recruiter_profile = get_object_or_404(RecruiterProfile, user=user)
+                recruiter_profile.company = request.POST.get('company')
+                recruiter_profile.save()
+            else:
+                candidate_profile = get_object_or_404(CandidateProfile, user=user)
+                # Additional fields for candidate profile can be updated here if needed
+
+            messages.success(request, 'Your personal information has been updated successfully.')
+            return redirect('settings')
+        else:
+            messages.error(request, 'Form validation error. Please check the entered data.')
+            # Optionally, you can pass the form errors to the template for display
+            return render(request, 'profiles/settings.html', {'user_profile_form': user_profile_form})
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('settings')
+
+
+@login_required
+def settings_View(request):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.role == CustomUser.RECRUITER:
+            profile = get_object_or_404(RecruiterProfile, user=user)
+        else:
+            profile = get_object_or_404(CandidateProfile, user=user)
+
+    return render(request, 'profiles/settings.html')    

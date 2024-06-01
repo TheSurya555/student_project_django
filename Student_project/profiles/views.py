@@ -3,13 +3,16 @@ from django.contrib import messages
 from django.db import transaction
 from .forms import UserProfileForm ,ProjectExperienceForm
 from .models import UserProfile ,ProjectExperience
+from signUp.models import CustomUser ,RecruiterProfile ,CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 
+# profile view
 @login_required
 def profiles_View(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
+        print(user_profile)
     except UserProfile.DoesNotExist:
         # Handle the case where the user profile does not exist
         user_profile = UserProfile.objects.create(user=request.user)
@@ -19,14 +22,44 @@ def profiles_View(request):
 
     return render(request, 'profiles/profiles.html', {'user_profile': user_profile ,'profile_image_url': profile_image_url ,'project_experiences': project_experiences,})
 
-
+# setting view
+@login_required
 def settings_View(request):
-    return render(request, 'profiles/settings.html')
+    user_profile = get_object_or_404(UserProfile, user=request.user)
 
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Settings updated successfully.')
+            return redirect('settings')
+        else:
+            messages.error(request, 'Error updating settings. Please check the form and try again.')
+    else:
+        form = UserProfileForm(instance=user_profile)
+    
+    profile = None
+    if request.user.role == CustomUser.RECRUITER:
+        profile = get_object_or_404(RecruiterProfile, user=request.user)
+    elif request.user.role == CustomUser.CANDIDATE:
+        profile = get_object_or_404(CandidateProfile, user=request.user)
+
+    context = {
+        'custom_user': request.user,
+        'form': form,
+        'profile': profile,
+    }
+
+    return render(request, 'profiles/settings.html', context)
+
+
+# message view
 def messages_View(request):
     return render(request, 'profiles/messages.html')
 
 
+
+# profile view
 def edit_profile_View(request):
     try:
         user_profile = get_object_or_404(UserProfile, user=request.user)
