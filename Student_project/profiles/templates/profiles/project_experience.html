@@ -6,8 +6,9 @@ Add Project / Experience
 {% endblock %}
 
 {% block head_css %}
-<link rel="stylesheet" href="{% static 'css/button.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!-- Include CKEditor -->
+<script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -17,29 +18,37 @@ Add Project / Experience
         <div id="composeSection" class="content-section">
             <h4 class="section-heading">Compose</h4>
             <div class="card card-custom mb-4 p-3">
-                <h5 class="mb-4">New Message</h5>
-                <form id="postBlogForm">
+                <h5 class="mb-4">New Project / Experience</h5>
+                <form id="projectForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div class="mb-3">
-                        <label for="blogTitle" class="form-label">Blog Title</label>
-                        <input type="text" class="form-control" id="blogTitle" name="blogTitle" required>
+                        <label for="id_title" class="form-label">Project Title</label>
+                        {{ form.title }}
                     </div>
                     <div class="mb-3">
-                        <label for="authorName" class="form-label">Author Name</label>
-                        <input type="text" class="form-control" id="authorName" name="authorName" required readonly>
+                        <label for="id_contribution" class="form-label">Contribution</label>
+                        {{ form.contribution }}
                     </div>
                     <div class="mb-3">
-                        <label for="publicationDate" class="form-label">Publication Date</label>
-                        <input type="date" class="form-control" id="publicationDate" name="publicationDate" required>
+                        <label for="id_technologies" class="form-label">Technologies</label>
+                        {{ form.technologies }}
                     </div>
                     <div class="mb-3">
-                        <label for="blogContent" class="form-label">Blog Content</label>
-                        <textarea class="form-control" id="blogContent" name="blogContent" rows="10" required></textarea>
+                        <label for="id_duration" class="form-label">Duration</label>
+                        {{ form.duration }}
                     </div>
                     <div class="mb-3">
-                        <label for="blogImage" class="form-label">Upload Image</label>
-                        <input class="form-control" type="file" id="blogImage" name="blogImage" accept="image/*">
+                        <label for="id_description" class="form-label">Description</label>
+                        {{ form.description }}
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <button type="submit" class="btn btn-dark border-0 rounded-3"><span>Save Project</span></button>
                 </form>
             </div>
         </div>
@@ -47,3 +56,13 @@ Add Project / Experience
   </div>
 </div>
 {% endblock %}
+{% comment %} 
+{% block scripts %}
+<script>
+    ClassicEditor
+        .create(document.querySelector('#id_description'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+{% endblock %} {% endcomment %}

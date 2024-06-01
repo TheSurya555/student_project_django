@@ -99,8 +99,8 @@ Edit Profile Form
                                     {% endif %}
                                     <button type="submit" class="px-3"><span>Save</span></button>
                                     <!-- Messages -->
-                                    {% for message in messages %}
-                                    <div class="text-red-500">{{ message }}</div> <br>
+                                    {% for edit_message in edit_messages %}
+                                    <div class="text-red-500">{{ edit_message }}</div> <br>
                                     {% endfor %}                    
                                 </form>
                             </div>

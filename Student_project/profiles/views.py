@@ -15,8 +15,9 @@ def profiles_View(request):
         user_profile = UserProfile.objects.create(user=request.user)
         # Optionally, you can redirect the user to an edit profile page or display a message
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    project_experiences = ProjectExperience.objects.filter(user_profile=user_profile)
 
-    return render(request, 'profiles/profiles.html', {'user_profile': user_profile ,'profile_image_url': profile_image_url})
+    return render(request, 'profiles/profiles.html', {'user_profile': user_profile ,'profile_image_url': profile_image_url ,'project_experiences': project_experiences,})
 
 
 def settings_View(request):
@@ -47,25 +48,27 @@ def edit_profile_View(request):
                 messages.success(request, 'Profile updated successfully.')
                 return redirect('profiles')  # Redirect to the profile view after successful update
             except ValidationError as e:
-                error_messages = e.message_dict
+                edit_messages = e.message_dict
                 form = UserProfileForm(instance=user_profile)
-                return render(request, 'profiles/edit_profile.html', {'form': form, 'error_messages': error_messages})
+                return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_message': edit_messages })
     else:
         form = UserProfileForm(instance=user_profile)
     return render(request, 'profiles/edit_profile.html', {'form': form})
 
 
-
-def project_experience_view(request):
+@login_required
+def add_project(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
     if request.method == 'POST':
         form = ProjectExperienceForm(request.POST)
         if form.is_valid():
-            form.save()
-            # Optionally, you can add success message or redirect to a different page
+            project = form.save(commit=False)
+            project.user_profile = user_profile  # Assign the current user's profile to the project
+            project.save()
+            messages.success(request, 'Project added successfully.')
+            return redirect('profiles')
+        else:
+            messages.error(request, 'Error adding project. Please check the form and try again.')
     else:
         form = ProjectExperienceForm()
-
-    # Fetch all project experiences from the database
-    project_experiences = ProjectExperience.objects.all()
-
-    return render(request, 'profiles/project_experience.html', {'form': form, 'project_experiences': project_experiences})
+    return render(request, 'profiles/project_experience.html', {'form': form})

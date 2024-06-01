@@ -180,15 +180,33 @@
         </div>
     </section>
     {% comment %} footer section end {% endcomment %}
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="{% static 'js/script.js' %}"></script>
+  <script src="{% static 'js/account_creation.js' %}"></script>
+  <script src="{% static 'js/message.js' %}"></script>
+  <script src="{% static 'js/setting.js' %}"></script>
+  <script src="{% static 'js/profile.js' %}"></script>
+      <!-- Initialize CKEditor -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Replace the <textarea> with CKEditor instance
+            ClassicEditor
+                .create(document.querySelector('#projectDescription'))
+                .catch(error => {
+                    console.error(error);
+                });
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="{% static 'js/script.js' %}"></script>
-<script src="{% static 'js/account_creation.js' %}"></script>
-<script src="{% static 'js/message.js' %}"></script>
-<script src="{% static 'js/setting.js' %}"></script>
-<script src="{% static 'js/profile.js' %}"></script>
+            document.getElementById('postBlogForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                // Add your form submission logic here
+                alert('Form submitted successfully!');
+            });
+        });
+    </script>
+{% endblock %}
 </body>
 </html>

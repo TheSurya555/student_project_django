@@ -21,6 +21,7 @@ class UserProfile(models.Model):
 
 
 class ProjectExperience(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects' ,default=1)
     title = models.CharField(max_length=100)
     contribution = models.CharField(max_length=100)
     technologies = models.CharField(max_length=200, blank=True, null=True)

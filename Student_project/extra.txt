@@ -61,3 +61,27 @@ def profiles_View(request):
         return render(request, 'profiles/profiles.html', context)
     else:
         return redirect('login')
+
+
+from django.shortcuts import render, redirect
+from .forms import ProjectExperienceForm
+
+def add_project(request):
+    try:
+        project_user = get_object_or_404(ProjectExperience, user=request.user)
+    except UserProfile.DoesNotExist:
+        project_user = ProjectExperience(user=request.user)
+    if request.method == 'POST':
+        P_form = ProjectExperienceForm(request.POST ,instance=project_user)
+        if P_form.is_valid():
+            # Save the form data to the database
+            P_form.save()
+            # Redirect to a success page or display a success message
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('profiles')  # Replace 'profile' with the name of the URL pattern for the profile page
+        else:
+            messages.error(request, 'Error updating profile. Please check the form and try again.')
+            # Redirect to the profile page after successful form submission
+    else:
+        form = ProjectExperienceForm()
+    return render(request, 'profiles/project_experience.html', {'form': form})
