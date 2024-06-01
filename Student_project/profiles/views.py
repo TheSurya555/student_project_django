@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from django.db import transaction
 from .forms import UserProfileForm ,ProjectExperienceForm
 from .models import UserProfile ,ProjectExperience
 from signUp.models import CustomUser ,RecruiterProfile ,CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
+from signUp.forms import CustomPasswordChangeForm 
+from django.contrib.auth import update_session_auth_hash
 
 # profile view
 @login_required
@@ -23,6 +24,36 @@ def profiles_View(request):
     return render(request, 'profiles/profiles.html', {'user_profile': user_profile ,'profile_image_url': profile_image_url ,'project_experiences': project_experiences,})
 
 # setting view
+# @login_required
+# def settings_View(request):
+#     user_profile = get_object_or_404(UserProfile, user=request.user)
+
+#     if request.method == 'POST':
+#         form = UserProfileForm(request.POST, instance=user_profile)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Settings updated successfully.')
+#             return redirect('settings')
+#         else:
+#             messages.error(request, 'Error updating settings. Please check the form and try again.')
+#     else:
+#         form = UserProfileForm(instance=user_profile)
+    
+#     profile = None
+#     if request.user.role == CustomUser.RECRUITER:
+#         profile = get_object_or_404(RecruiterProfile, user=request.user)
+#     elif request.user.role == CustomUser.CANDIDATE:
+#         profile = get_object_or_404(CandidateProfile, user=request.user)
+
+#     context = {
+#         'custom_user': request.user,
+#         'form': form,
+#         'profile': profile,
+#     }
+
+#     return render(request, 'profiles/settings.html', context)
+
+
 @login_required
 def settings_View(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
@@ -44,13 +75,18 @@ def settings_View(request):
     elif request.user.role == CustomUser.CANDIDATE:
         profile = get_object_or_404(CandidateProfile, user=request.user)
 
+    # Initialize change password form
+    change_passform = CustomPasswordChangeForm(request.user)
+
     context = {
         'custom_user': request.user,
         'form': form,
         'profile': profile,
+        'change_passform': change_passform,  # Add change password form to context
     }
 
     return render(request, 'profiles/settings.html', context)
+
 
 
 # message view
@@ -105,3 +141,25 @@ def add_project(request):
     else:
         form = ProjectExperienceForm()
     return render(request, 'profiles/project_experience.html', {'form': form})
+
+
+@login_required
+def change_password(request):
+    print("Accessing change_password view")  # Debug statement
+    
+    if request.method == 'POST':
+        print("POST request detected")  # Debug statement
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
+            messages.success(request, 'Your password has been changed successfully!')
+            return redirect('settings')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = CustomPasswordChangeForm(request.user)
+        print("Initializing form:", form)  # Debug statement
+        print("Form fields:", form.fields)  # Debug statement
+    
+    return render(request, 'profiles/change_password.html', {'change_passform': form})

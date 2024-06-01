@@ -1,7 +1,8 @@
 # forms.py
 from django import forms
-from django.contrib.auth.forms import UserCreationForm ,AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm ,AuthenticationForm ,PasswordChangeForm
 from .models import CustomUser ,RecruiterProfile, CandidateProfile
+from django.contrib.auth import authenticate
 
 class CandidateSignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'input', 'id': 'fname', 'autocomplete': 'off'}))
@@ -87,4 +88,25 @@ class EmailOrPhoneLoginForm(AuthenticationForm):
                 cleaned_data['email'] = username
             else:
                 cleaned_data['phone'] = username
+        return cleaned_data
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'autocomplete': 'off' ,'placeholder': 'Enter old password'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter new password'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm new password'}))
+    
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get('old_password')
+        user = authenticate(username=self.user.username, password=old_password)
+        if not user:
+            raise forms.ValidationError("Invalid old password.")
+        return old_password
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data.get('new_password1')
+        new_password2 = cleaned_data.get('new_password2')
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            raise forms.ValidationError("The new passwords do not match.")
         return cleaned_data
