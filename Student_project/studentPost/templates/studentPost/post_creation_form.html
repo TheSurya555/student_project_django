@@ -1,0 +1,50 @@
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Blog post form
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/services.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
+{% endblock %}
+
+{% block content %}
+    <section class="container my-5">
+        <h2 class="mb-4">Post a Project Blog</h2>
+        <form id="postBlogForm" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="blogImage" class="form-label">Upload Image</label>
+                {{form.image}}
+            </div>
+            <div class="mb-3">
+                <label for="blogTitle" class="form-label">Blog Title</label>
+                {{form.title}}
+            </div>
+            <div class="mb-3">
+                <label for="authorName" class="form-label">Author Name</label>
+                {{form.author}}
+            </div>
+            <div class="mb-3">
+                <label for="publicationDate" class="form-label">Publication Date</label>
+                {{form.publication_date}}
+            </div>
+            <div class="mb-3">
+                <label for="blogContent" class="form-label">Blog Content</label>
+                {{form.content}}
+            </div>
+
+            <button type="submit" class="px-3"><span>Create</span></button>
+        </form>
+    </section>
+
+{% endblock %}
