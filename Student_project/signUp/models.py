@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'phone']
+    
     groups = models.ManyToManyField(
         Group,
         related_name='customuser_set',

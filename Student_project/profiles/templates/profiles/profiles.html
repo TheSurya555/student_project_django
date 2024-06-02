@@ -126,28 +126,29 @@ Profile
 
               {% if project_experiences %}
                 {% for project in project_experiences %}
-                <div class="card card-custom mb-4">
-                  <h5>Project {{project.id}}: <span> {{ project.title }}</span></h5>
-                  <div class="d-flex align-items-center">
-                    <div class="profile" style="margin-right: 15px;">
-                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
+                  <div class="card card-custom mb-4">
+                    <h5>Project {{project.id}}: <span> {{ project.title }}</span></h5>
+                    <div class="d-flex align-items-center">
+                      <div class="profile" style="margin-right: 15px;">
+                        <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
+                      </div>
+                      <div>
+                        <p><strong>Contribution:</strong>{{ project.contribution }}</p>
+                        <p><strong>Technologies:</strong>{{ project.technologies }}</p>
+                        <p><strong>Description:</strong>{{ project.description }}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p><strong>Contribution:</strong>{{ project.contribution }}</p>
-                      <p><strong>Technologies:</strong>{{ project.technologies }}</p>
-                      <p><strong>Description:</strong>{{ project.description }}</p>
-                    </div>
-                  </div>
-                </div>       
-                {% endfor %}
-                {% else %}
+                  </div>       
+                  {% endfor %}
+                  <a href="{% url "add_project" %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
+              {% else %}
                 <div class="no-projects">
                   <p>No projects or experiences to display.</p>
                   <a href="{% url "add_project" %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
                 </div>
-              {% endif %}       
-              <a href="{% url "add_project" %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
-          </div>
+              {% endif %}    
+                
+              </div>
           {% comment %} project section end {% endcomment %}
 
           {% comment %}  BILL AND PAYMENT SECTION {% endcomment %}

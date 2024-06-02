@@ -59,6 +59,7 @@ Settings
           </div>
         </div>
       </div>
+      
       <div id="appearanceSection" class="content-section">
           <h4 class="section-heading">Appearance</h4>
           <p>Customize the appearance of your profile:</p>
@@ -93,24 +94,24 @@ Settings
           {% csrf_token %}
           <div class="form-group">
             <label for="editFirstName">First Name</label>
-            <input type="text" class="form-control" id="editFirstName" name="first_name" value="{{ custom_user.first_name }}" required>
+            {{ form.first_name }}
           </div>
           <div class="form-group">
             <label for="editLastName">Last Name</label>
-            <input type="text" class="form-control" id="editLastName" name="last_name" value="{{ custom_user.last_name }}" required>
+            {{ form.last_name }}
           </div>
           <div class="form-group">
             <label for="editEmail">Email</label>
-            <input type="email" class="form-control" id="editEmail" name="email" value="{{ custom_user.email }}" required>
+            {{ form.email }}
           </div>
           <div class="form-group">
             <label for="editPhone">Phone</label>
-            <input type="tel" class="form-control" id="editPhone" name="phone" value="{{ custom_user.phone }}" required>
+            {{ form.phone }}
           </div>
           {% if custom_user.role == "recruiter" %}
             <div class="form-group">
               <label for="editCompany">Company</label>
-              <input type="text" class="form-control" id="editCompany" name="company" value="{{ profile.company }}" required>
+              {{ form.company }}
             </div>
           {% endif %}
           <div>
@@ -135,7 +136,7 @@ Settings
         </button>
       </div>
       <div class="modal-body">
-        <form id="changePasswordForm" method="post" action="{% url "change_password" %}">
+        <form id="changePasswordForm" method="post" action="{% url "settings" %}">
           {% csrf_token %}
           <div class="form-group">
             <label for="currentPassword">Current Password</label>
@@ -163,8 +164,6 @@ Settings
       </div>
     </div>
   </div>
-</div>
-
 </div>
 
 

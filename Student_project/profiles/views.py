@@ -1,11 +1,10 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from .forms import UserProfileForm ,ProjectExperienceForm
+from .forms import ProjectExperienceForm ,EditUserForm ,CustomPasswordChangeForm ,UserProfileForm
 from .models import UserProfile ,ProjectExperience
 from signUp.models import CustomUser ,RecruiterProfile ,CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
-from signUp.forms import CustomPasswordChangeForm 
 from django.contrib.auth import update_session_auth_hash
 
 # profile view
@@ -23,69 +22,55 @@ def profiles_View(request):
 
     return render(request, 'profiles/profiles.html', {'user_profile': user_profile ,'profile_image_url': profile_image_url ,'project_experiences': project_experiences,})
 
-# setting view
-# @login_required
-# def settings_View(request):
-#     user_profile = get_object_or_404(UserProfile, user=request.user)
-
-#     if request.method == 'POST':
-#         form = UserProfileForm(request.POST, instance=user_profile)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Settings updated successfully.')
-#             return redirect('settings')
-#         else:
-#             messages.error(request, 'Error updating settings. Please check the form and try again.')
-#     else:
-#         form = UserProfileForm(instance=user_profile)
-    
-#     profile = None
-#     if request.user.role == CustomUser.RECRUITER:
-#         profile = get_object_or_404(RecruiterProfile, user=request.user)
-#     elif request.user.role == CustomUser.CANDIDATE:
-#         profile = get_object_or_404(CandidateProfile, user=request.user)
-
-#     context = {
-#         'custom_user': request.user,
-#         'form': form,
-#         'profile': profile,
-#     }
-
-#     return render(request, 'profiles/settings.html', context)
-
 
 @login_required
 def settings_View(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
+    try:
+        # user_profile = get_object_or_404(UserProfile, user=request.user)
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Handle the case where the user profile does not exist
+        user_profile = UserProfile.objects.create(user=request.user)
 
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=user_profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Settings updated successfully.')
-            return redirect('settings')
-        else:
-            messages.error(request, 'Error updating settings. Please check the form and try again.')
+        if 'save_changes' in request.POST:
+            form = EditUserForm(request.POST, instance=user_profile)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Settings updated successfully.')
+                return redirect('settings')
+            else:
+                messages.error(request, 'Error updating settings. Please check the form and try again.')
+        elif 'change_password' in request.POST:
+            change_passform = CustomPasswordChangeForm(request.user, request.POST)
+            if change_passform.is_valid():
+                user = change_passform.save()
+                update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
+                messages.success(request, 'Your password has been changed successfully!')
+                return redirect('settings')
+            else:
+                messages.error(request, 'Please correct the error below.')
     else:
-        form = UserProfileForm(instance=user_profile)
-    
+        form = EditUserForm(instance=user_profile)  # This assignment is moved inside the else block
+
     profile = None
     if request.user.role == CustomUser.RECRUITER:
         profile = get_object_or_404(RecruiterProfile, user=request.user)
     elif request.user.role == CustomUser.CANDIDATE:
         profile = get_object_or_404(CandidateProfile, user=request.user)
 
-    # Initialize change password form
     change_passform = CustomPasswordChangeForm(request.user)
 
     context = {
         'custom_user': request.user,
         'form': form,
         'profile': profile,
-        'change_passform': change_passform,  # Add change password form to context
+        'change_passform': change_passform,
     }
+    print(context)
 
     return render(request, 'profiles/settings.html', context)
+
 
 
 
@@ -143,23 +128,23 @@ def add_project(request):
     return render(request, 'profiles/project_experience.html', {'form': form})
 
 
-@login_required
-def change_password(request):
-    print("Accessing change_password view")  # Debug statement
+# @login_required
+# def change_password(request):
+#     print("Accessing change_password view")  # Debug statement
     
-    if request.method == 'POST':
-        print("POST request detected")  # Debug statement
-        form = CustomPasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
-            messages.success(request, 'Your password has been changed successfully!')
-            return redirect('settings')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = CustomPasswordChangeForm(request.user)
-        print("Initializing form:", form)  # Debug statement
-        print("Form fields:", form.fields)  # Debug statement
+#     if request.method == 'POST':
+#         print("POST request detected")  # Debug statement
+#         form = CustomPasswordChangeForm(request.user, request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
+#             messages.success(request, 'Your password has been changed successfully!')
+#             return redirect('settings')
+#         else:
+#             messages.error(request, 'Please correct the error below.')
+#     else:
+#         form = CustomPasswordChangeForm(request.user)
+#         print("Initializing form:", form)  # Debug statement
+#         print("Form fields:", form.fields)  # Debug statement
     
-    return render(request, 'profiles/change_password.html', {'change_passform': form})
+#     return render(request, 'profiles/change_password.html', {'change_passform': form})
