@@ -2,6 +2,7 @@ from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import BlogPostForm
 from .models import BlogPost
+from profiles.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -9,17 +10,19 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def studentPost(request):
     posts = BlogPost.objects.filter(user=request.user)
-    return render(request, 'studentPost/studentPost.html', {'posts': posts})
+    user_profile = UserProfile.objects.get(user=request.user)
+    print(user_profile)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    return render(request, 'studentPost/studentPost.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
 
 @login_required
+
 def postDetail(request, post_id):
-    # Retrieve the blog post details
-    post = get_object_or_404(BlogPost, pk=post_id)
-
-    # Retrieve related posts (for example, the three most recent posts)
-    related_posts = BlogPost.objects.exclude(pk=post_id).order_by('-publication_date')[:3]
-
-    return render(request, 'studentPost/postdetailes.html', {'post': post, 'related_posts': related_posts})
+    post = get_object_or_404(BlogPost, id=post_id)
+    related_posts = BlogPost.objects.filter(user=post.user).exclude(id=post.id)[:3]  # Fetch related posts by the same user, excluding the current post
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    return render(request, 'studentPost/postdetailes.html', {'post': post, 'user_profile': user_profile , 'related_posts': related_posts ,'profile_image_url': profile_image_url})
 
 
 @login_required

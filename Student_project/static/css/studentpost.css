@@ -146,4 +146,14 @@
   .ezy__blog7-author a {
     color: var(--ezy-theme-color);
   }
+
+  .image_container{
+    display: flex;
+    max-height: 500px;
+    justify-content: center;
+  }
   
+ .banner_image{
+    width: 100%;
+    object-fit: cover;
+ }

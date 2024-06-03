@@ -428,3 +428,149 @@ Post Detailes
   </div>
 </section>
 {% endblock %}
+
+from django.forms import ValidationError
+from django.shortcuts import get_object_or_404, render, redirect
+from .forms import BlogPostForm
+from .models import BlogPost
+from profiles.models import UserProfile
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+# Create your views here.
+@login_required
+def studentPost(request):
+    posts = BlogPost.objects.filter(user=request.user)
+    user_profile = UserProfile.objects.get(user=request.user)
+    print(user_profile)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    return render(request, 'studentPost/studentPost.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
+
+@login_required
+
+def postDetail(request, post_id):
+    post = get_object_or_404(BlogPost, id=post_id)
+    related_posts = BlogPost.objects.filter(user=post.user).exclude(id=post.id)[:3]  # Fetch related posts by the same user, excluding the current post
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    return render(request, 'studentPost/postdetailes.html', {'post': post, 'user_profile': user_profile , 'related_posts': related_posts ,'profile_image_url': profile_image_url})
+
+
+@login_required
+def create_blog_post(request):
+    if request.method == 'POST':
+        form = BlogPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                blog_post = form.save(commit=False)
+                blog_post.user = request.user  # Assign the current user
+                blog_image = request.FILES.get('blog_image')
+                if blog_image:
+                    # Print debug information
+                    print(f'Uploaded image name: {blog_image.name}')
+                    print(f'Uploaded image size: {blog_image.size}')
+                    max_filename_length = 1000
+                    if len(blog_image.name) > max_filename_length:
+                        blog_image.name = blog_image.name[:max_filename_length]
+                    blog_post.blog_image = blog_image  # Save the image
+                blog_post.save()
+                messages.success(request, 'Blog post created successfully.')
+                print('Blog post created successfully.')
+                return redirect('studentpost')  # Redirect to a success page or the list of posts
+            except ValidationError as e:
+                error_messages = e.message_dict
+                print(f'Validation errors: {error_messages}')
+                form = BlogPostForm()
+                return render(request, 'studentPost/post_creation_form.html', {'form': form, 'error_messages': error_messages})
+            except Exception as e:
+                messages.error(request, f'Error while creating the post: {e}')
+                print(f'Error while creating the post: {e}')
+        else:
+            messages.error(request, 'Form is not valid. Please check the fields.')
+            print('Form is not valid. Please check the fields.')
+    else:
+        form = BlogPostForm()
+    return render(request, 'studentPost/post_creation_form.html', {'form': form})
+
+
+
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Post Details
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/services.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="ezy__blog7 light">
+    <div class="container-fluid d-flex justify-content-center" style="max-height: 500px;">
+      <img src="https://images.pexels.com/photos/4065876/pexels-photo-4065876.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" class="w-100" style="object-fit: cover;" />
+    </div>
+
+    <div class="ezy__blog7-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-lg-center">
+            <h2 class="ezy__blog7-heading mb-3 mt-0">Let's Now make an impression.</h2>
+            <p class="ezy__blog7-sub-heading mb-4">
+              "Create stunning blog posts effortlessly. Share your insights, engage with readers, and build your online presence globally."
+            </p>
+            <a href="{% url 'create_blog_post' %}"><button class="px-3"><span>Create Post</span></button></a>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          {% for post in posts %}
+          <div class="col-12 col-md-6 col-lg-4 mb-3">
+            <article class="ezy__blog7-post">
+              <div class="position-relative">
+                {% if post.blog_image %}
+                <img
+                  src="{{ post.blog_image.url }}"
+                  alt="Blog image"
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                {% else %}
+                <!-- Use a sample image -->
+                <img
+                  src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
+                  alt="Sample Image"
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                {% endif %}
+                <div class="px-4 py-3 ezy__blog7-calendar">{{ post.publication_date|date:"d M Y" }}</div>
+              </div>
+              <div class="p-3 p-md-4">
+                <h4 class="mt-3 ezy__blog7-title fs-4 mb-4">{{ post.title }}</h4>
+                <div class="avatar">
+                  {% if user_profile.profile_image %}
+                  <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+                  {% else %}
+                  <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                  {% endif %}
+                  <span class="fw-bold m-2">{{ related_post.user.first_name }} {{ related_post.user.last_name }}</span>
+                </div>
+                <p class="ezy__blog7-description mt-3 mb-4">
+                  {{ post.content|truncatewords:20 }}
+                </p>
+                <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
+              </div>
+            </article>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock %}
