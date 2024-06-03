@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-Post Detailes
+Post Details
 {% endblock %}
 
 {% block head_css %}
@@ -11,7 +11,6 @@ Post Detailes
 <link rel="stylesheet" href="{% static 'css/services.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
-
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
@@ -24,85 +23,53 @@ Post Detailes
     <div class="ezy__blog7-wrapper">
       <div class="container">
         <div class="row">
-          <div class="col-lg-8">
+          <div class="col-lg-12 text-lg-center">
             <h2 class="ezy__blog7-heading mb-3 mt-0">Let's Now make an impression.</h2>
             <p class="ezy__blog7-sub-heading mb-4">
               Wildebeest that irksomely hippopotamus along ubiquitously scallop oh up much and some while convulsive
               far laconically.
             </p>
-            <a href="" class="btn ezy__blog7-btn">Load All Posts</a>
+            <a href="{% url 'create_blog_post' %}"><button class="px-3"><span>Create Post</span></button></a>
           </div>
         </div>
+
         <div class="row mt-5">
+          {% for post in posts %}
           <div class="col-12 col-md-6 col-lg-4 mb-3">
             <article class="ezy__blog7-post">
               <div class="position-relative">
+                {% if post.blog_image %}
                 <img
-                  src="https://cdn.easyfrontend.com/pictures/blog/blog_3.jpg"
-                  alt=""
+                  src="{{ post.blog_image.url }}"
+                  alt="Blog image"
                   class="img-fluid w-100 ezy-blog7-banner"
                 />
-                <div class="px-4 py-3 ezy__blog7-calendar">26<br />Oct<br />2016</div>
+                {% else %}
+                <!-- Use a sample image -->
+                <img
+                  src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
+                  alt="Sample Image"
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                {% endif %}
+                <div class="px-4 py-3 ezy__blog7-calendar">{{ post.publication_date|date:"d M Y" }}</div>
               </div>
               <div class="p-3 p-md-4">
-                <p class="ezy__blog7-author">By <a href="" class="text-decoration-none">Ben Stokes</a></p>
-                <h4 class="mt-3 ezy__blog7-title fs-4">Beautiful Woman Smiling With Hands In Hair</h4>
+                <h4 class="mt-3 ezy__blog7-title fs-4 mb-4">{{ post.title }}</h4>
+                <div class="avatar">
+                  <img class="post_avatar" src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="avatar" width="80" height="80">
+                  <span class="fw-bold m-2">{{ post.user.first_name }} {{ post.user.last_name }}</span>
+                </div>
                 <p class="ezy__blog7-description mt-3 mb-4">
-                  It’s no secret that the digital industry is booming. From exciting startups to global brands.
+                  {{ post.content|truncatewords:20 }}
                 </p>
-                <a href="{% url "postdetail" 1 %}" class="btn ezy__blog7-btn-read-more">Read More</a>
+                <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
               </div>
             </article>
           </div>
-          <div class="col-12 col-md-6 col-lg-4 mb-3">
-            <article class="ezy__blog7-post">
-              <div class="position-relative">
-                <img
-                  src="https://cdn.easyfrontend.com/pictures/blog/blog_13_1.jpg"
-                  alt=""
-                  class="img-fluid w-100 ezy-blog7-banner"
-                />
-                <div class="px-4 py-3 ezy__blog7-calendar">11<br />May<br />2020</div>
-              </div>
-              <div class="p-3 p-md-4">
-                <p class="ezy__blog7-author">By <a href="" class="text-decoration-none">Moein Ali</a></p>
-                <h4 class="mt-3 ezy__blog7-title fs-4">Not Your Regular Home Decoration?</h4>
-                <p class="ezy__blog7-description mt-3 mb-4">
-                  Urna molestie at eleme ntum eu facilisis sed odio Male suada fames .
-                </p>
-                <a href="{% url "postdetail" 2 %}" class="btn ezy__blog7-btn-read-more">Read More</a>
-              </div>
-            </article>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4 mb-3">
-            <article class="ezy__blog7-post">
-              <div class="position-relative">
-                <img
-                  src="https://cdn.easyfrontend.com/pictures/blog/blog_9.jpg"
-                  alt=""
-                  class="img-fluid w-100 ezy-blog7-banner"
-                />
-                <div class="px-4 py-3 ezy__blog7-calendar">19<br />Mar<br />2021</div>
-              </div>
-              <div class="p-3 p-md-4">
-                <p class="ezy__blog7-author">By <a href="" class="text-decoration-none">Maxy Paulo</a></p>
-                <h4 class="mt-3 ezy__blog7-title fs-4">Fashion Essentials All Men Should Know</h4>
-                <p class="ezy__blog7-description mt-3 mb-4">
-                  Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores.
-                </p>
-                <a href="{% url "postdetail" 2 %}" class="btn ezy__blog7-btn-read-more">Read More</a>
-              </div>
-            </article>
-          </div>
+          {% endfor %}
         </div>
       </div>
-    </div>
-
-    <!-- Button to load more posts -->
-    <div class="text-center mt-5">
-      <a href="{% url "create_blog_post" %}">
-        <button id="load-more-posts" class="btn ezy__blog7-btn">Load More Posts</button>
-      </a>
     </div>
 </section>
 {% endblock %}

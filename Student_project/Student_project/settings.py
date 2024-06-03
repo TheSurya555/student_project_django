@@ -156,3 +156,7 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = 'signUp.CustomUser'
 
 # AUTH_USER_MODEL = 'signUp.RequiterUser'
+
+# Set the maximum upload size
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB

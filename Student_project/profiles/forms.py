@@ -11,17 +11,17 @@ class UserProfileForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['dob'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['phone'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['address'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['role'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['position'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['experience'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['skills'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['languages'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['education'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['vat_id'].widget.attrs.update({'class': 'form-control input', 'autocomplete': 'off'})
-        self.fields['profile_image'].widget.attrs.update({'class': 'form-control input', 'type': 'file'})
+        self.fields['dob'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'input', 'autocomplete': 'off'})
+        self.fields['phone'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
+        self.fields['address'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
+        self.fields['role'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['position'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['experience'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['skills'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['languages'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['education'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['vat_id'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['profile_image'].widget.attrs.update({'class': 'input', 'type': 'file'})
 
 class ProjectExperienceForm(forms.ModelForm):
     class Meta:

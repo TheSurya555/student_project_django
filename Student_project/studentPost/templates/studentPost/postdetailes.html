@@ -1,9 +1,8 @@
 {% extends "main/Layout.html" %}
-
 {% load static %}
 
 {% block title %}
-Post Detailes
+{{ post.title }}
 {% endblock %}
 
 {% block head_css %}
@@ -12,184 +11,93 @@ Post Detailes
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
-
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/postdetail.css' %}">
+<link rel="stylesheet" href="{% static 'css/postdetail.css' %}">
 {% endblock %}
 
 {% block content %}
 <section class="ezy__blogdetails1 light" id="ezy__blogdetails1">
     <div class="container">
-      <div class="row">
-        <div class="col-12 col-md-8">
-          <h1 class="ezy__blogdetails1-heading mb-5">How to Pitch a Video Game: 7 Tips for Pitching Games</h1>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 col-md-8">
-          <img src="https://images.pexels.com/photos/1667088/pexels-photo-1667088.jpeg" alt="" class="img-fluid rounded" />
-          <div class="d-flex justify-content-between my-5 me-5 flex-column">
-            <h2 class="mb-4 fw-bolder">Student Management Project by Using Python and Django</h2>
-            <div class="d-flex align-items-center mb-2">
-              <div class="me-2">
-                <img src="https://cdn.easyfrontend.com/pictures/testimonial/testimonial_square_1.jpeg" alt=""
-                  class="img-fluid rounded-circle border" width="47" />
-              </div>
-              <div>
-                <p class="mb-0">By <b>Surya Prasad Sahoo</b></p>
-              </div>
-              <p class="mb-0 ms-3">August 10th, 2020</p>
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <h1 class="ezy__blogdetails1-heading mb-5">{{ post.title }}</h1>
+                {% if post.blog_image %}
+                <img
+                  src="{{ post.blog_image.url }}"
+                  alt="Blog image"
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                {% else %}
+                <!-- Use a sample image -->
+                <img
+                  src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
+                  alt="Sample Image"
+                  class="img-fluid w-100 ezy-blog7-banner"
+                />
+                {% endif %}
+                <div class="d-flex justify-content-between my-5 me-5 flex-column">
+                    <h2 class="mb-4 fw-bolder">{{ post.title }}</h2>
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="me-2">
+                            <img src="{{ post.author.profile_picture.url }}" alt="" class="img-fluid rounded-circle border" width="47" />
+                        </div>
+                        <div>
+                            <p class="mb-0">By <b>{{ post.author }}</b></p>
+                        </div>
+                        <p class="mb-0 ms-3">{{ post.publication_date }}</p>
+                    </div>
+                    <!-- Add social media links here if needed -->
+                </div>
+                <div class="ezy__blogdetails1-content">
+                    {{ post.content|safe }}
+                </div>
             </div>
-            <div class="ezy__blogdetails1-social d-flex justify-content-between">
-              <div class="star-rating ezy__footer13-quick-links">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-              <ul class="ezy__footer13-quick-links">
-                <a href=""><i class="fab fa-facebook me-3"></i></a>
-                <a href=""><i class="fab fa-instagram me-3"></i></a>
-                <a href=""><i class="fab fa-linkedin-in me-3"></i></a>
-                <a href=""><i class="fab fa-twitter me-3"></i></a>
-                <a href=""><i class="fab fa-whatsapp me-3"></i></a>
-                <a href=""><i class="fas fa-share-alt me-3"></i></a>
-                <a href=""><i class="fas fa-bookmark"></i></a>
-              </ul>
-            </div>
-          </div>
-          <div class="ezy__blogdetails1-content">
-            <p>
-              Teaching is a noble profession. Think about the most respected persons in our society. Yes, they are the
-              teachers. If you ask someone about some of his favourite persons, it is most likely to find a teacher of
-              him in his answer. So, being a teacher is an amazing thing. Besides, the career prospect in teaching is
-              also lucrative. In England and Wales, as a Newly Qualified Teacher (NQT) you’ll earn £24,373 to £30,480
-              depending on location Since you have decided to become a teacher, you may be known to all of these.
-            </p>
-            <p>
-              Getting into teaching requires many years of preparation. If you don’t know how to become a teacher, you
-              may find the way challenging. So, in this article, I’ll walk you through the steps to becoming a teacher
-              in the UK.
-            </p>
-  
-            <br />
-            <h5>2. Decide your preferred subject</h5>
-            <p>
-              In primary schools, you may be responsible for teaching multiple subjects. But in the secondary schools,
-              it’s most likely that you’ll be teaching the subject in which you did your major. So, it’s your choice
-              which subject do you want to teach. It’s necessary to decide this because it will keep you on the track to
-              become a teacher and step forward to make your preparation.
-            </p>
-  
-            <br />
-            <h5>3. Earn your bachelor degree</h5>
-            <p>
-              Unlike many other professions, teaching is very strict in its requirements. It’s because we don’t want to
-              give the responsibility of educating our children to someone who doesn’t have the proper education and
-              credentials. So, getting into teaching requires a minimum degree in the first place. After that, the other
-              things come. You need a bachelor degree to become a teacher. There are also other specialized and advanced
-              degrees, but you need your bachelor degree before everything.
-            </p>
-            <p>
-              If you want to be a primary teacher, then you’ll need a degree of Bachelor of Education (BEd.) But, if you
-              want to be a secondary teacher, you have to do your bachelor in your preferred subject. Your major in your
-              degree will determine which subject you’ll be teaching. Earning a bachelor degree will require 3 to 4
-              years. However, if you want to be a nursery or pre-school teacher, you don’t need a bachelor degree rather
-              a proper license and certification in teaching children.
-            </p>
-          </div>
         </div>
-        <div class="col-12 col-md-4 col-lg-3">
-          <!-- Payment section -->
-          <div class="ezy__blogdetails1-top py-4 px-3 mb-4">
-            <h5 class="mb-0">Go with this cadidate</h5>
-          </div>
-          <div class="tab-content" id="packageTabsContent">
-            <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
-              <div class="price_card">
-                <h5 class="price_card-title">I WILL EDIT REAL ESTATE 5 PHOTOS</h5>
-                <p>Lens Correction, White Balance, Sky replacement, Repair Straight, vertical Horizontal</p>
-                <ul class="features">
-                    <li><i class="fas fa-clock"></i> 1-day delivery</li>
-                    <li><i class="fas fa-sync"></i> Unlimited Revisions</li>
-                    <li><i class="fas fa-images"></i> 5 images</li>
-                    <li><i class="fas fa-file-image"></i> Printable resolution file</li>
-                </ul>
-                <p class="price">Price: <span>₹4056</span></p>
-                <button class="px-3"><span>Continue</span></button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-</section>    
+</section>
 
 <section class="ezy__blog3 light">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center">
-        <h2 class="ezy__blog3-heading mb-3 mt-0">View More Posts</h2>
-      </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="ezy__blog3-heading mb-3 mt-0">Related Posts</h2>
+            </div>
+        </div>
+        <div class="row mt-5">
+            {% for related_post in related_posts %}
+            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                <article class="ezy__blog3-post h-100">
+                    <div class="position-relative">
+                        {% if post.blog_image %}
+                        <img
+                          src="{{ post.blog_image.url }}"
+                          alt="Blog image"
+                          class="img-fluid w-100 ezy-blog7-banner"
+                        />
+                        {% else %}
+                        <!-- Use a sample image -->
+                        <img
+                          src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
+                          alt="Sample Image"
+                          class="img-fluid w-100 ezy-blog7-banner"
+                        />
+                        {% endif %}
+                    </div>
+                    <div class="p-3 p-md-4">
+                        <div class="avatar">
+                            <img class="post_avatar" src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="avatar" width="80" height="80">
+                            <span class="fw-bold m-2">{{ related_post.author }}</span>
+                        </div>
+                        <h4 class="mt-3 ezy__blog3-title fs-4">{{ related_post.title }}</h4>
+                        <p class="ezy__blog3-description mt-3 mb-4">
+                            {{ related_post.content|truncatewords:20 }}
+                        </p>
+                        <a href="{% url 'postdetail' related_post.id %}"><button class="px-3"><span>Read More</span></button></a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    <div class="row mt-5">
-      <div class="col-12 col-md-6 col-lg-4 mb-3">
-        <article class="ezy__blog3-post h-100">
-          <div class="position-relative">
-            <img src="https://cdn.easyfrontend.com/pictures/blog/blog_3.jpg" alt="" class="img-fluid w-100" />
-          </div>
-          <div class="p-3 p-md-4">
-              <div class="avatar">
-                  <img class="post_avatar" src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="avatar" width="80" height="80">
-                  <span class="fw-bold m-2">Surya </span>
-              </div>                    
-            <h4 class="mt-3 ezy__blog3-title fs-4">Not Your Regular Home Decoration?</h4>
-            <p class="ezy__blog3-description mt-3 mb-4">
-              Urna molestie at eleme ntum eu facilisis sed odio Male suada fames.
-            </p>
-            <a href=""><button class="px-3"><span>Read More</span></button></a>
-          </div>
-        </article>
-      </div>
-      <div class="col-12 col-md-6 col-lg-4 mb-3">
-        <article class="ezy__blog3-post h-100">
-          <div class="position-relative">
-            <img src="https://cdn.easyfrontend.com/pictures/blog/blog_9.jpg" alt="" class="img-fluid w-100" />
-          </div>
-          <div class="p-3 p-md-4">
-              <div class="avatar">
-                  <img class="post_avatar" src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="avatar" width="80" height="80">
-                  <span class="fw-bold m-2">Surya </span>
-              </div>                    
-            <h4 class="mt-3 ezy__blog3-title fs-4">How I’m Styling Everyday Black Outfits</h4>
-            <p class="ezy__blog3-description mt-3 mb-4">
-              t’s no secret that the digital industry is booming. From exciting startups to global brands.
-            </p>
-            <a href=""><button class="px-3"><span>Read More</span></button></a>
-            
-          </div>
-        </article>
-      </div>
-      <div class="col-12 col-md-6 col-lg-4 mb-3">
-        <article class="ezy__blog3-post h-100">
-          <div class="position-relative">
-            <img src="https://cdn.easyfrontend.com/pictures/blog/blog_14_1.jpg" alt="" class="img-fluid w-100" />
-          </div>
-          <div class="p-3 p-md-4">
-              <div class="avatar">
-                  <img class="post_avatar" src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="avatar" width="80" height="80">
-                  <span class="fw-bold m-2">Surya Prasad Sahoo</span>
-              </div>
-            <h4 class="mt-3 ezy__blog3-title fs-4">Fashion Essentials All Men Should Know</h4>
-            <p class="ezy__blog3-description mt-3 mb-4">
-              More off this less hello salamander lied porpoise much over tightly circa horse taped.
-            </p>
-            <a href=""><button class="px-3"><span>Read More</span></button></a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </div>
 </section>
 {% endblock %}
