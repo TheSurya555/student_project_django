@@ -48,7 +48,7 @@
                       {% if user.is_authenticated %}
                         {% if request.session.user_role == "Candidate" %}
                           <li class="nav-item"><a class="nav-link" href="{% url "studentpost" %}">Posts</a></li>
-                          <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
                           <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" role="button" style=" border: 2px solid #000; border-radius: 50px;" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
@@ -66,7 +66,7 @@
                         {% if request.session.user_role == "Recruiter" %}
                           <li class="nav-item text-dark"><a class="nav-link" href="{% url "services" %}">Services</a></li>
                           <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
-                          <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
                           <li class="nav-item dropdown">
                             <a class="nav-link" style=" border: 2px solid #000; border-radius: 50px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
@@ -82,7 +82,7 @@
                         {% endif %}
                       {% else %}
                           <li class="nav-item"><a class="nav-link" href="{% url "services" %}">Services</a></li>
-                          <li class="nav-item"><a class="nav-link" href="{% url "contactus" %}">Contact Us</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
                           <ul class="navbar-nav flex-row mb-2 mb-lg-0 ms-lg-3">
                               <li class="nav-item me-2">
                                   <a href="{% url 'signup' %}"><button class="px-3"> <span>Sign Up</span></button></a>

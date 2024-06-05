@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 def studentPost(request):
     posts = BlogPost.objects.filter(user=request.user)
     user_profile = UserProfile.objects.get(user=request.user)
-    print(user_profile)
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     return render(request, 'studentPost/studentPost.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
 

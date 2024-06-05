@@ -28,20 +28,23 @@ contactus
                 <div class="col-lg-5">
                     <div class="card ezy__contact4-form-card">
                         <div class="card-body p-md-5">
-                            <h2 class="ezy__contact4-heading mb-3">Contact Us</h2>
+                            <h2 class="ezy__contact4-heading mb-3">Cunsult With Us</h2>
                             <p class="ezy__contact4-sub-heading mb-5">We list your menu online, help you process orders.
                             </p>
 
-                            <form>
+                            <form method="post">
+                                {% csrf_token %}
                                 <div class="form-group mb-3 mt-2">
-                                    <input type="text" class="form-control" placeholder="Enter Name" />
+                                    {{form.name}}
                                 </div>
                                 <div class="form-group mb-3 mt-2">
-                                    <input type="email" class="form-control" placeholder="Enter Email" />
+                                    {{form.email}}
+                                </div>
+                                <div class="form-group mb-3 mt-2">
+                                    {{form.phone}}
                                 </div>
                                 <div class="form-group mb-3">
-                                    <textarea name="message" class="form-control" placeholder="Enter Message"
-                                        rows="3"></textarea>
+                                    {{form.message}}
                                 </div>
                                 <div>
                                     <button type="submit" class="px-3"> <span>Submit</span></button>
@@ -53,4 +56,27 @@ contactus
             </div>
         </div>
     </section>
+
+
+    <!-- Pop-up message -->
+    <div id="popup-message" class="popup-message">
+        Your message has been sent successfully!
+    </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        // JavaScript to show the pop-up message if the form was successfully submitted
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if messages %}
+                var popup = document.getElementById('popup-message');
+                popup.style.display = 'block';
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 3000);  // Hide the pop-up after 3 seconds
+            {% endif %}
+        });
+    </script>
 {% endblock %}

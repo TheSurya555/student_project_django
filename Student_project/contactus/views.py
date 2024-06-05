@@ -1,5 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from.forms import ConsultingForm
+from.models import ConsultingMessage
+from django.contrib import messages
 
-# Create your views here.
-def contactus_View(request):
-    return render(request,'contactus/contactus.html')
+def consulting_View(request):
+    if request.method == 'POST':
+        form = ConsultingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('consulting')
+    else:
+        form = ConsultingForm()
+    return render(request, 'contactus/consulting.html', {'form': form})

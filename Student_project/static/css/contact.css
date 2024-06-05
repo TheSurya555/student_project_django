@@ -122,3 +122,17 @@
 	border-color: rgba(var(--ezy-theme-color-rgb), .9);
 	color: #ffffff;
 }
+
+/* CSS for the pop-up message */
+.popup-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    z-index: 1000;
+}

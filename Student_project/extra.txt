@@ -574,3 +574,25 @@ Post Details
     </div>
 </section>
 {% endblock %}
+
+
+# from django.shortcuts import render
+# from studentPost.models import BlogPost
+# from profiles.models import UserProfile
+
+# # Create your views here.
+# def services_View(request):
+#     posts = BlogPost.objects.all()
+#     user_profile = UserProfile.objects.get(user=request.user)
+#     print(user_profile)
+#     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+#     print(profile_image_url)
+#     return render(request, 'services/services.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
+
+# from django.shortcuts import render
+# from studentPost.models import BlogPost
+
+# def services_View(request):
+#     posts = BlogPost.objects.all()
+#     profile_image_url = None  # Initialize profile_image_url to None for unauthenticated users
+#     return render(request, 'services/services.html', {'posts': posts, 'profile_image_url': profile_image_url})
