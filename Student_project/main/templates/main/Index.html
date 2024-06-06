@@ -123,140 +123,51 @@ Home
     </section>
   <!-- client section end -->
 
-    <!-- Service seccion start -->
-    <section class="ezy__service23 light  service" id="ezy__service23">
-        <div class="container">
-          <div class="row ezy__service23-separator">
+  <!-- Service section start -->
+  <section class="ezy__service23 light service" id="ezy__service23">
+    <div class="container">
+        <div class="row ezy__service23-separator">
             <!-- Start: Section Heading -->
             <div class="col-12 mb-5 text-center">
-              <div class="row justify-content-center">
-                <div class="col-12 col-md-10 col-lg-5">
-                  <h3 class="ezy__service23-heading">Services List</h3>
-                  <p class="ezy__service23-sub-heading mt-4 px-md-4">
-                    Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                    blanditiis eligendi qui.
-                  </p>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-10 col-lg-5">
+                        <h3 class="ezy__service23-heading">Services List</h3>
+                        <p class="ezy__service23-sub-heading mt-4 px-md-4">
+                            Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
+                            blanditiis eligendi qui.
+                        </p>
+                    </div>
                 </div>
-              </div>
             </div>
             <!-- End: Section Heading -->
-            <div class="row ezy__service23-row">
-              <!-- card start -->
-              <div class="col-md-6 col-xl-4 mt-4">
-                <div class="card ezy__service23-card p-4 border-0 rounded-0">
-                  <div class="card-body pt-4">
-                    <div class="ezy__service23-card-icon">
-                      <i class="fa-solid fa-database"></i>
+
+            <!-- Loop through services and display them -->
+            {% for service in services %}
+            <div class="col-md-6 col-xl-4 mt-4">
+                <div class="card ezy__service23-card border-0 rounded-0">
+                    <div class="card-body pt-4">
+                        <div class="ezy__service23-card-icon">
+                            <!-- Use the icon field from the Service model -->
+                            <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
+                        </div>
                     </div>
-                  </div>
-                  <div class="card-body pb-4">
-                    <h5 class="ezy__service23-card-title mb-3">Product Design</h5>
-                    <p class="ezy__service23-card-sub-title mb-0">
-                      Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                      blanditiis eligendi qui.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- card end -->
-              <!-- card start -->
-              <div class="col-md-6 col-xl-4 mt-4">
-                <div class="card ezy__service23-card p-4 border-0 rounded-0">
-                  <div class="card-body pt-4">
-                    <div class="ezy__service23-card-icon">
-                      <i class="fas fa-cannabis"></i>
+                    <div class="card-body pb-4 text-center">
+                        <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
+                        <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
+                        <a href="{% url 'service_candidates' service.id %}"><button class="px-3"><span>View Candidates</span></button></a>
                     </div>
-                  </div>
-                  <div class="card-body pb-4">
-                    <h5 class="ezy__service23-card-title mb-3">Photography</h5>
-                    <p class="ezy__service23-card-sub-title mb-0">
-                      Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                      blanditiis eligendi qui.
-                    </p>
-                  </div>
                 </div>
-              </div>
-              <!-- card end -->
-              <!-- card start -->
-              <div class="col-md-6 col-xl-4 mt-4">
-                <div class="card ezy__service23-card p-4 border-0 rounded-0">
-                  <div class="card-body pt-4">
-                    <div class="ezy__service23-card-icon">
-                      <i class="fas fa-cannabis"></i>
-                    </div>
-                  </div>
-                  <div class="card-body pb-4">
-                    <h5 class="ezy__service23-card-title mb-3">Coding</h5>
-                    <p class="ezy__service23-card-sub-title mb-0">
-                      Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                      blanditiis eligendi qui.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- card end -->
-              <!-- card start -->
-              <div class="col-md-6 col-xl-4 mt-4">
-                <div class="card ezy__service23-card p-4 border-0 rounded-0">
-                  <div class="card-body pt-4">
-                    <div class="ezy__service23-card-icon">
-                      <i class="fas fa-cannabis"></i>
-                    </div>
-                  </div>
-                  <div class="card-body pb-4">
-                    <h5 class="ezy__service23-card-title mb-3">Content Writing</h5>
-                    <p class="ezy__service23-card-sub-title mb-0">
-                      Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                      blanditiis eligendi qui.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- card end -->
-              <!-- card start -->
-              <div class="col-md-6 col-xl-4 mt-4">
-                <div class="card ezy__service23-card p-4 border-0 rounded-0">
-                  <div class="card-body pt-4">
-                    <div class="ezy__service23-card-icon">
-                      <i class="fas fa-cannabis"></i>
-                    </div>
-                  </div>
-                  <div class="card-body pb-4">
-                    <h5 class="ezy__service23-card-title mb-3">Branding</h5>
-                    <p class="ezy__service23-card-sub-title mb-0">
-                      Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                      blanditiis eligendi qui.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- card end -->
-              <!-- card start -->
-              <div class="col-md-6 col-xl-4 mt-4">
-                <div class="card ezy__service23-card p-4 border-0 rounded-0">
-                  <div class="card-body pt-4">
-                    <div class="ezy__service23-card-icon">
-                      <i class="fas fa-cannabis"></i>
-                    </div>
-                  </div>
-                  <div class="card-body pb-4">
-                    <h5 class="ezy__service23-card-title mb-3">Data Entry</h5>
-                    <p class="ezy__service23-card-sub-title mb-0">
-                      Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                      blanditiis eligendi qui.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- card end -->
             </div>
-            <!-- End: .row -->
-          </div>
-          <!-- End: .row -->
+            {% endfor %}
+            <!-- End loop -->
+
         </div>
-        <!-- End: .container -->
-    </section>
-    <!-- Service seccion end -->
+        <!-- End: .row -->
+    </div>
+    <!-- End: .container -->
+  </section>
+  <!-- Service section end -->
+
 
 
     {% comment %} testimonial section  {% endcomment %}
@@ -276,9 +187,9 @@ Home
                       <div class="col-md-6 col-lg-4">
                           <div class="ezy__testimonial5-item p-4 py-lg-5 mt-4 text-center">
                               {% if user.userprofile.profile_image %}
-                                  <img class="post_avatar" src="{{ user.userprofile.profile_image.url }}" alt="avatar" width="80" height="80">
+                                  <img class="post_avatar" src="{{ user.userprofile.profile_image.url }}" alt="avatar">
                               {% else %}
-                                  <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                                  <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
                               {% endif %}
                               <div class="ezy__testimonial5-content mt-3">
                                   <h4 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h4>

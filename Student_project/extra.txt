@@ -684,3 +684,24 @@ Post Details
         </div>
     </section>
     {% comment %} testimonial section end {% endcomment %}
+
+
+                <div class="row">
+                    {% for candidate in candidates %}
+                        <div class="card ezy__service23-card border-0 rounded-0 col-md-6 col-lg-4">
+                            <div class="ezy__testimonial5-item p-4 py-lg-5 mt-4 text-center">
+                                {% if user.userprofile.profile_image %}
+                                    <img class="post_avatar" src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
+                                {% else %}
+                                    <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+                                {% endif %}
+                                <div class="ezy__testimonial5-content mt-3">
+                                    <h4 class="mb-1">{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h4>
+                                    <p class="mb-4 ezy__testimonial5-rating">
+                                        {{ candidate.skills }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>    
