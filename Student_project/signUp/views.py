@@ -3,7 +3,7 @@ from django.contrib.auth import login ,logout ,authenticate
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
-from .forms import CandidateSignUpForm, RecruiterSignUpForm ,EmailOrPhoneLoginForm
+from .forms import CandidateSignUpForm, RecruiterSignUpForm ,EmailOrPhoneLoginForm ,AdminSignUpForm
 from .models import CustomUser
 
 
@@ -45,6 +45,23 @@ def requiter_SignUp_View(request):
     else:
         form = RecruiterSignUpForm()
     return render(request, 'signup/requiterSignup.html', {'form': form})
+
+# Admin signup view
+def admin_SignUp_View(request):
+    if request.method == 'POST':
+        form = AdminSignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            admin_group = Group.objects.get(name='Admin')
+            user.groups.add(admin_group)
+            messages.success(request, 'Account Created Successfully !')
+            form = AdminSignUpForm()
+            print(form)
+        else:
+            messages.error(request, 'Error while creating account !')
+    else:
+        form = AdminSignUpForm()
+    return render(request, 'signUp/adminSignup.html', {'form': form})
     
 
 def login_View(request):
@@ -111,6 +128,37 @@ def RecruiterLoginView(request):
         return render(request, 'signUp/requiterLogin.html', {'form': form})
     else:
         return HttpResponseRedirect('/') 
+    
+    
+# Admin login view
+def admin_LoginView(request):
+    if not request.user.is_authenticated:
+        if request.method == 'POST':
+            form = EmailOrPhoneLoginForm(request=request, data=request.POST)
+            if form.is_valid():
+                uname = form.cleaned_data['username']
+                upass = form.cleaned_data['password']
+                user = authenticate(username=uname, password=upass)
+                print('user is', user)
+                if user is not None:
+                    login(request, user)
+                    # Determine the user's role and store it in the session
+                    if user.role == CustomUser.ADMIN:
+                        request.session['user_role'] = 'Admin'
+                        print('Admin logged in')
+                        messages.success(request, 'Logged in successfully as Admin!!')
+                        return HttpResponseRedirect('/')  # Redirect to Admin dashboard
+                    else:
+                        messages.error(request, 'Unknown user role!!')
+                else:
+                    messages.error(request, 'Bad credentials!!')
+            else:
+                messages.error(request, 'Bad credentials!!')
+        else:
+            form = EmailOrPhoneLoginForm()
+        return render(request, 'signUp/adminLogin.html', {'form': form})
+    else:
+        return HttpResponseRedirect('/')  # Redirect to the home page    
     
     
 #logout view

@@ -59,9 +59,13 @@ contactus
 
 
     <!-- Pop-up message -->
-    <div id="popup-message" class="popup-message">
-        Your message has been sent successfully!
-    </div>
+    {% if messages %}
+        <div id="popup-message" class="popup-message">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
 
 {% endblock %}
 
@@ -70,13 +74,15 @@ contactus
     <script>
         // JavaScript to show the pop-up message if the form was successfully submitted
         document.addEventListener('DOMContentLoaded', function() {
-            {% if messages %}
-                var popup = document.getElementById('popup-message');
+            var popup = document.getElementById('popup-message');
+            if (popup) {
                 popup.style.display = 'block';
                 setTimeout(function() {
                     popup.style.display = 'none';
+                    // Remove the popup element after hiding it
+                    popup.parentNode.removeChild(popup);
                 }, 3000);  // Hide the pop-up after 3 seconds
-            {% endif %}
+            }
         });
     </script>
 {% endblock %}

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from studentPost.models import BlogPost
-from profiles.models import UserProfile
 
 def services_View(request):
     posts = BlogPost.objects.all()

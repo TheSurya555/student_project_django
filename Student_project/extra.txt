@@ -596,3 +596,91 @@ Post Details
 #     posts = BlogPost.objects.all()
 #     profile_image_url = None  # Initialize profile_image_url to None for unauthenticated users
 #     return render(request, 'services/services.html', {'posts': posts, 'profile_image_url': profile_image_url})
+
+
+    {% comment %} testimonial section  {% endcomment %}
+    <section class="ezy__testimonial5 light" id="Talents">
+        <div class="container">
+            <div class="row justify-content-center mb-4 mb-md-5">
+                <div class="col-lg-6 col-xl-5 text-center">
+                    <h2 class="ezy__testimonial5-heading mb-3">Meet Our Talents</h2>
+                    <p class="ezy__testimonial5-sub-heading mb-0">
+                        From there give dominion, lights doesn't good all rule let open, appear our beast second bearing.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                {% for user in users %}
+                    {% if user.role == 'candidate' %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="ezy__testimonial5-item p-4 py-lg-5 mt-4">
+                                {% if user.candidate_profile.profile_image %}
+                                    <img class="post_avatar" src="{{ user.candidate_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+                                {% else %}
+                                    <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                                {% endif %}
+                                <div class="ezy__testimonial5-content mt-3">
+                                    <h4 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h4>
+                                    <p class="mb-4 ezy__testimonial5-rating">
+                                        <span class="fas fa-star active"></span>
+                                        <span class="fas fa-star active"></span>
+                                        <span class="fas fa-star active"></span>
+                                        <span class="fas fa-star-half-alt active"></span>
+                                        <span class="fas fa-star"></span>
+                                    </p>
+                                    <p class="opacity-50 mb-0">
+                                        It’s easier to reach your savings goals when you have the right savings account. Take a look and find
+                                        the right one for you.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% comment %} testimonial section end {% endcomment %}
+
+
+
+        {% comment %} testimonial section  {% endcomment %}
+    <section class="ezy__testimonial5 light" id="Talents">
+        <div class="container">
+          <div class="row justify-content-center mb-4 mb-md-5">
+            <div class="col-lg-6 col-xl-5 text-center">
+              <h2 class="ezy__testimonial5-heading mb-3">Meet Our Talents</h2>
+              <p class="ezy__testimonial5-sub-heading mb-0">
+                From there give dominion, lights doesn't good all rule let open, appear our beast second bearing. 
+              </p>
+            </div>
+          </div>
+          <div class="d-flex">
+              {% for user in users  %}
+                <div class="ezy__testimonial5-item p-4 py-lg-5 mt-4">
+                  {% if user.userprofile.profile_image %}
+                  <img class="post_avatar" src="{{ user.userprofile.profile_image.url }}" alt="avatar" width="80" height="80">
+                  {% else %}
+                  <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                  {% endif %}
+                  <div class="ezy__testimonial5-content mt-3">
+                    <h4 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h4>
+                    <p class="mb-4 ezy__testimonial5-rating">
+                      <span class="fas fa-star active"></span>
+                      <span class="fas fa-star active"></span>
+                      <span class="fas fa-star active"></span>
+                      <span class="fas fa-star-half-alt active"></span>
+                      <span class="fas fa-star"></span>
+                    </p>
+                    <p class="opacity-50 mb-0">
+                      It’s easier to reach your savings goals when you have the right savings account. Take a look and find
+                      the right one for you.
+                    </p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+          </div>
+        </div>
+    </section>
+    {% comment %} testimonial section end {% endcomment %}

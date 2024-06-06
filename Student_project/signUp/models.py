@@ -4,14 +4,17 @@ from django.db import models
 class CustomUser(AbstractUser):
     CANDIDATE = 'candidate'
     RECRUITER = 'recruiter'
+    ADMIN = 'admin'
 
     ROLE_CHOICES = (
         (CANDIDATE, 'Candidate'),
         (RECRUITER, 'Recruiter'),
+        (ADMIN, 'Admin'),
     )
 
     role = models.CharField(max_length=10, choices=ROLE_CHOICES ,default=CANDIDATE)
     phone = models.CharField(max_length=15,null=True , unique=True)
+    professional_id = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = 'username'
@@ -48,4 +51,12 @@ class CandidateProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='candidate_profile')
 
     def __str__(self):
-        return self.user.username    
+        return self.user.username
+
+
+class AdminProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='admin_profile')
+    professional_id = models.CharField(max_length=30, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.professional_id}"

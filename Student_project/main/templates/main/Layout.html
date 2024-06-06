@@ -80,6 +80,24 @@
                             </ul>
                           </li>
                         {% endif %}
+                        {% if request.session.user_role == "Admin" %}
+                          <li class="nav-item"><a class="nav-link" href="{% url "studentpost" %}">Posts</a></li>
+                          <li class="nav-item text-dark"><a class="nav-link" href="{% url "services" %}">Services</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
+                          <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
+                          <li class="nav-item dropdown">
+                            <a class="nav-link" style=" border: 2px solid #000; border-radius: 50px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url "settings" %}">Setting</a></li>
+                                <li><a class="dropdown-item" href="{% url "messages" %}">Message</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                          </li>
+                        {% endif %}
                       {% else %}
                           <li class="nav-item"><a class="nav-link" href="{% url "services" %}">Services</a></li>
                           <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
@@ -121,6 +139,7 @@
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Services</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                <li><a class="dropdown-item" href="{% url 'adminlogin' %}">Admin Login</a></li>
               </ul>
             </div>
             
