@@ -2,12 +2,33 @@
 {% load static %}
 
 {% block title %}
-Candidate for {{service.name}}
+Candidates for {{ service.name }}
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    .ezy__service23-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+    .ezy__service23-card:hover {
+        transform: translateY(-5px);
+    }
+    .post_avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    a{
+        text-decoration: none;
+        color: black;
+    }
+</style>
+{% endblock %}
 
 {% block content %}   
-   
    <!-- Candidates section start -->
    <section class="ezy__candidates light" id="ezy__candidates">
         <div class="container">
@@ -17,25 +38,27 @@ Candidate for {{service.name}}
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-10 col-lg-5">
                             <h3 class="ezy__candidates-heading">Candidates for {{ service.name }}</h3>
+                            <p>Below is the list of candidates that match the skills required for {{ service.name }}. Click on a candidate to view their full profile.</p>
                         </div>
                     </div>
                 </div>
                 <!-- End: Section Heading -->
-
                 <div class="row">
                     {% for candidate in candidates %}
-                        <div class="card ezy__service23-card  col-md-6 col-lg-4 m-5 text-center">
+                        <div class="card ezy__service23-card col-md-6 col-lg-4 m-5 text-center">
                             <div class="ezy__testimonial5-item border-1 rounded-2 py-lg-5 mt-4 text-center">
-                                {% if candidate.profile_image %}
-                                    <img class="post_avatar" src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
-                                {% else %}
-                                    <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
-                                {% endif %}
-                                <div class="ezy__testimonial5-content mt-3">
-                                    <h4 class="mb-4">{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h4>
-                                    <p class="mb-4 ezy__testimonial5-rating">{{ candidate.skills }}</p>
-                                    <p class="mb-4 ezy__testimonial5-rating">{{candidate.education}}</p>
-                                </div>
+                                <a class="candidate_list" href="{% url 'candidate_profile' candidate.id %}?service_id={{ service.id }}">
+                                    {% if candidate.profile_image %}
+                                        <img class="post_avatar" src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
+                                    {% else %}
+                                        <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+                                    {% endif %}
+                                    <div class="ezy__testimonial5-content mt-3">
+                                        <h4 class="mb-4">{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h4>
+                                        <p class="mb-4 ezy__testimonial5-rating">{{ candidate.skills }}</p>
+                                        <p class="mb-4 ezy__testimonial5-rating">{{ candidate.education }}</p>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     {% endfor %}
@@ -47,4 +70,4 @@ Candidate for {{service.name}}
         <!-- End: .container -->
     </section>
     <!-- Candidates section end -->
-{% endblock %} 
+{% endblock %}

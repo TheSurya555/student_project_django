@@ -1,0 +1,65 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+{{ candidate.user.username }}'s Profile
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .profile-header img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+    }
+    .profile-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .profile-content h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    .profile-content p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 10px;
+    }
+    .back-button {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="profile-header mt-5">
+        {% if candidate.profile_image %}
+            <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
+        {% else %}
+            <img src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+        {% endif %}
+        <h2>{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h2>
+    </div>
+    <div class="profile-content">
+        <p><strong>Username:</strong> {{ candidate.user.username }}</p>
+        <p><strong>Address:</strong> {{ candidate.address }}</p>
+        <p><strong>Position:</strong> {{ candidate.position }}</p>
+        <p><strong>Experience:</strong> {{ candidate.experience }}</p>
+        <p><strong>Skills:</strong> {{ candidate.skills }}</p>
+        <p><strong>Languages:</strong> {{ candidate.languages }}</p>
+        <p><strong>Education:</strong> {{ candidate.education }}</p>
+    </div>
+    <div class="back-button">
+        <a href="{% url 'service_candidates' service_id %}" class=""><button class="px-3"><span>Back to Candidates</span></button></a>
+    </div>
+</div>
+{% endblock %}

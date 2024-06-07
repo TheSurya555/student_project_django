@@ -44,3 +44,14 @@ def service_candidates(request, service_id):
         print(f"Candidate: {candidate.user.username}, Skills: {candidate.skills} , education: {candidate.education}")
 
     return render(request, 'services/candidates.html', {'service': service, 'candidates': matching_candidates})
+
+def candidate_profile(request, candidate_id):
+    candidate = get_object_or_404(UserProfile, id=candidate_id)
+    print('candidate is:' ,candidate )
+    service_id = request.GET.get('service_id')  # Retrieve the service_id from the query parameters
+    return render(request, 'services/candidate_profile.html', {'candidate': candidate ,'service_id': service_id})
+
+
+def all_services(request):
+    services = Service.objects.all()
+    return render(request, 'services/all_services.html', {'services': services})
