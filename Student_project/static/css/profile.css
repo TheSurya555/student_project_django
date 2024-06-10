@@ -23,15 +23,18 @@
 .main-content {
   padding: 20px;
 }
+
 .main-content .section-heading {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 20px;
 }
+
 .card-custom {
   border: 1px solid #e4e4e4;
   border-radius: 8px;
   padding: 20px;
+  cursor: pointer;
 }
 .card-custom h5 {
   font-size: 1.2rem;

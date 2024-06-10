@@ -1,194 +1,116 @@
 {% extends "main/Layout.html" %}
-
 {% load static %}
 
 {% block title %}
-talents
+Talents
 {% endblock %}
 
 {% block content %}
-<body>
     <section class="specified_skills light">
         <div class="container my-3">
             <div class="text-center mb-4">
-                <h2 class="section-heading">Specialized design and creative experts you can count on</h2>
+                <h2 class="section-heading">Specialized {{random_skill}} experts you can count on</h2>
             </div>
             <div class="row text-center mb-4 mt-md-5">
                 <div class="col-md-4 stat">
                     <h3>⭐ 4.92</h3>
-                    <p>Average rating for work with design and creative talent.</p>
+                    <p>Average rating for work with {{random_skill}} talent.</p>
                 </div>
                 <div class="col-md-4 stat">
-                    <h3>184K+ contracts</h3>
-                    <p>Involving design and creative work in the past year.</p>
+                    <h3>{{random_contracts}} contracts</h3>
+                    <p>Involving {{random_skill}} work in the past year.</p>
                 </div>
                 <div class="col-md-4 stat">
-                    <h3>468 skills</h3>
-                    <p>Represented by talent on Upwork.</p>
+                    <h3>{{total_skills}} skills</h3>
+                    <p>Represented by talent on talentsprout</p>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="row" id="services-container">
+                {% for service in related_services %}
                 <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
-                    <div class="card card-custom h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">UX/UI Designers</h5>
-                            <div class="rating">⭐ 4.8 average rating</div>
-                            <div class="profile-pics">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 3">
+                    <a href="{% url 'skill_service_candidates' service.id %}" class="card-link" style="text-decoration: none; color: black;">
+                        <div class="card card-custom h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{service.name}}</h5>
+                                <div class="rating">⭐ 4.8 average rating</div>
+                                <div class="profile-pics">
+                                    {% for user in related_user_profiles %}
+                                        <img src="{{ user.profile_image.url }}" alt="{{ user.user.username }}">
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
-                    <div class="card card-custom h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Motion Designers</h5>
-                            <div class="rating">⭐ 4.9 average rating</div>
-                            <div class="profile-pics">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 3">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
-                    <div class="card card-custom h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Animators</h5>
-                            <div class="rating">⭐ 4.8 average rating</div>
-                            <div class="profile-pics">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 3">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex justify-content-center">
-                    <div class="card card-custom h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Voice Artists</h5>
-                            <div class="rating">⭐ 4.9 average rating</div>
-                            <div class="profile-pics">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 1">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}" alt="Profile 2">
-                                <img src="{% static 'assets/alchemyrefiner_alchemymagic_2_78ad3111-a1a3-4ce8-8f9b-ff5c9b293956_0.jpg' %}" alt="Profile 3">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
-            <div class="text-center see-more-btn mt-md-5 mt-sm-2">
-                <button class="px-3"><span>See more skills</span></button>
-            </div>        
         </div>
     </section>
+
     <section>
         <div class="container my-5 mt-lg-1">
             <div class="mb-5 mb-md-5">
                 <h2 class="section-heading">Other Skills</h2>
             </div>
-            <div id="skillsCarousel" class="carousel slide" data-ride="carousel">
+            <div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="row">
-                            <div class="col-md-4 mb-4 d-flex justify-content-center ">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 1</h5>
-                                        <div class="rating">⭐ 4.5 average rating</div>
+                            {% for skill in rest_of_skills %}
+                                <div class="col-md-4 mb-4 d-flex justify-content-center">
+                                    <div class="card card-custom h-100 skill-card" style="padding: 0; border-radius: 100px;" data-skill-id="{{ skill.id }}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ skill.skill }}</h5>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4 mb-4 d-flex justify-content-center ">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 2</h5>
-                                        <div class="rating">⭐ 4.6 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-4 d-flex justify-content-center ">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 3</h5>
-                                        <div class="rating">⭐ 4.7 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-4 mb-4 d-flex justify-content-center">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 4</h5>
-                                        <div class="rating">⭐ 4.5 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-4 d-flex justify-content-center">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 5</h5>
-                                        <div class="rating">⭐ 4.6 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-4 d-flex justify-content-center">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 6</h5>
-                                        <div class="rating">⭐ 4.7 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-4 mb-4 d-flex justify-content-center">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 7</h5>
-                                        <div class="rating">⭐ 4.5 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-4 d-flex justify-content-center">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 8</h5>
-                                        <div class="rating">⭐ 4.6 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-4 d-flex justify-content-center">
-                                <div class="card card-custom h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Skill 9</h5>
-                                        <div class="rating">⭐ 4.7 average rating</div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
-                <a class="carousel-control-prev" href="#skillsCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                    <span><i class="fa-solid fa-angle-right"></i></span>
-                </a>
-                <a class="carousel-control-next" href="#skillsCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                    <span><i class="fa-solid fa-angle-right"></i></span>
-                </a>
             </div>            
         </div>
     </section>
+
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.skill-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const skillId = this.getAttribute('data-skill-id');
+                fetch(`{% url 'fetch_skill_data' 0 %}`.replace('0', skillId))
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector('.section-heading').textContent = `Specialized ${data.random_skill} experts you can count on`;
+                        document.querySelector('.stat:nth-child(2) h3').textContent = data.random_contracts + ' contracts';
+                        document.querySelector('.stat:nth-child(2) p').textContent = `Involving ${data.random_skill} work in the past year.`;
+    
+                        const servicesContainer = document.getElementById('services-container');
+                        servicesContainer.innerHTML = '';
+    
+                        data.related_services.forEach(service => {
+                            const serviceCard = document.createElement('div');
+                            serviceCard.classList.add('col-12', 'col-sm-6', 'col-lg-3', 'mb-4', 'd-flex', 'justify-content-center');
+                            serviceCard.innerHTML = `
+                                <a href="{% url 'skill_service_candidates' 0 %}".replace('0', service.id)" class="card-link" style="text-decoration: none; color: black;">
+                                    <div class="card card-custom h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${service.name}</h5>
+                                            <div class="rating">${service.rating}</div>
+                                            <div class="profile-pics">
+                                                ${data.related_user_profiles.map(user => `<img src="${user.profile_image}" alt="${user.username}">`).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>`;
+                            servicesContainer.appendChild(serviceCard);
+                        });
+                    });
+            });
+        });
+    });
+  </script>
 {% endblock %}

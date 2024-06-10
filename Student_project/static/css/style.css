@@ -4,15 +4,51 @@
       body {
         padding-top: 96px;
     }
+
+
     header {
-      width: 100%;
-      height: 100%;
-      --color: #e4e4e4;
-      background-color: #F3F3F3;
-      background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent),
-          linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
-      background-size: 80px 80px;
-    }    
+        width: 100%;
+        height: 100vh;
+        --color: #e4e4e4;
+        background-color: #F3F3F3;
+        background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent),
+                          linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
+        background-size: 80px 80px;
+        animation: moveGrid 10s linear infinite;
+        position: relative;
+    }
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: inherit;
+        animation: fadeGrid 10s linear infinite;
+    }
+
+    @keyframes moveGrid {
+        0% {
+            background-position: 0 0, 0 0;
+        }
+        100% {
+            background-position: 80px 80px, 80px 80px;
+        }
+    }
+
+    @keyframes fadeGrid {
+        0%, 80% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.2;
+        }
+    }
+
+
+    
     .nav.scrolled {
         background-color: #EAEBEC !important;
         transition: background-color 0.3s;
