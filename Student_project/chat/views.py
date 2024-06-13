@@ -34,15 +34,16 @@ def start_chat(request, candidate_id):
 
 @login_required
 def chat_session(request, chat_session_id):
+    user = request.user
     chat_session = get_object_or_404(ChatSession, id=chat_session_id)
     messages = chat_session.messages.all().order_by('timestamp')
     other_participant = chat_session.participants.exclude(id=request.user.id).first()
-
-    # Print the received user's name and their message
-    # Print statements for debugging
-    print("Received user:", other_participant)
-    for message in messages:
-        print("Message content:", message.content)
+    received_messages = Message.objects.filter(receiver=user).order_by('-timestamp')
+    
+    print('candidate name:' , other_participant)
+    
+    for message in received_messages:
+        print("received_messages :" , message.content)
 
     if request.method == 'POST':
         content = request.POST.get('content')
@@ -54,13 +55,15 @@ def chat_session(request, chat_session_id):
                 content=content
             )
             return redirect('chat_session', chat_session_id=chat_session.id)
-    
+
     return render(request, 'chat/chat_session.html', {
         'chat_session': chat_session,
         'messages': messages,
         'candidate': other_participant,
+        'received_messages':received_messages,
         'user': request.user,
     })
+    
 
     
 @login_required
@@ -80,9 +83,9 @@ def get_messages(request, chat_session_id):
 @login_required
 def send_message(request):
     if request.method == 'POST':
-        to_email = request.POST.get('to')
+        to_username = request.POST.get('to_username')
         content = request.POST.get('message')
-        recipient = get_object_or_404(CustomUser, email=to_email)
+        recipient = get_object_or_404(CustomUser, username=to_username)
 
         if recipient:
             # Ensure only one chat session exists between sender and recipient
