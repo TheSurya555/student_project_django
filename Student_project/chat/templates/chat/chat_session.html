@@ -1,0 +1,102 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Chat with {{ candidate.first_name }} {{ candidate.last_name }}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-window {
+        height: 300px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .chat-header {
+        background-color: #000;
+        color: #fff;
+        padding: 10px;
+        font-size: 18px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .chat-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        background-color: #fff;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    .form {
+        display: flex;
+        width: 100%;
+    }
+
+    .message-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .message-item {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+
+    .sent {
+        background-color: #d1ffd1;
+        align-self: flex-end;
+        text-align: right;
+    }
+
+    .received {
+        background-color: #ffd1d1;
+        align-self: flex-start;
+        text-align: left;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row m-5">
+        <div class="chat-header">
+            <h2>Chat with {{ candidate.first_name }} {{ candidate.last_name }}</h2>
+        </div>
+        <div class="chat-window my-3">
+            <ul class="message-list">
+                {% for message in messages %}
+                    {% if message.sender == user %}
+                        <li class="message-item sent">
+                            <strong>You:</strong>
+                            <p>{{ message.content }}</p>
+                            <small>{{ message.timestamp }}</small>
+                        </li>
+                    {% else %}
+                        <li class="message-item received">
+                            <strong>{{ candidate.first_name }} {{ candidate.last_name }}:</strong>
+                            <p>{{ message.content }}</p>
+                            <small>{{ message.timestamp }}</small>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="chat-input">
+            <form method="post" class="form">
+                {% csrf_token %}
+                <input name="content" class="form-control" placeholder="Type your message..."></input>
+                <button type="submit" class="px-3"><span>Send</span></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

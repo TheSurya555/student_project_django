@@ -1,0 +1,100 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Messages
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/button.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 sidebar">
+            <h3 class="mb-4">Messages</h3>
+            <a href="#" id="inboxLink" class="active">Inbox</a>
+            <a href="#" id="sentLink">Sent</a>
+            <a href="#" id="composeLink">Compose</a>
+        </div>
+        <div class="col-md-9 main-content">
+            <div id="inboxSection" class="content-section active">
+                <h4 class="section-heading">Inbox</h4>
+                <div class="card card-custom mb-4">
+                    <h5 class="mb-4">Messages</h5>
+                    <div class="message-list">
+                        {% for message in received_messages %}
+                        <div class="message-preview mb-5">
+                            <p><strong>Sent on:</strong><small> {{ message.timestamp}}</small></p>
+                            <p>From: {{ message.sender.first_name }} {{ message.sender.last_name }}</p>
+                            <p>{{ message.content }}</p>
+                        </div>
+                        {% empty %}
+                        <p>No messages received.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div id="sentSection" class="content-section">
+                <h4 class="section-heading">Sent</h4>
+                <div class="card card-custom mb-4">
+                    <h5 class="mb-4">Messages</h5>
+                    <div class="message-list">
+                        {% for message in sent_messages %}
+                        <div class="message-preview mb-5">
+                            <p><strong>Sent on:</strong><small> {{ message.timestamp}}</small></p>
+                            <p>To: {{ message.receiver.first_name }} {{ message.receiver.last_name }}</p>
+                            <p>{{ message.content }}</p>
+                        </div>
+                        {% empty %}
+                        <p>No messages sent.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div id="composeSection" class="content-section">
+                <h4 class="section-heading">Compose</h4>
+                <div class="card card-custom mb-4">
+                    <h5 class="mb-4">New Message</h5>
+                    <form method="post" action="{% url 'send_message' %}">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="to" class="mb-1">To:</label>
+                            <input type="email" class="form-control" id="to" name="to" placeholder="Enter recipient's email">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="message" class="mb-1">Message:</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Enter your message"></textarea>
+                        </div>
+                        <button type="submit" class="px-3"><span>Send</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('inboxLink').onclick = function() {
+        document.getElementById('inboxSection').classList.add('active');
+        document.getElementById('sentSection').classList.remove('active');
+        document.getElementById('composeSection').classList.remove('active');
+    };
+
+    document.getElementById('sentLink').onclick = function() {
+        document.getElementById('sentSection').classList.add('active');
+        document.getElementById('inboxSection').classList.remove('active');
+        document.getElementById('composeSection').classList.remove('active');
+    };
+
+    document.getElementById('composeLink').onclick = function() {
+        document.getElementById('composeSection').classList.add('active');
+        document.getElementById('inboxSection').classList.remove('active');
+        document.getElementById('sentSection').classList.remove('active');
+    };
+</script>
+{% endblock %}

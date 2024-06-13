@@ -6,6 +6,8 @@ from signUp.models import CustomUser ,RecruiterProfile ,CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from chat.models import ChatSession
+from django.http import JsonResponse
 
 # profile view
 @login_required
@@ -70,13 +72,6 @@ def settings_View(request):
     print(context)
 
     return render(request, 'profiles/settings.html', context)
-
-
-
-
-# message view
-def messages_View(request):
-    return render(request, 'profiles/messages.html')
 
 
 

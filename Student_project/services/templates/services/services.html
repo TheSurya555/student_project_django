@@ -31,18 +31,18 @@ services
 
             <!-- Loop through services and display them -->
             {% for service in services %}
-            <div class="col-md-6 col-xl-4 mt-4">
-                <div class="card ezy__service23-card border-0 rounded-0">
-                    <div class="card-body">
-                        <div class="ezy__service23-card-icon">
+            <div class="col-md-6 col-xl-4 mt-4 d-flex align-items-stretch">
+                <div class="card ezy__service23-card border-0 rounded-0 w-100">
+                    <div class="card-body pt-4 text-center d-flex flex-column align-items-center">
+                        <div class="ezy__service23-card-icon mb-3">
                             <!-- Use the icon field from the Service model -->
                             <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
                         </div>
-                    </div>
-                    <div class="card-body pb-4 text-center">
-                        <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
-                        <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
-                        <a href="{% url 'service_candidates' service.id %}"><button class="px-3 mt-3"><span>View Candidates</span></button></a>
+                        <div class="card-body pb-4 text-center">
+                          <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
+                          <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
+                          <a href="{% url 'service_candidates' service.id %}"><button class="px-3 mt-3"><span>View Candidates</span></button></a>
+                        </div>
                     </div>
                 </div>
             </div>

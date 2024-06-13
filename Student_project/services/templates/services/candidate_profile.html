@@ -36,6 +36,66 @@
         text-align: center;
     }
 
+    .message-modal {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        z-index: 1000;
+    }
+    .message-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 10px 10px 0 0;
+    }
+    .message-modal-header h5 {
+        margin: 0;
+    }
+    .message-modal-body {
+        padding: 10px;
+    }
+    .message-modal-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+    .message-modal-footer button {
+        padding: 5px 10px;
+    }
+
+    .message_profile-header img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+    }
+    .predefined-messages {
+        margin-bottom: 10px;
+    }
+
+    .predefined-messages button {
+        display: block;
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 5px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .predefined-messages button:hover {
+        background-color: #f1f1f1;
+    }
 </style>
 {% endblock %}
 
@@ -59,7 +119,29 @@
         <p><strong>Education:</strong> {{ candidate.education }}</p>
     </div>
     <div class="back-button">
-        <a href="{% url 'service_candidates' service_id %}" class=""><button class="px-3"><span>Back to Candidates</span></button></a>
+        <a href="{% url 'service_candidates' service_id %}" class="mx-3"><button class="px-3"><span>Back</span></button></a>
+        <a href="{% url 'start_chat' candidate.user.id %}"><button class="px-3" id="message-button"><span>Message The Candidate</span></button></a>
     </div>
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('message-button').onclick = function() {
+        document.getElementById('message-modal').style.display = 'block';
+    };
+
+    document.getElementById('close-modal').onclick = function() {
+        document.getElementById('message-modal').style.display = 'none';
+    };
+
+    document.getElementById('cancel-button').onclick = function() {
+        document.getElementById('message-modal').style.display = 'none';
+    };
+
+    function insertMessage(message) {
+        document.getElementById('message-textarea').value = message;
+    }
+</script>
 {% endblock %}

@@ -990,3 +990,54 @@ talents
         </div>
     </header>
     <!-- hero section end -->
+
+
+    <div class="message-modal" id="message-modal">
+        <div class="message-modal-header">
+            <div class="message_profile-header">
+                {% if candidate.profile_image %}
+                    <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
+                {% else %}
+                    <img src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+                {% endif %}
+            </div>
+            <h5>Message {{ candidate.user.first_name }}</h5>
+            <button class="px-3" id="close-modal"><span><i class="fa-solid fa-x"></i></span></button>
+        </div>
+        <div class="message-modal-body">
+            <div class="predefined-messages">
+                <button onclick="insertMessage('Hello {{ candidate.user.first_name }}, I have a project that I would like to discuss with you.')"><span>Hello {{ candidate.user.first_name }}, I have a project that I would like to discuss with you.</span></button>
+                <button onclick="insertMessage('Can you help me with my project requirements?')"><span>Can you help me with my project requirements?</span></button>
+                <button onclick="insertMessage('Would it be possible to get a custom offer for my project?')"><span>Would it be possible to get a custom offer for my project?</span></button>
+                <button onclick="insertMessage('Do you think you can deliver an order by the specified deadline?')"><span>Do you think you can deliver an order by the specified deadline?</span></button>
+            </div>
+            <textarea id="message-textarea" class="form-control" rows="4" placeholder="Type your message...">Hello {{ candidate.user.first_name }}, I would like to discuss a potential opportunity with you.</textarea>
+        </div>
+        <div class="message-modal-footer">
+            <button class="px-3" id="cancel-button"><span>Cancel</span></button>
+            <button class="px-3"><span>Send</span></button>
+        </div>
+    </div>    
+
+
+
+
+
+
+@login_required
+def get_messages(request, chat_session_id):
+    chat_session = get_object_or_404(ChatSession, id=chat_session_id)
+    messages = chat_session.messages.all().order_by('timestamp')
+    
+    return JsonResponse({
+        'messages': [{
+            'sender': message.sender.username,
+            'receiver': message.receiver.username,
+            'content': message.content,
+            'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        } for message in messages]
+    })
+# message view
+def messages_View(request):
+    return render(request, 'profiles/messages.html')
+

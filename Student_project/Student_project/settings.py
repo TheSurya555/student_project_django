@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'contactus',
     'profiles',
     'studentPost',
+    'chat',
+    'channels',
     
 ]
 
@@ -77,6 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Student_project.wsgi.application'
 
+ASGI_APPLICATION = 'your_project.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

@@ -5,7 +5,14 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 def layout_View(request):
-    return render(request,'main/Layout.html')
+    profile_image_url = None
+    if request.user.is_authenticated:
+        profile_image_url = request.user.profile_image.url if request.user.profile_image else None
+        print('profile_image_url' ,profile_image_url)
+
+    return render(request, 'main/Layout.html', {
+        'profile_image_url': profile_image_url
+    })
 
 
 def home_View(request):

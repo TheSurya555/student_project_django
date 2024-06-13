@@ -50,8 +50,12 @@
                           <li class="nav-item"><a class="nav-link" href="{% url "studentpost" %}">Posts</a></li>
                           <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
                           <li class="nav-item dropdown">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" style=" border: 2px solid #000; border-radius: 50px;" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" style="border: 2px solid #000; border-radius: 50px;" data-bs-toggle="dropdown" aria-expanded="false">
+                              {% if user.profile_image %}
+                                  <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle" style="width: 30px; height: 30px;">
+                              {% else %}
+                                  <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
+                              {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
@@ -68,8 +72,12 @@
                           <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
                           <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
                           <li class="nav-item dropdown">
-                            <a class="nav-link" style=" border: 2px solid #000; border-radius: 50px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" style="border: 2px solid #000; border-radius: 50px;" data-bs-toggle="dropdown" aria-expanded="false">
+                              {% if user.profile_image %}
+                                  <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle" style="width: 30px; height: 30px;">
+                              {% else %}
+                                  <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
+                              {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
@@ -86,8 +94,12 @@
                           <li class="nav-item"><a class="nav-link" href="{% url "talents" %}">Talents</a></li>
                           <li class="nav-item"><a class="nav-link" href="{% url "consulting" %}">Contact Us</a></li>
                           <li class="nav-item dropdown">
-                            <a class="nav-link" style=" border: 2px solid #000; border-radius: 50px;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
+                            <a class="nav-link" href="#" id="navbarDropdown" role="button" style="border: 2px solid #000; border-radius: 50px;" data-bs-toggle="dropdown" aria-expanded="false">
+                              {% if user.profile_image %}
+                                  <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle" style="width: 30px; height: 30px;">
+                              {% else %}
+                                  <i class="fa-solid fa-user" id="profile_icon" style="font-size: 24px;"></i>
+                              {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
@@ -219,5 +231,7 @@
         });
       </script> {% endcomment %}
 {% endblock %}
+
+{% block extra_js %}{% endblock %}
 </body>
 </html>
