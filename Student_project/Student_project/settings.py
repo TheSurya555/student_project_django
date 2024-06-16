@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'profiles',
     'studentPost',
     'chat',
+    'payment',
     'channels',
     
 ]

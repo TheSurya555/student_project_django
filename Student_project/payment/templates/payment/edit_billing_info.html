@@ -1,0 +1,90 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Edit Billing Information
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .billing-info-container {
+        margin: 50px auto;
+        max-width: 600px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .form-group input[type="radio"] {
+        width: auto;
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="billing-info-container">
+    <h2>Edit Billing Information</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" value="{{ profile.full_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="company_name">Company Name</label>
+            <input type="text" id="company_name" name="company_name" value="{{ profile.company_name }}">
+        </div>
+        <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" value="{{ profile.country }}" required>
+        </div>
+        <div class="form-group">
+            <label for="state">State/Union Territory</label>
+            <input type="text" id="state" name="state" value="{{ profile.state }}" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" value="{{ profile.address }}" required>
+        </div>
+        <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" value="{{ profile.city }}" required>
+        </div>
+        <div class="form-group">
+            <label for="postal_code">Postal Code</label>
+            <input type="text" id="postal_code" name="postal_code" value="{{ profile.postal_code }}" required>
+        </div>
+        <div class="form-group">
+            <label>Are you a citizen/resident of India?</label>
+            <div>
+                <input type="radio" id="is_indian_citizen_yes" name="is_indian_citizen" value="yes" {% if profile.is_indian_citizen %}checked{% endif %} required>
+                <label for="is_indian_citizen_yes">Yes</label>
+            </div>
+            <div>
+                <input type="radio" id="is_indian_citizen_no" name="is_indian_citizen" value="no" {% if not profile.is_indian_citizen %}checked{% endif %} required>
+                <label for="is_indian_citizen_no">No</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="checkbox" id="receive_invoices_via_email" name="receive_invoices_via_email" {% if profile.receive_invoices_via_email %}checked{% endif %}>
+            <label for="receive_invoices_via_email">I want to get invoices via email as well.</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+{% endblock %}
