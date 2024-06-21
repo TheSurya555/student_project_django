@@ -1,0 +1,152 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Take Test
+{% endblock %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3 sidebar">
+      <h3 class="mb-4">Questions</h3>
+      <ul class="list-group">
+        {% for question in questions %}
+          <li class="list-group-item" data-question-id="{{ forloop.counter0 }}">{{ forloop.counter }}. {{ question.text }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-9 main-content">
+      <div id="testSection" class="content-section active">
+        <h4 class="section-heading">Answer the Questions or Submit GitHub Link</h4>
+        <div class="card card-custom mb-4 p-3">
+          <form id="testForm" method="post">
+            {% csrf_token %}
+            {% for question in questions %}
+              <div class="question-section mb-3" data-question-id="{{ forloop.counter0 }}" style="display: none;">
+                <h5>Question {{ forloop.counter }}:</h5>
+                <label for="question_{{ question.id }}">{{ question.text }}</label>
+                <textarea id="question_{{ question.id }}" name="question_{{ question.id }}" class="tinymce"></textarea>
+              </div>
+            {% endfor %}
+            <div class="mb-3">
+              <label for="github_link">Or Submit GitHub Project Link</label>
+              <input type="url" id="github_link" name="github_link" class="form-control" placeholder="https://github.com/username/repo">
+            </div>
+            <div class="d-flex justify-content-between">
+              <button type="button" class="btn btn-secondary" id="prev-btn">Previous</button>
+              <button type="button" class="btn btn-secondary" id="next-btn">Next</button>
+            </div>
+            <div class="text-center mt-3">
+              <button type="button" id="submit-btn" class="btn btn-dark border-0 rounded-3"><span>Submit Answer</span></button>
+              <button type="submit" id="final-submit-btn" class="btn btn-dark border-0 rounded-3" style="display: none;"><span>Final Submit</span></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        menubar: false,
+        plugins: 'link code',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code'
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('.question-section');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const finalSubmitBtn = document.getElementById('final-submit-btn');
+        let currentSectionIndex = 0;
+
+        // Show the first question by default
+        sections[currentSectionIndex].style.display = 'block';
+        prevBtn.style.display = 'none'; // Hide previous button on the first question
+
+        function showQuestion(index) {
+            sections.forEach((section, i) => {
+                section.style.display = i === index ? 'block' : 'none';
+            });
+        }
+
+        function updateButtons() {
+            if (currentSectionIndex === 0) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'inline-block';
+            }
+
+            if (currentSectionIndex === sections.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'none';
+                finalSubmitBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                submitBtn.style.display = 'inline-block';
+                finalSubmitBtn.style.display = 'none';
+            }
+        }
+
+        function validateCurrentAnswer() {
+          const currentSection = sections[currentSectionIndex];
+          const textarea = currentSection.querySelector('textarea');
+          const content = tinymce.get(textarea.id).getContent({ format: 'text' }).trim();
+
+          // If GitHub link is provided, no need to validate textarea
+          const githubLink = document.getElementById('github_link').value.trim();
+          if (githubLink !== '') {
+              return true;
+          }
+
+          if (content === '') {
+              alert('Please write something in the textarea before proceeding.');
+              return false;
+          }
+
+          return true;
+      }
+
+        // Handle Next button click event
+        nextBtn.addEventListener('click', function() {
+            if (validateCurrentAnswer() && currentSectionIndex < sections.length - 1) {
+                currentSectionIndex++;
+                showQuestion(currentSectionIndex);
+                updateButtons();
+            }
+        });
+
+        // Handle Previous button click event
+        prevBtn.addEventListener('click', function() {
+            if (currentSectionIndex > 0) {
+                currentSectionIndex--;
+                showQuestion(currentSectionIndex);
+                updateButtons();
+            }
+        });
+
+        // Handle Submit Answer button click event
+        submitBtn.addEventListener('click', function() {
+            if (validateCurrentAnswer() && currentSectionIndex < sections.length - 1) {
+                currentSectionIndex++;
+                showQuestion(currentSectionIndex);
+                updateButtons();
+            }
+        });
+
+        // Initial button state update
+        updateButtons();
+    });
+</script>
+{% endblock %}

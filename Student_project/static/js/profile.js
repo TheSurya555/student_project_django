@@ -98,15 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
-  const startTestButton = document.getElementById('startTestButton');
-
-  if (startTestButton) {
-      startTestButton.addEventListener('click', function() {
-          alert('Test started! Follow the instructions to complete your test.');
-          // Additional functionality to start the test can be added here
-      });
-  }
-
   const completedProjectForm = document.getElementById('completedProjectForm');
 
   if (completedProjectForm) {

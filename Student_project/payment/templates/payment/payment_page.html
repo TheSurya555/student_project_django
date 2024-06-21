@@ -7,13 +7,13 @@ Payment Page
 
 {% block extra_css %}
 <style>
-    .payment_container{
+    .payment_container {
         margin: 50px auto;
         max-width: 1200px;
         padding: 20px;
         justify-content: center;
     }
-    .billing-info, .payment-options, .order-summary {
+    .billing-info, .payment-options, .order-summary, .preferred-candidate {
         width: 100%;
         height: 100%;
         padding: 20px;
@@ -28,9 +28,11 @@ Payment Page
         margin-bottom: 20px;
         font-size: 1.2rem;
     }
+
     .form-group {
         margin-bottom: 15px;
     }
+
     .form-group label {
         display: block;
         margin-bottom: 5px;
@@ -99,14 +101,33 @@ Payment Page
             <p><strong>{{ request.user.profile.full_name }}</strong></p>
             <p>{{ request.user.profile.address }}, {{ request.user.profile.city }}, {{ request.user.profile.state }}, {{ request.user.profile.country }}</p>
             <p>{{ request.user.profile.postal_code }}</p>
-            <a href="{% url 'edit_billing_info' %}" ><button class="px-3"><span>Edit</span></button></a>
+            <a href="{% url 'edit_billing_info' subscription.id %}"><button class="px-3"><span>Edit</span></button></a>
+        </div>
+
+        <!-- Preferred Candidate Details -->
+        <div class="preferred-candidate mb-5">
+            <h3>Preferred Candidate Details</h3>
+            <form id="candidate-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="candidate_username">Candidate Username</label>
+                    <input type="text" id="candidate_username" name="candidate_username" value="{{ request.user.profile.preferred_candidate_username }}" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="candidate_name">Candidate Name</label>
+                    <input type="text" id="candidate_name" name="candidate_name" value="{{ request.user.profile.preferred_candidate_name }}" class="form-control" required>
+                </div>
+            </form>
         </div>
 
         <div class="payment-options">
             <h3>Payment Options</h3>
-            <form id="payment-form" method="post" action="{% url 'process_payment' %}">
+            <form id="payment-form" method="post" action="{% url 'process_payment' subscription.id %}">
                 {% csrf_token %}
-                <input type="hidden" name="candidate_username" value="{{ candidate.username }}">
+                <input type="hidden" id="hidden_candidate_username" name="candidate_username">
+                <input type="hidden" id="hidden_candidate_name" name="candidate_name">
+        
+                <!-- Credit & Debit Cards Option -->
                 <div class="radio_button">
                     <div class="mx-2">
                         <input type="radio" name="payment_method" value="card" checked id="payment_card">
@@ -118,6 +139,7 @@ Payment Page
                 </div>
                 <hr>
                 <div id="card_payment_section">
+                    <!-- Card Payment Details -->
                     <div class="form-group d-flex flex-column">
                         <input type="text" name="card_number" placeholder="Card number">
                         <div class="card-details">
@@ -131,6 +153,7 @@ Payment Page
                     </div>
                 </div>
                 
+                <!-- UPI Option -->
                 <div class="radio_button m-0">
                     <div class="mx-2">
                         <input type="radio" name="payment_method" value="upi" id="payment_upi">
@@ -139,6 +162,7 @@ Payment Page
                 </div>
                 <hr>
                 <div id="upi_payment_section" class="hidden">
+                    <!-- UPI Payment Details -->
                     <div class="form-group">
                         <input type="text" name="upi_id" placeholder="Enter UPI ID" class="w-100">
                     </div>
@@ -146,6 +170,7 @@ Payment Page
                 <button type="submit" class="px-3"><span>Confirm & Pay</span></button>
             </form>
         </div>
+        
     </div>
 
     <div class="order-summary" style="margin-left: 50px;">
@@ -154,14 +179,13 @@ Payment Page
             <img src="{% static 'assets/talentsprout.jpeg' %}" alt="Service Image">
             <span><p><strong>I will edit real estate photos professionally with the best quality</strong></p></span>
         </div>
-        <p class="d-flex justify-content-between"><strong>Price: </strong>₹438.46</p>
+        <p class="d-flex justify-content-between"><strong>Price:</strong> ₹{{ subscription.price }}</p>
+        <p class="d-flex justify-content-between"><strong>Service fee (2%):</strong> ₹{{ service_fee }}</p>
+        <p class="d-flex justify-content-between"><strong>GST (12%):</strong> ₹{{ gst }}</p>
         <hr>
-        <p class="d-flex justify-content-between"><strong>Service fee: <i class="fas fa-question-circle"></i> </strong>₹287.63</p>
-        <p class="d-flex justify-content-between"><strong>GST: <i class="fas fa-question-circle"></i> </strong>₹130.66</p>
-        <hr>
-        <p class="d-flex justify-content-between"><strong>Total: </strong>₹856.76</p>
+        <p class="d-flex justify-content-between"><strong>Total:</strong> ₹{{ total_amount }}</p>
         <button type="submit" class="px-3" form="payment-form"><span>Confirm & Pay</span></button>
-        <p>You will be charged ₹856.76. Total amount includes currency conversion fees.</p>
+        <p>You will be charged ₹{{ total_amount }}. Total amount includes currency conversion fees.</p>
     </div>
 </div>
 
@@ -194,6 +218,17 @@ Payment Page
             upiPaymentSection.classList.remove('hidden');
             cardPaymentSection.classList.add('hidden');
         }
+
+        // Copy candidate details from the preferred candidate form to the payment form
+        const candidateForm = document.getElementById('candidate-form');
+        const paymentForm = document.getElementById('payment-form');
+        const hiddenCandidateUsername = document.getElementById('hidden_candidate_username');
+        const hiddenCandidateName = document.getElementById('hidden_candidate_name');
+
+        paymentForm.addEventListener('submit', function() {
+            hiddenCandidateUsername.value = candidateForm.querySelector('#candidate_username').value;
+            hiddenCandidateName.value = candidateForm.querySelector('#candidate_name').value;
+        });
     });
 </script>
 {% endblock %}

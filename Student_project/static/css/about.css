@@ -1,0 +1,54 @@
+/* static/css/about.css */
+
+.ezy__about h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .ezy__about p {
+    font-size: 18px;
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  .ezy__about-features .card {
+    transition: all 0.3s ease;
+  }
+  
+  .ezy__about-features .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ezy__about-team h2 {
+    font-size: 32px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .ezy__about-team p {
+    font-size: 18px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .ezy__about-team-member img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  
+  .ezy__about-team-member h3 {
+    font-size: 20px;
+    color: #333;
+    margin-top: 15px;
+  }
+  
+  .ezy__about-team-member p {
+    font-size: 16px;
+    color: #999;
+  }
+  

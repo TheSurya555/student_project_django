@@ -1,5 +1,6 @@
 from django import forms
 from .models import BlogPost
+from tinymce.widgets import TinyMCE
 
 class BlogPostForm(forms.ModelForm):
     class Meta:
@@ -9,6 +10,6 @@ class BlogPostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'author': forms.TextInput(attrs={'class': 'form-control'}),
             'publication_date': forms.DateInput(attrs={'class': 'form-control' ,'type': 'date'}),
-            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 8}),
+            'content': TinyMCE(attrs={'class': 'form-control', 'rows': 8}),
             'blog_image': forms.FileInput(attrs={'class': 'form-control' ,'type':'file' }),
         }

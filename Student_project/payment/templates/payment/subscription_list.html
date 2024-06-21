@@ -1,0 +1,63 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+subscription_list
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .container {
+        text-align: center;
+        padding: 20px;
+    }
+    .subscription-card {
+        display: inline-block;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 30%;
+        margin: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .subscription-card h2,h3{
+        margin: 0 0 20px;
+        font-weight: 700;
+    }
+    .subscription-card p {
+        margin: 20px 0;
+    }
+
+    .subscribe-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+    }
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h1>Price List</h1>
+    {% for subscription in subscriptions %}
+        <div class="subscription-card">
+            <h3>{{ subscription.name }}</h3>
+            <h1>${{ subscription.price }}</h1>
+            <p>{{ subscription.description }}</p>
+            <ul style="text-align: left; list-style: initial;">
+                {% for feature in subscription.features_list %}
+                    <li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'payment_page' subscription.id %}"><button class="px-3"><span>Reserve</span></button></a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

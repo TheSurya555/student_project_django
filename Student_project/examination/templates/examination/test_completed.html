@@ -1,0 +1,24 @@
+{% extends "main/Layout.html" %}
+
+{% block title %}
+Test Completed
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Test Completed</h2>
+    <p>Thank you for completing the test.</p>
+    <div class="alert alert-success" role="alert">
+        Your test is completed. You will be redirected to the home page in 10 seconds.
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Redirect to home page after 10 seconds
+    setTimeout(function() {
+        window.location.href = "{{ home_url }}";
+    }, 10000); // 10000 milliseconds = 10 seconds
+</script>
+{% endblock %}

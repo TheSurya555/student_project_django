@@ -121,28 +121,8 @@
     <div class="back-button">
         <a href="{% url 'service_candidates' service_id %}" class="mx-3"><button class="px-3"><span>Back</span></button></a>
         <a href="{% url 'start_chat' candidate.user.id %}"><button class="px-3" id="message-button"><span>Message The Candidate</span></button></a>
-        <a href="{% url 'payment_page' candidate.user.id %}"><button class="px-3"><span>Pay For This Candidate</span></button></a>
+        <a href="{% url 'subscription_list' %}"><button class="px-3"><span>Pay For This Candidate</span></button></a>
     </div>
 
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    document.getElementById('message-button').onclick = function() {
-        document.getElementById('message-modal').style.display = 'block';
-    };
-
-    document.getElementById('close-modal').onclick = function() {
-        document.getElementById('message-modal').style.display = 'none';
-    };
-
-    document.getElementById('cancel-button').onclick = function() {
-        document.getElementById('message-modal').style.display = 'none';
-    };
-
-    function insertMessage(message) {
-        document.getElementById('message-textarea').value = message;
-    }
-</script>
 {% endblock %}

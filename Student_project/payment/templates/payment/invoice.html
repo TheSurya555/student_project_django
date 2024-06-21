@@ -1,0 +1,28 @@
+<!-- templates/emails/invoice.html -->
+<html>
+<body>
+    <h2>Invoice for Your Payment</h2>
+    <p>Dear {{ recruiter.profile.full_name }},</p>
+    <p>Thank you for your payment. Here are the details:</p>
+    <table>
+        <tr>
+            <td>Amount:</td>
+            <td>{{ amount }}</td>
+        </tr>
+        <tr>
+            <td>Payment Method:</td>
+            <td>{{ payment_method }}</td>
+        </tr>
+        <tr>
+            <td>Candidate:</td>
+            <td>{{ candidate.username }}</td>
+        </tr>
+        <tr>
+            <td>Date:</td>
+            <td>{{ date }}</td>
+        </tr>
+    </table>
+    <p>Best regards,</p>
+    <p>Your Company Name</p>
+</body>
+</html>

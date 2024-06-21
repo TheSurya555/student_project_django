@@ -14,4 +14,7 @@ urlpatterns = [
     path('studentpost/', include('studentPost.urls')),
     path('chat/', include('chat.urls')),
     path('payment/', include('payment.urls')),
+    path('examination/', include('examination.urls')),
+    path('aboutUs-talent/', include('aboutUs.urls')),
+    path('tinymce/', include('tinymce.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

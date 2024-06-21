@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'studentPost',
     'chat',
     'payment',
+    'aboutUs',
+    'examination',
+    'tinymce',
     'channels',
     
 ]
@@ -159,8 +162,45 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = 'signUp.CustomUser'
 
-# AUTH_USER_MODEL = 'signUp.RequiterUser'
-
 # Set the maximum upload size
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
+
+# Configure Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'  # SMTP server for Outlook
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'talentsprout@outlook.com'
+EMAIL_HOST_PASSWORD = 'Suryatalent@#1234'
+DEFAULT_FROM_EMAIL = 'talentsprout@outlook.com'
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'width': 800,
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'theme': 'silver',
+    'plugins': '''
+            textcolor save link image media preview codesample contextmenu
+            table code lists fullscreen  insertdatetime  nonbreaking
+            contextmenu directionality searchreplace wordcount visualblocks
+            visualchars code fullscreen autolink lists  charmap print  hr
+            anchor pagebreak
+            ''',
+    'toolbar1': '''
+            fullscreen preview bold italic underline | fontselect,
+            fontsizeselect  | forecolor backcolor | alignleft alignright |
+            aligncenter alignjustify | indent outdent | bullist numlist table |
+            | link image media | codesample |
+            ''',
+    'toolbar2': '''
+            visualblocks visualchars |
+            charmap hr pagebreak nonbreaking anchor |  code |
+            ''',
+    'contextmenu': 'formats | link image',
+    'menubar': True,
+    'statusbar': True,
+}

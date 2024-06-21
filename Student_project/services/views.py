@@ -4,8 +4,9 @@ from studentPost.models import BlogPost
 from .models import Service
 from profiles.models import UserProfile
 from django.shortcuts import render, get_object_or_404
-
 from signUp.models import CandidateProfile
+
+
 def services_View(request):
     posts = BlogPost.objects.all()
     services = Service.objects.all()
@@ -19,9 +20,6 @@ def services_View(request):
 
 def service_candidates(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    
-    # Print the service skills for debugging
-    print(f"Service Skills: {service.skills}")
     
     # Print all candidate skills for debugging
     all_candidates = UserProfile.objects.all()

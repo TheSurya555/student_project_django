@@ -1,54 +1,23 @@
-      /* Navbar*/
-      /*===========================================================================================*/
-
-      body {
-        padding-top: 96px;
+    /* Navbar*/
+    /*===========================================================================================*/
+    @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+    body {
+      padding-top: 96px;
     }
 
-
-    header {
-        width: 100%;
-        height: 100vh;
-        --color: #e4e4e4;
-        background-color: #F3F3F3;
-        background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent),
-                          linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
-        background-size: 80px 80px;
-        animation: moveGrid 10s linear infinite;
-        position: relative;
+    body {
+      font-family: 'Urbanist', sans-serif;
     }
-
-    header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: inherit;
-        animation: fadeGrid 10s linear infinite;
+  
+    h1 {
+      font-family: 'Urbanist', sans-serif;
+      font-weight: 700; /* Bold */
     }
-
-    @keyframes moveGrid {
-        0% {
-            background-position: 0 0, 0 0;
-        }
-        100% {
-            background-position: 80px 80px, 80px 80px;
-        }
+  
+    p {
+      font-family: 'Urbanist', sans-serif;
+      font-weight: 400; /* Regular */
     }
-
-    @keyframes fadeGrid {
-        0%, 80% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0.2;
-        }
-    }
-
-
-    
     .nav.scrolled {
         background-color: #EAEBEC !important;
         transition: background-color 0.3s;
@@ -93,7 +62,7 @@
     .ezy__nav2 .navbar-brand img {
         width: 80px;
         height: auto;
-        margin-left: 30px;
+        margin-left: 10px;
     }
     
     .ezy__nav2 .navbar-toggler {
@@ -137,9 +106,7 @@
         bottom: 7px;
     }
     
-    .ezy__nav2 .navbar-toggler[aria-expanded="true"]>span>span {
-        background-color: transparent;
-    }
+
     
     .ezy__nav2 .navbar-toggler[aria-expanded="true"]>span>span::before {
         top: 0;
@@ -153,21 +120,16 @@
     
     .ezy__nav2 .navbar-nav .nav-link {
         color: var(--bs-body-color);
-        opacity: .6;
+        opacity: 1;
     }
     
     .ezy__nav2 .navbar-nav .nav-link:hover,
     .ezy__nav2 .navbar-nav .nav-link:focus,
     .ezy__nav2 .navbar-nav .nav-link.active {
         color: var(--bs-body-color);
-        opacity: 1;
+        opacity: 0.7;
     }
-
-
-    .navbar-nav li{
-      margin: 10px 0;
-    }
-
+    
     @media (min-width: 992px) {
         .ezy__nav2 .navbar-nav .nav-link {
             padding-right: 16px;
@@ -227,6 +189,17 @@
           padding: 20px 0;
         }
       }
+
+
+      header {
+        width: 100%;
+        height: 100%;
+        --color: #e4e4e4;
+        background-color: #F3F3F3;
+        background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent),
+            linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
+        background-size: 80px 80px;
+      }    
       
       /* Gray Block Style */
       .gray .ezy__header41,
@@ -316,7 +289,6 @@
         border-radius: 390px;
         z-index: -1;
       }
-
       @media (min-width: 991px) {
         .ezy__header41-shape {
           left: -50px;
@@ -624,8 +596,8 @@
       }
       
       .ezy__testimonial5-item img {
-        border-radius: 50%;
-        margin: 5px;
+        border-radius: 15px;
+        padding: 5px;
       }
       
       .ezy__testimonial5-content * {
@@ -813,34 +785,17 @@
         opacity: 0.8;
       }
       
-      .ezy__footer2-social li {
-        list-style-type: none;
-        display: inline-block;
-        margin: 6px 8px;
-      }
-      
-      .ezy__footer2-social li a {
-        color: var(--bs-body-color);
-        width: 35px;
-        height: 35px;
-        text-decoration: none;
-      }
-      
-      .ezy__footer2-social li a:hover {
-        color: var(--ezy-theme-color);
-      }
-      
-      .ezy__footer2-quick-links li {
-        margin-bottom: 8px;
-      }
-      
-      .ezy__footer2-quick-links li a {
-        color: var(--bs-body-color);
-        opacity: 0.7;
-        text-decoration: none;
-      }
-      
-      .ezy__footer2-quick-links li a:hover {
-        color: var(--bs-body-color);
-        opacity: 1;
-      }        
+  .ezy__footer2-quick-links li {
+    margin-bottom: 8px;
+  }
+  
+  .ezy__footer2-quick-links li a {
+    color: var(--bs-body-color);
+    opacity: 0.7;
+    text-decoration: none;
+  }
+  
+  .ezy__footer2-quick-links li a:hover {
+    color: var(--bs-body-color);
+    opacity: 1;
+  }        

@@ -1,0 +1,14 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Cannot Retake Test
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="alert alert-warning" role="alert">
+    You have already taken this test. You can retake it after {{ next_attempt_date|date:"F j, Y, g:i a" }}.
+  </div>
+</div>
+{% endblock %}

@@ -69,6 +69,16 @@ Edit Billing Information
             <label for="postal_code">Postal Code</label>
             <input type="text" id="postal_code" name="postal_code" value="{{ profile.postal_code }}" required>
         </div>
+        <!-- Preferred Candidate Details -->
+        <h3>Preferred Candidate Details</h3>
+        <div class="form-group">
+            <label for="preferred_candidate_name">Candidate Name</label>
+            <input type="text" id="preferred_candidate_name" name="preferred_candidate_name" value="{{ profile.preferred_candidate_name }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="preferred_candidate_username">Candidate Username</label>
+            <input type="text" id="preferred_candidate_username" name="preferred_candidate_username" value="{{ profile.preferred_candidate_username }}" class="form-control" required>
+        </div>
         <div class="form-group">
             <label>Are you a citizen/resident of India?</label>
             <div>

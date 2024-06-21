@@ -1,0 +1,49 @@
+{% extends "main/Layout.html" %}
+
+{% block title %}
+Rules and Regulations
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Rules and Regulations</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <ul>
+                <li>
+                    <h4>Rule 1: Code Quality</h4>
+                    <p>Your code should be clean, readable, and maintainable. Avoid using unnecessary variables, comments, or code blocks.</p>
+                </li>
+                <li>
+                    <h4>Rule 2: Functionality</h4>
+                    <p>Your code should correctly implement the required functionality. Make sure to test your code thoroughly before submitting it.</p>
+                </li>
+                <li>
+                    <h4>Rule 3: Time Limit</h4>
+                    <p>You have a limited amount of time to complete the test. Make sure to manage your time effectively and submit your code before the deadline.</p>
+                </li>
+                <li>
+                    <h4>Rule 4: Code Length</h4>
+                    <p>Your code should be concise and efficient. Avoid writing unnecessary code or using complex algorithms when simpler ones will suffice.</p>
+                </li>
+                <li>
+                    <h4>Rule 5: Code Style</h4>
+                    <p>Your code should follow a consistent style and formatting. Use a consistent naming convention, indentation, and spacing throughout your code.</p>
+                </li>
+                <li>
+                    <h4>Rule 6: No External Libraries</h4>
+                    <p>You are not allowed to use any external libraries or dependencies in your code. You must write your code from scratch.</p>
+                </li>
+                <li>
+                    <h4>Rule 7: No Cheating</h4>
+                    <p>You are not allowed to cheat or copy someone else's code. Any form of cheating will result in immediate disqualification.</p>
+                </li>
+                <!-- Add more rules as needed -->
+            </ul>
+            <p class="text-center">
+                <a href="{% url 'choose_skill' %}" class="btn btn-primary">Proceed to Test</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

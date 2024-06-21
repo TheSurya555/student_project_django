@@ -1,0 +1,23 @@
+{% extends "main/Layout.html" %}
+
+{% block title %}
+Choose a Skill
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Choose a Skill</h2>
+    <ul>
+        {% for skill in skills %}
+            <li class="mb-5">
+                <select class="form-control" id="skills" multiple>
+                    <option value="{{skill.id}}">{{ skill.name }}</option>
+                </select>
+                <form action="{% url 'start_test' skill.id %}" method="get" style="display:inline;">
+                    <button type="submit" class="px-3 mt-3"><span>Select</span></button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

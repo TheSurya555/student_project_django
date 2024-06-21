@@ -67,7 +67,7 @@ def admin_SignUp_View(request):
 def login_View(request):
     return render(request,'signUp/chooselogin.html')
 
-
+# candidate login view
 def CandidateLoginView(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
