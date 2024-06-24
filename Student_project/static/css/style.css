@@ -596,7 +596,7 @@
       }
       
       .ezy__testimonial5-item img {
-        border-radius: 15px;
+        border-radius: 50px;
         padding: 5px;
       }
       
@@ -730,16 +730,16 @@
       
       .ezy__footer2 {
         /* Bootstrap variables */
-        --bs-body-color: #28303b;
-        --bs-body-bg: rgb(255, 255, 255);
-      
+        --bs-body-color: #ffffff; /* Change text color to white */
+        --bs-body-bg: #000000; /* Change background color to black */
+    
         /* Easy Frontend variables */
         --ezy-theme-color: rgb(13, 110, 253);
         --ezy-theme-color-rgb: 13, 110, 253;
-      
+    
         background-color: var(--bs-body-bg);
         color: var(--bs-body-color);
-        padding-top:60px ;
+        padding-top: 60px;
       }
 
       .footer-brand img{

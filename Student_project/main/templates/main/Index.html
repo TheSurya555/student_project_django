@@ -17,11 +17,45 @@ Home
         transform: translateY(-10px);
     }
 
-    .pagination .page-item.active .page-link {
-      background-color: #4175df;
-      border-color: #4175df;
+    .ezy__howitworks5-card {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .ezy__howitworks5-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .pagination {
+        margin: 0 auto;
+    }
+
+    .pagination .dot {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #70dcc5; /* Adjust to your desired color */
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .pagination .dot.active {
+        background-color: #000; /* Adjust to your desired active color */
+    }
+
+    .pagination .arrow {
+      border-radius: 0;
+      background: none;
+      font-size: 60px;
+      line-height: 40px;
+      text-align: center;
+      vertical-align: middle;
+      margin: 0 20px;
+      cursor: pointer;
     }
   </style>
+
 {% endblock %}
 
 {% block content %}
@@ -145,83 +179,73 @@ Home
   </section>
   <!-- client section end -->
 
-  <!-- Service section start -->
-  <section class="ezy__service23 light service" id="ezy__service23">
-    <div class="container">
-        <div class="row ezy__service23-separator">
-            <!-- Start: Section Heading -->
-            <div class="col-12 mb-5 text-center">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-5">
-                        <h3 class="ezy__service23-heading">Services List</h3>
-                    </div>
-                </div>
-                <p class="ezy__service23-sub-heading mt-4 px-md-4">
-                  Discover our wide range of services designed to meet your needs. 
-                  From professional consulting to cutting-edge technology solutions, 
-                  our offerings are tailored to help you achieve your goals efficiently and effectively.
-              </p>
-            </div>
-            <!-- End: Section Heading -->
+    <!-- Service section start -->
+    <section class="ezy__service23 light service" id="ezy__service23">
+      <div class="container">
+          <div class="row ezy__service23-separator">
+              <!-- Start: Section Heading -->
+              <div class="col-12 mb-5 text-center">
+                  <div class="row justify-content-center">
+                      <div class="col-12 col-md-10 col-lg-5">
+                          <h3 class="ezy__service23-heading">Services List</h3>
+                      </div>
+                  </div>
+                  <p class="ezy__service23-sub-heading mt-4 px-md-4">
+                      Discover our wide range of services designed to meet your needs. 
+                      From professional consulting to cutting-edge technology solutions, 
+                      our offerings are tailored to help you achieve your goals efficiently and effectively.
+                  </p>
+              </div>
+              <!-- End: Section Heading -->
 
-            <!-- Loop through services and display them -->
-            {% for service in page_obj %}
-            <div class="col-md-6 col-xl-4 mt-4 d-flex align-items-stretch">
-                <div class="card ezy__service23-card border-0 rounded-0 w-100">
-                    <div class="card-body pt-4 text-center d-flex flex-column align-items-center">
-                        <div class="ezy__service23-card-icon mb-3">
-                            <!-- Use the icon field from the Service model -->
-                            <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
-                        </div>
-                        <div class="card-body pb-4 text-center">
-                          <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
-                          <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
-                          <a href="{% url 'service_candidates' service.id %}"><button class="px-3 mt-3"><span>View Candidates</span></button></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            <!-- End loop -->
+              <!-- Services container -->
+              <div id="services-container" class="row">
+                  <!-- Loop through services and display them -->
+                  {% for service in page_obj %}
+                  <div class="col-md-6 col-xl-4 mt-4 d-flex align-items-stretch">
+                      <div class="card ezy__service23-card border-0 rounded-0 w-100">
+                          <div class="card-body pt-4 text-center d-flex flex-column align-items-center">
+                              <div class="ezy__service23-card-icon mb-3">
+                                  <!-- Use the icon field from the Service model -->
+                                  <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
+                              </div>
+                              <div class="card-body pb-4 text-center">
+                                  <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
+                                  <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
+                                  <a href="{% url 'service_candidates' service.id %}">
+                                      <button class="px-3 mt-3"><span>View Candidates</span></button>
+                                  </a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+                  <!-- End loop -->
+              </div>
+              <!-- End: Services container -->
 
-            <!-- Pagination controls -->
-            <div class="col-12 mt-4">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% for num in page_obj.paginator.page_range %}
-                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-            <!-- End: Pagination controls -->
+              <!-- Pagination controls -->
+              <div class="col-12 mt-4">
+                  <nav aria-label="Page navigation">
+                      <ul class="pagination justify-content-center d-flex align-items-center" id="paginator" >
+                          <!-- Pagination dots will be dynamically generated here -->
+                      </ul>
+                  </nav>
+              </div>
+              <!-- End: Pagination controls -->
 
-            <!-- View All button -->
-            <div class="col-12 mt-4 text-center">
-                <a href="{% url 'all_services' %}"><button class="px-3"><span>View All Services</span></button></a>
-            </div>
-        </div>
-        <!-- End: .row -->
-    </div>
-    <!-- End: .container -->
-  </section>
-  <!-- Service section end -->
+              <!-- View All button -->
+              <div class="col-12 mt-4 text-center">
+                  <a href="{% url 'all_services' %}">
+                      <button class="px-3"><span>View All Services</span></button>
+                  </a>
+              </div>
+          </div>
+          <!-- End: .row -->
+      </div>
+      <!-- End: .container -->
+    </section>
+    <!-- Service section end -->
 
 
     {% comment %} testimonial section  {% endcomment %}
@@ -270,7 +294,7 @@ Home
 
 
     {% comment %} how it work section{% endcomment %}
-    <section class="ezy__howitworks5 light">
+    <section class="ezy__howitworks5 light" >
         <div class="container">
           <div class="row justify-content-center text-center">
             <div class="col-md-6">
@@ -283,7 +307,7 @@ Home
           </div>
           <div class="row">
             <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100">
+              <div class="card ezy__howitworks5-card h-100 w-100">
                 <div class="card-body p-4 p-lg-5">
                   <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
                     <i class="fas fa-sign-in-alt"></i>
@@ -295,7 +319,7 @@ Home
             </div>
       
             <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100">
+              <div class="card ezy__howitworks5-card h-100 w-100">
                 <div class="card-body p-4 p-lg-5">
                   <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
                     <i class="fas fa-cannabis"></i>
@@ -307,7 +331,7 @@ Home
             </div>
       
             <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100">
+              <div class="card ezy__howitworks5-card h-100 w-100">
                 <div class="card-body p-4 p-lg-5">
                   <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
                     <i class="fas fa-camera"></i>
@@ -319,7 +343,7 @@ Home
             </div>
       
             <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100">
+              <div class="card ezy__howitworks5-card h-100 w-100">
                 <div class="card-body p-4 p-lg-5">
                   <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
                     <i class="fas fa-random"></i>
@@ -333,4 +357,71 @@ Home
         </div>
     </section>
     {% comment %} how it work section{% endcomment %}
+{% endblock %}
+
+{% block extra_js %}
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const paginator = document.getElementById("paginator");
+        const totalPages = {{ page_obj.paginator.num_pages }};
+        let currentPage = {{ page_obj.number }};
+
+        function loadPage(page) {
+            fetch(`?page=${page}`)
+                .then(response => response.text())
+                .then(data => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, 'text/html');
+                    const newContent = doc.getElementById('services-container').innerHTML;
+                    document.getElementById('services-container').innerHTML = newContent;
+
+                    currentPage = page;
+                    updatePaginator();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updatePaginator() {
+            paginator.innerHTML = "";
+
+            const prevArrow = document.createElement("li");
+            prevArrow.classList.add("arrow");
+            prevArrow.innerHTML = "&laquo;";
+            prevArrow.addEventListener("click", function() {
+                if (currentPage > 1) {
+                    loadPage(currentPage - 1);
+                }
+            });
+            paginator.appendChild(prevArrow);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const dot = document.createElement("li");
+                dot.classList.add("dot");
+                if (i === currentPage) {
+                    dot.classList.add("active");
+                }
+                dot.setAttribute("data-page", i);
+                dot.addEventListener("click", function() {
+                    const page = parseInt(this.getAttribute("data-page"));
+                    loadPage(page);
+                });
+                paginator.appendChild(dot);
+            }
+
+            const nextArrow = document.createElement("li");
+            nextArrow.classList.add("arrow");
+            nextArrow.innerHTML = "&raquo;";
+            nextArrow.addEventListener("click", function() {
+                if (currentPage < totalPages) {
+                    loadPage(currentPage + 1);
+                }
+            });
+            paginator.appendChild(nextArrow);
+        }
+
+        updatePaginator();
+    });
+  </script>
+
 {% endblock %}

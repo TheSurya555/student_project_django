@@ -138,7 +138,7 @@
 
 
     {% comment %} Footer Section {% endcomment %}
-    <section class="ezy__footer2 light">
+    <section class="ezy__footer2 light" style="background: #000; color: #fff;">
         <div class="container">
           <div class="row text-center text-sm-start">
             <div class="col-lg-3">
@@ -148,7 +148,7 @@
             </div>
             <div class="col-sm-6 col-lg-2 mt-4 mt-lg-0">
               <h5>Quick Links</h5>
-              <ul class="nav flex-column ezy__footer2-quick-links">
+              <ul class="nav flex-column ezy__footer2-quick-links" style="color: #fff;">
                 <li><a href="/">Home</a></li>
                 <li><a href="{% url "aboutUs_view" %}">About Us</a></li>
                 {% if request.session.user_role == "Recruiter" %}
