@@ -287,8 +287,20 @@
   <script src="{% static 'js/script.js' %}"></script>
   <script src="{% static 'js/account_creation.js' %}"></script>
   <script src="{% static 'js/message.js' %}"></script>
-  <script src="{% static 'js/setting.js' %}"></script>
   <script src="{% static 'js/profile.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+      const passwordFields = document.querySelectorAll('input[type="password"]');
+  
+      showPasswordCheckbox.addEventListener('change', function () {
+          const showPassword = this.checked;
+          passwordFields.forEach(function (field) {
+              field.type = showPassword ? 'text' : 'password';
+          });
+      });
+    });  
+  </script>
 {% endblock %}
 
 {% block extra_js %}{% endblock %}

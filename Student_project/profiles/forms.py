@@ -37,14 +37,29 @@ class ProjectExperienceForm(forms.ModelForm):
         self.fields['contribution'].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})
         self.fields['technologies'].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})
         self.fields['duration'].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})
-        self.fields['description'].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})
-
-
-class CustomPasswordChangeForm(PasswordChangeForm):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'autocomplete': 'off' ,'placeholder': 'Enter old password'}))
-    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter new password'}))
-    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm new password'}))
+        self.fields['description'].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})   
     
+    
+class CustomPasswordChangeForm(forms.Form):
+    old_password = forms.CharField(
+        label="Old Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'autocomplete': 'off', 'placeholder': 'Enter old password'})
+    )
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter new password'})
+    )
+    new_password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm new password'})
+    )
+    # show_password = forms.BooleanField(label='Show Password', required=False)
+    
+    
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
     def clean_old_password(self):
         old_password = self.cleaned_data.get('old_password')
         user = authenticate(username=self.user.username, password=old_password)
@@ -58,19 +73,25 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         new_password2 = cleaned_data.get('new_password2')
         if new_password1 and new_password2 and new_password1 != new_password2:
             raise forms.ValidationError("The new passwords do not match.")
-        return cleaned_data        
+        return cleaned_data
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password1"]
+        self.user.set_password(password)
+        if commit:
+            self.user.save()
+        return self.user    
     
     
-class EditUserForm(UserChangeForm):
-    password = None
-    # 'phone': forms.CharField(attrs={'class':'border-b border-black focus:outline-none focus:border-blue-600 text-sm w-full py-2', 'placeholder': 'Phone Number'}),
+class EditUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name','email' ,'phone']
+        fields = ['first_name', 'last_name', 'email', 'phone']  # include all relevant fields
+        def __init__(self, *args, **kwargs):
+            super(EditUserForm, self).__init__(*args, **kwargs)
         widgets = {
             'first_name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'First Name'}),
             'last_name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Last Name'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'email': forms.EmailInput(attrs={'class':'form-control', 'placeholder': 'Email Address'}),
         }
-    

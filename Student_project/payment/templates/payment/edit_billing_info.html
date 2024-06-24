@@ -33,6 +33,14 @@ Edit Billing Information
         width: auto;
         margin-right: 10px;
     }
+
+    .radio_button {
+        display: flex;
+        align-items: baseline;
+        margin: 5px;
+        padding: 10px;
+        border-radius: 5px;
+    }
 </style>
 {% endblock %}
 
@@ -81,20 +89,29 @@ Edit Billing Information
         </div>
         <div class="form-group">
             <label>Are you a citizen/resident of India?</label>
-            <div>
-                <input type="radio" id="is_indian_citizen_yes" name="is_indian_citizen" value="yes" {% if profile.is_indian_citizen %}checked{% endif %} required>
+            <div class="radio_button m-0">
+                <div class="mx-2">
+                    <input type="radio" id="is_indian_citizen_yes" name="is_indian_citizen" value="yes" {% if profile.is_indian_citizen %}checked{% endif %} required>
+                </div>
                 <label for="is_indian_citizen_yes">Yes</label>
             </div>
-            <div>
-                <input type="radio" id="is_indian_citizen_no" name="is_indian_citizen" value="no" {% if not profile.is_indian_citizen %}checked{% endif %} required>
+
+            <div class="radio_button m-0">
+                <div class="mx-2">
+                    <input type="radio" id="is_indian_citizen_no" name="is_indian_citizen" value="no" {% if not profile.is_indian_citizen %}checked{% endif %} required>
+                </div>
                 <label for="is_indian_citizen_no">No</label>
             </div>
         </div>
         <div class="form-group">
-            <input type="checkbox" id="receive_invoices_via_email" name="receive_invoices_via_email" {% if profile.receive_invoices_via_email %}checked{% endif %}>
-            <label for="receive_invoices_via_email">I want to get invoices via email as well.</label>
+            <div class="radio_button m-0">
+                <div class="mx-2">
+                    <input type="checkbox" id="receive_invoices_via_email" name="receive_invoices_via_email" {% if profile.receive_invoices_via_email %}checked{% endif %}>
+                </div>
+                <label for="receive_invoices_via_email">I want to get invoices via email as well.</label>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="px-3"><span>Save</span></button>
     </form>
 </div>
 {% endblock %}

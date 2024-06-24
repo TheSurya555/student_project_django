@@ -6,6 +6,6 @@ urlpatterns = [
     path('settings', views.settings_View , name= 'settings'),
     path('profile_edit', views.edit_profile_View , name= 'profile_edit'),
     path('add_project/', views.add_project, name='add_project'), 
-    # path('change_password/', views.change_password, name='change_password'),
+    path('privacy-policy/', views.privacy_policy_view, name='privacy_policy'),
     
 ]

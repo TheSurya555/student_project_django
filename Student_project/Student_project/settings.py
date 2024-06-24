@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'examination',
     'tinymce',
     'channels',
+    # 'djstripe',
     
 ]
 
@@ -171,9 +172,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'  # SMTP server for Outlook
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'talentsprout@outlook.com'
-EMAIL_HOST_PASSWORD = 'Suryatalent@#1234'
-DEFAULT_FROM_EMAIL = 'talentsprout@outlook.com'
+EMAIL_HOST_USER = 'Nibeditapradhan@outlook.in'
+EMAIL_HOST_PASSWORD = 'papali@27'
+DEFAULT_FROM_EMAIL = 'Nibeditapradhan@outlook.in'
 
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -204,3 +205,14 @@ TINYMCE_DEFAULT_CONFIG = {
     'menubar': True,
     'statusbar': True,
 }
+
+
+# Stripe API keys
+# STRIPE_TEST_SECRET_KEY = 'sk_test_51PULQQSDtrc6CVhb71C4be1XRzlED7yJ5FVDe0H6eCuCyjgfEaMBsQyz3iITjzDRDHetXxZBiERVhPIrBFEu2gR500zY02wnzJ'
+# STRIPE_TEST_PUBLIC_KEY = 'pk_test_51PULQQSDtrc6CVhbNy1iCKKK93kyLSvfpA6GRJrQce3O7ufT89V9GP9lZiXngpWHH7S8uQzkwfdNwkuJh9C8Nywg00uIPy8Atq'
+# DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+# DJSTRIPE_WEBHOOK_SECRET = "your_webhook_secret"
+# # Add Stripe keys to settings
+# # STRIPE_LIVE_MODE = False  # Set to True when ready to go live
+# # STRIPE_SECRET_KEY = STRIPE_TEST_SECRET_KEY if not STRIPE_LIVE_MODE else 'your_live_secret_key'
+# # STRIPE_PUBLIC_KEY = STRIPE_TEST_PUBLIC_KEY if not STRIPE_LIVE_MODE else 'your_live_public_key'

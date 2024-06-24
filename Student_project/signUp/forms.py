@@ -12,8 +12,6 @@ class CandidateSignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'input', 'id': 'lname', 'autocomplete': 'off'}))
     email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput(attrs={'class': 'input', 'id': 'email', 'autocomplete': 'off'}))
     phone = forms.CharField(max_length=15, required=True, validators=[RegexValidator(r'^\d{10}$', message="Phone number must be exactly 10 digits.")],widget=forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    # password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    # password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'input', 'autocomplete': 'off'}))
 
     password1 = forms.CharField(
         label="Password",
@@ -38,7 +36,6 @@ class CandidateSignUpForm(UserCreationForm):
         widgets = {
             'username': forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}),
         }
-        
         
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
@@ -77,11 +74,8 @@ class RecruiterSignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'input', 'id': 'lname', 'autocomplete': 'off'}))
     company = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'input', 'id': 'company', 'autocomplete': 'off'}))
     email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput(attrs={'class': 'input', 'id': 'email', 'autocomplete': 'off'}))
-    #phone = forms.CharField(max_length=15, required=True, widget=forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    # password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    # password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    phone = forms.CharField(max_length=15, required=True, validators=[RegexValidator(r'^\d{10}$', message="Phone number must be exactly 10 digits.")],widget=forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}))
 
+    phone = forms.CharField(max_length=15, required=True, validators=[RegexValidator(r'^\d{10}$', message="Phone number must be exactly 10 digits.")],widget=forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}))
 
     password1 = forms.CharField(
         label="Password",
@@ -145,9 +139,6 @@ class AdminSignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=30, required=True, widget=forms.TextInput(attrs={'class': 'input', 'id': 'lname', 'autocomplete': 'off'}))
     email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput(attrs={'class': 'input', 'id': 'email', 'autocomplete': 'off'}))
     professional_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    # phone = forms.CharField(max_length=15, required=True, widget=forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    # password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'input', 'autocomplete': 'off'}))
-    # password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'input', 'autocomplete': 'off'}))
     phone = forms.CharField(max_length=15, required=True, validators=[RegexValidator(r'^\d{10}$', message="Phone number must be exactly 10 digits.")],widget=forms.TextInput(attrs={'class': 'input', 'autocomplete': 'off'}))
     
     

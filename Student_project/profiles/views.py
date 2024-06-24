@@ -6,8 +6,6 @@ from signUp.models import CustomUser ,RecruiterProfile ,CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from chat.models import ChatSession
-from django.http import JsonResponse
 
 # profile view
 @login_required
@@ -28,15 +26,19 @@ def profiles_View(request):
 @login_required
 def settings_View(request):
     try:
-        # user_profile = get_object_or_404(UserProfile, user=request.user)
         user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
-        # Handle the case where the user profile does not exist
         user_profile = UserProfile.objects.create(user=request.user)
+
+    profile = None
+    if request.user.role == CustomUser.RECRUITER:
+        profile = get_object_or_404(RecruiterProfile, user=request.user)
+    elif request.user.role == CustomUser.CANDIDATE:
+        profile = get_object_or_404(CandidateProfile, user=request.user)
 
     if request.method == 'POST':
         if 'save_changes' in request.POST:
-            form = EditUserForm(request.POST, instance=user_profile)
+            form = EditUserForm(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Settings updated successfully.')
@@ -46,22 +48,15 @@ def settings_View(request):
         elif 'change_password' in request.POST:
             change_passform = CustomPasswordChangeForm(request.user, request.POST)
             if change_passform.is_valid():
-                user = change_passform.save()
-                update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
+                change_passform.save()
+                update_session_auth_hash(request, request.user)  # Update the session with the new password hash
                 messages.success(request, 'Your password has been changed successfully!')
                 return redirect('settings')
             else:
                 messages.error(request, 'Please correct the error below.')
     else:
-        form = EditUserForm(instance=user_profile)  # This assignment is moved inside the else block
-
-    profile = None
-    if request.user.role == CustomUser.RECRUITER:
-        profile = get_object_or_404(RecruiterProfile, user=request.user)
-    elif request.user.role == CustomUser.CANDIDATE:
-        profile = get_object_or_404(CandidateProfile, user=request.user)
-
-    change_passform = CustomPasswordChangeForm(request.user)
+        form = EditUserForm(instance=request.user)
+        change_passform = CustomPasswordChangeForm(request.user)
 
     context = {
         'custom_user': request.user,
@@ -69,7 +64,6 @@ def settings_View(request):
         'profile': profile,
         'change_passform': change_passform,
     }
-    print(context)
 
     return render(request, 'profiles/settings.html', context)
 
@@ -123,23 +117,5 @@ def add_project(request):
     return render(request, 'profiles/project_experience.html', {'form': form})
 
 
-# @login_required
-# def change_password(request):
-#     print("Accessing change_password view")  # Debug statement
-    
-#     if request.method == 'POST':
-#         print("POST request detected")  # Debug statement
-#         form = CustomPasswordChangeForm(request.user, request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
-#             messages.success(request, 'Your password has been changed successfully!')
-#             return redirect('settings')
-#         else:
-#             messages.error(request, 'Please correct the error below.')
-#     else:
-#         form = CustomPasswordChangeForm(request.user)
-#         print("Initializing form:", form)  # Debug statement
-#         print("Form fields:", form.fields)  # Debug statement
-    
-#     return render(request, 'profiles/change_password.html', {'change_passform': form})
+def privacy_policy_view(request):
+    return render(request, 'profiles/privacy_policy.html')

@@ -1398,3 +1398,90 @@ def subscription_list(request):
     for subscription in subscriptions:
         subscription.features_list = subscription.features.split(",")
     return render(request, 'payment/subscription_list.html', {'subscriptions': subscriptions})
+
+
+
+
+
+
+
+===============editform form==========================
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name','email' ,'phone']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Last Name'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            'email': forms.EmailInput(attrs={'class':'form-control', 'placeholder': 'Email Address'}),
+        }
+
+
+===================== change password form ==================================
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'autocomplete': 'off' ,'placeholder': 'Enter old password'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter new password'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm new password'}))
+    
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get('old_password')
+        user = authenticate(username=self.user.username, password=old_password)
+        if not user:
+            raise forms.ValidationError("Invalid old password.")
+        return old_password
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password1 = cleaned_data.get('new_password1')
+        new_password2 = cleaned_data.get('new_password2')
+        if new_password1 and new_password2 and new_password1 != new_password2:
+            raise forms.ValidationError("The new passwords do not match.")
+        return cleaned_data             
+
+@login_required
+def settings_View(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        user_profile = UserProfile.objects.create(user=request.user)
+
+    profile = None
+    if request.user.role == CustomUser.RECRUITER:
+        profile = get_object_or_404(RecruiterProfile, user=request.user)
+    elif request.user.role == CustomUser.CANDIDATE:
+        profile = get_object_or_404(CandidateProfile, user=request.user)
+
+    if request.method == 'POST':
+        if 'save_changes' in request.POST:
+            form = EditUserForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Settings updated successfully.')
+                return redirect('settings')
+            else:
+                messages.error(request, 'Error updating settings. Please check the form and try again.')
+        elif 'change_password' in request.POST:
+            change_passform = CustomPasswordChangeForm(request.user, request.POST)
+            if change_passform.is_valid():
+                user = change_passform.save()
+                update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
+                messages.success(request, 'Your password has been changed successfully!')
+                return redirect('settings')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            form = EditUserForm(instance=request.user)  # Ensure form is always defined
+            change_passform = CustomPasswordChangeForm(request.user)  # Ensure change_passform is always defined
+    else:
+        form = EditUserForm(instance=request.user)
+        change_passform = CustomPasswordChangeForm(request.user)
+
+    context = {
+        'custom_user': request.user,
+        'form': form,
+        'profile': profile,
+        'change_passform': change_passform,
+    }
+
+    return render(request, 'profiles/settings.html', context)
