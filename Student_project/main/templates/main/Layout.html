@@ -39,12 +39,10 @@
                 <a class="navbar-brand" href="/" style="margin-left: 20px;">
                     <img src="{% static 'assets/talentsprout.jpeg' %}" alt="logo">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                    <span>
-                        <span></span>
-                    </span>
-                </button>
+                <span class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                  <i class="fas fa-bars" style="font-size: 32px;"></i>
+                </span>
                 <div class="collapse navbar-collapse" id="navbarText" style="margin-right: 20px;">
                   <ul class="navbar-nav ms-auto mb-2 align-items-center  mb-lg-0 mt-4 mt-lg-0">
                       {% if user.is_authenticated %}
@@ -288,6 +286,8 @@
   <script src="{% static 'js/account_creation.js' %}"></script>
   <script src="{% static 'js/message.js' %}"></script>
   <script src="{% static 'js/profile.js' %}"></script>
+
+  {% comment %} show password js {% endcomment %}
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
@@ -301,6 +301,25 @@
       });
     });  
   </script>
+
+
+  {% comment %} nav toggler js {% endcomment %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var navbarToggler = document.querySelector('.navbar-toggler');
+        navbarToggler.addEventListener('click', function() {
+            var icon = this.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    });
+  </script>
+
 {% endblock %}
 
 {% block extra_js %}{% endblock %}
