@@ -11,4 +11,6 @@ urlpatterns = [
     path('adminlogin/', views.admin_LoginView , name='adminlogin'),
     path('login/', views.login_View, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path('email_verification_notification/', views.email_verification_notification, name='email_verification_notification'),
 ]

@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=15,null=True , unique=True)
     professional_id = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(unique=True)
+    email_verified = models.BooleanField(default=False)  # Add this line
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'phone']

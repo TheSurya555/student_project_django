@@ -45,8 +45,8 @@ Login
                             <a href="{% url "requiterSignUp" %}">Register</a>
                           </p>
                         </div>
-                        {% for msg in messages %}
-                        <div class="text-red-500">{{ msg }}</div> <br>
+                        {% for r_lmsg in messages %}
+                          <div class="bg-success">{{ r_lmsg }}</div> <br>
                         {% endfor %}
                       </form>
                     </div>

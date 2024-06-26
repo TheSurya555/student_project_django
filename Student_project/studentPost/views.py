@@ -15,17 +15,22 @@ def studentPost(request):
     print('profile_image_url' ,profile_image_url)
     return render(request, 'studentPost/studentPost.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
 
+
 def postDetail(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
     related_posts = BlogPost.objects.filter(user=post.user).exclude(id=post.id)[:3]
-    
+
     user_profile = None
     profile_image_url = None
-    
+
     if request.user.is_authenticated:
-        user_profile = UserProfile.objects.get(user=request.user)
-        profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
-    
+        try:
+            user_profile = UserProfile.objects.get(user=post.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            user_profile = None
+            profile_image_url = None
+
     return render(request, 'studentPost/postdetailes.html', {
         'post': post,
         'user_profile': user_profile,

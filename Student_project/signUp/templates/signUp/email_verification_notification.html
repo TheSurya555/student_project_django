@@ -1,0 +1,19 @@
+<!-- templates/email_verification_notification.html -->
+{% extends "main/Layout.html" %}
+
+{% load static %}
+
+{% block title %}
+Email Verification
+{% endblock %}
+
+
+{% block content %}
+<div class="container text-center my-5">
+    <div class="verification-notification">
+        <h1>Verify Your Email</h1>
+        <p>An email has been sent to your email address. Please check your inbox and click on the verification link to activate your account.</p>
+        <a href="{% url 'home' %}"><button class="px-3"><span>Back to Home Page</span></button></a>
+    </div>
+</div>
+{% endblock %}

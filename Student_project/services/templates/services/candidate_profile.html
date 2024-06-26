@@ -100,7 +100,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container my-5 ">
     <div class="profile-header mt-5">
         {% if candidate.profile_image %}
             <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
@@ -120,8 +120,10 @@
     </div>
     <div class="back-button">
         <a href="{% url 'service_candidates' service_id %}" class="mx-3"><button class="px-3"><span>Back</span></button></a>
-        <a href="{% url 'start_chat' candidate.user.id %}"><button class="px-3" id="message-button"><span>Message The Candidate</span></button></a>
-        <a href="{% url 'subscription_list' %}"><button class="px-3"><span>Pay For This Candidate</span></button></a>
+        {% if request.user.role == 'recruiter' %}
+            <a href="{% url 'start_chat' candidate.user.id %}"><button class="px-3" id="message-button"><span>Message The Candidate</span></button></a>
+            <a href="{% url 'subscription_list' %}"><button class="px-3"><span>Pay For This Candidate</span></button></a>
+        {% endif %}
     </div>
 
 </div>

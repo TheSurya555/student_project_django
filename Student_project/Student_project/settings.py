@@ -169,12 +169,14 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 
 # Configure Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'  # SMTP server for Outlook
+EMAIL_HOST = 'smtp.gmail.com'  # SMTP server for gmail
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'Nibeditapradhan@outlook.in'
-EMAIL_HOST_PASSWORD = 'papali@27'
-DEFAULT_FROM_EMAIL = 'Nibeditapradhan@outlook.in'
+EMAIL_HOST_USER = 'suryakingsahoo60063@gmail.com'
+EMAIL_HOST_PASSWORD = 'nzym mzyj rdll tyyu'
+DEFAULT_FROM_EMAIL = 'suryakingsahoo60063@gmail.com'
+
+# nzym mzyj rdll tyyu
 
 
 TINYMCE_DEFAULT_CONFIG = {

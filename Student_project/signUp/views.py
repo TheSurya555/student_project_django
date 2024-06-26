@@ -1,18 +1,42 @@
-from django.shortcuts import render ,redirect
-from django.contrib.auth import login ,logout ,authenticate
+# views.py
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
-from .forms import CandidateSignUpForm, RecruiterSignUpForm ,EmailOrPhoneLoginForm ,AdminSignUpForm
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.sites.shortcuts import get_current_site
+from .forms import CandidateSignUpForm, RecruiterSignUpForm, EmailOrPhoneLoginForm, AdminSignUpForm
+from .tokens import email_verification_token
+
+# Ensure the correct model is imported
 from .models import CustomUser
 
+User = get_user_model()
 
-# Create your views here.
+# signup view
 def signUP_View(request):
-    return render(request,'signUp/chooseSignUp.html')
+    return render(request, 'signUp/chooseSignUp.html')
 
+# Varification Send mail view
+def send_verification_email(request, user):
+    current_site = get_current_site(request)
+    mail_subject = 'Activate your account.'
+    message = render_to_string('signup/email_verification.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': email_verification_token.make_token(user),
+    })
+    to_email = user.email
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    email.send()
 
-#candidate signup view
+# Candidate signup view
 def candidate_SignUp_View(request):
     if request.method == 'POST':
         form = CandidateSignUpForm(request.POST)
@@ -20,33 +44,50 @@ def candidate_SignUp_View(request):
             user = form.save()
             candidate_group = Group.objects.get(name='Candidate')
             user.groups.add(candidate_group)
-            messages.success(request, 'Account Created Successfully !')
-            form = CandidateSignUpForm()
+            send_verification_email(request, user)
+            messages.success(request, 'Account created successfully! Please check your email to verify your account.')
+            return redirect('email_verification_notification')
         else:
-            messages.error(request, 'Error while creating account !')
+            messages.error(request, 'Error while creating account!')
     else:
         form = CandidateSignUpForm()
     return render(request, 'signup/candidateSignup.html', {'form': form})
 
-#requiter signup view
+# Requiter signup view
 def requiter_SignUp_View(request):
     if request.method == 'POST':
         form = RecruiterSignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Assign the 'Recruiter' group to the user
             recruiter_group = Group.objects.get(name='Recruiter')
             user.groups.add(recruiter_group)
-            messages.success(request, 'Account Created Successfully !')
-            form = RecruiterSignUpForm()
+            send_verification_email(request, user)
+            messages.success(request, 'Account created successfully! Please check your email to verify your account.')
+            return redirect('email_verification_notification')
         else:
-            messages.error(request, 'Error while creating account !')
-            print(messages.error)
+            messages.error(request, 'Error while creating account!')
     else:
         form = RecruiterSignUpForm()
     return render(request, 'signup/requiterSignup.html', {'form': form})
 
-# Admin signup view
+# email activation  view
+def activate(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and email_verification_token.check_token(user, token):
+        user.email_verified = True
+        user.save()
+        messages.success(request, 'Your email has been verified successfully. Please log in.')
+        return redirect('login')
+    else:
+        messages.error(request, 'Activation link is invalid!')
+        return redirect('login')
+
+# Admin Signup view
 def admin_SignUp_View(request):
     if request.method == 'POST':
         form = AdminSignUpForm(request.POST)
@@ -54,37 +95,37 @@ def admin_SignUp_View(request):
             user = form.save()
             admin_group = Group.objects.get(name='Admin')
             user.groups.add(admin_group)
-            messages.success(request, 'Account Created Successfully !')
-            form = AdminSignUpForm()
-            print(form)
+            send_verification_email(request, user)
+            messages.success(request, 'Account created successfully! Please check your email to verify your account.')
+            return redirect('email_verification_notification')
         else:
-            messages.error(request, 'Error while creating account !')
+            messages.error(request, 'Error while creating account!')
     else:
         form = AdminSignUpForm()
     return render(request, 'signUp/adminSignup.html', {'form': form})
-    
+
+def email_verification_notification(request):
+    return render(request, 'signUp/email_verification_notification.html')
+
 
 def login_View(request):
-    return render(request,'signUp/chooselogin.html')
+    return render(request, 'signUp/chooselogin.html')
 
-# candidate login view
+# cadidate login view
 def CandidateLoginView(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
-            form = EmailOrPhoneLoginForm(request=request ,data = request.POST)
+            form = EmailOrPhoneLoginForm(request=request, data=request.POST)
             if form.is_valid():
                 uname = form.cleaned_data['username']
                 upass = form.cleaned_data['password']
                 user = authenticate(username=uname, password=upass)
-                print('user is' ,user )
                 if user is not None:
                     login(request, user)
-                    # Determine the user's role and store it in the session
                     if user.role == CustomUser.CANDIDATE:
                         request.session['user_role'] = 'Candidate'
-                        print('Candidate logged in')
                         messages.success(request, 'Logged in successfully as Candidate!!')
-                        return HttpResponseRedirect('/')  # Redirect to Candidate dashboard
+                        return HttpResponseRedirect('/')
                     else:
                         messages.error(request, 'Unknown user role!!')
                 else:
@@ -95,28 +136,24 @@ def CandidateLoginView(request):
             form = EmailOrPhoneLoginForm()
         return render(request, 'signUp/candidateLogin.html', {'form': form})
     else:
-        return HttpResponseRedirect('/') # redirect to the home page
-        
-        
-# Recruiter Login View     
-        
-def RecruiterLoginView(request):        
+        return HttpResponseRedirect('/')
+
+
+# Requiter login view
+def RecruiterLoginView(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
-            form = EmailOrPhoneLoginForm(request=request ,data = request.POST)
+            form = EmailOrPhoneLoginForm(request=request, data=request.POST)
             if form.is_valid():
                 uname = form.cleaned_data['username']
                 upass = form.cleaned_data['password']
                 user = authenticate(username=uname, password=upass)
-                print('user is' ,user )
                 if user is not None:
                     login(request, user)
-                    # Determine the user's role and store it in the session
                     if user.role == CustomUser.RECRUITER:
                         request.session['user_role'] = 'Recruiter'
-                        print('Recruiter logged in')
                         messages.success(request, 'Logged in successfully as Recruiter!!')
-                        return HttpResponseRedirect('/')  # Redirect to Recruiter dashboard
+                        return HttpResponseRedirect('/')
                     else:
                         messages.error(request, 'Unknown user role!!')
                 else:
@@ -127,9 +164,9 @@ def RecruiterLoginView(request):
             form = EmailOrPhoneLoginForm()
         return render(request, 'signUp/requiterLogin.html', {'form': form})
     else:
-        return HttpResponseRedirect('/') 
-    
-    
+        return HttpResponseRedirect('/')
+
+
 # Admin login view
 def admin_LoginView(request):
     if not request.user.is_authenticated:
@@ -139,15 +176,12 @@ def admin_LoginView(request):
                 uname = form.cleaned_data['username']
                 upass = form.cleaned_data['password']
                 user = authenticate(username=uname, password=upass)
-                print('user is', user)
                 if user is not None:
                     login(request, user)
-                    # Determine the user's role and store it in the session
                     if user.role == CustomUser.ADMIN:
                         request.session['user_role'] = 'Admin'
-                        print('Admin logged in')
                         messages.success(request, 'Logged in successfully as Admin!!')
-                        return HttpResponseRedirect('/')  # Redirect to Admin dashboard
+                        return HttpResponseRedirect('/')
                     else:
                         messages.error(request, 'Unknown user role!!')
                 else:
@@ -158,11 +192,10 @@ def admin_LoginView(request):
             form = EmailOrPhoneLoginForm()
         return render(request, 'signUp/adminLogin.html', {'form': form})
     else:
-        return HttpResponseRedirect('/')  # Redirect to the home page    
-    
-    
-#logout view
+        return HttpResponseRedirect('/')
+
+
+# Logout view
 def logout_view(request):
     logout(request)
-    return redirect('login')  # Redirect to the login page after logout
-
+    return redirect('login')
