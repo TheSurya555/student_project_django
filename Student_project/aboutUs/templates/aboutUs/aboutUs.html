@@ -4,55 +4,73 @@
 {% block title %}About Us - Talent Sprout{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+  <link rel="stylesheet" href="{% static 'css/about.css' %}">
+  <style>
+    .custom-size {
+      max-width: 250px;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      transition: transform 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .custom-size:hover {
+      transform: scale(1.1);
+      border: 2px solid #999;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+  
+    .shadow-effect {
+      box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+    }
+  </style>
 {% endblock %}
 
+
 {% block content %}
+
   <section class="ezy__about py-5">
     <div class="container">
       <div class="row align-items-center">
-        <div class="col-lg-6 mb-4 mb-lg-0">
+        <div class="col-md-6 mb-4 mb-md-0">
           <h1>About Us</h1>
-          <p>Talent Sprout is a tech company that specializes in providing innovative solutions to bridge the gap between students and the industry. Our mission is to empower students with the skills and knowledge required to succeed in the ever-evolving tech landscape.</p>
-          <p>We believe that every student has the potential to grow and flourish, and we're committed to providing them with the necessary resources and support to achieve their goals. Our team of experienced professionals is dedicated to creating a platform that fosters growth, learning, and innovation.</p>
+          {% if about_us_content %}
+            <p>{{ about_us_content.description }}</p>
+          {% else %}
+            <p>Talent Sprout is a tech company that specializes in providing innovative solutions to bridge the gap between students and the industry. Our mission is to empower students with the skills and knowledge required to succeed in the ever-evolving tech landscape.</p>
+            <p>We believe that every student has the potential to grow and flourish, and we're committed to providing them with the necessary resources and support to achieve their goals. Our team of experienced professionals is dedicated to creating a platform that fosters growth, learning, and innovation.</p>
+          {% endif %}
         </div>
-        <div class="col-lg-6">
-          <img src="{% static 'assets/talentsprout.jpeg' %}" alt="About Us Image" class="img-fluid rounded">
+        <div class="col-md-6 text-center">
+          {% if about_us_content and about_us_content.image %}
+            <img src="{{ about_us_content.image.url }}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect">
+          {% else %}
+            <img src="{% static 'assets/talentsprout.jpeg' %}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect">
+          {% endif %}
         </div>
       </div>
     </div>
   </section>
 
+
   <section class="ezy__about-features py-5 bg-light" style="text-align: -webkit-center;">
     <div class="container">
       <div class="row">
-        <div class="col-md-6 col-lg-4 mb-4 ">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-              <i class="fas fa-graduation-cap fa-3x mb-3 text-primary"></i>
-              <h3 class="card-title">Student Internships</h3>
-              <p class="card-text">We provide internship opportunities to students, giving them hands-on experience in the tech industry.</p>
+        {% if about_us_content %}
+          {% for feature in about_us_content.features.all %}
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body text-center">
+                <i class="{{ feature.icon }} fa-2x mb-3"></i>
+                <h3 class="card-title">{{ feature.title }}</h3>
+                <p class="card-text">{{ feature.description }}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-              <i class="fas fa-code fa-3x mb-3 text-primary"></i>
-              <h3 class="card-title">Technical Training</h3>
-              <p class="card-text">We offer technical training and workshops, equipping students with the skills required to succeed in the industry.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="card border-0 shadow-sm h-100">
-            <div class="card-body text-center">
-              <i class="fas fa-network-wired fa-3x mb-3 text-primary"></i>
-              <h3 class="card-title">Industry Connections</h3>
-              <p class="card-text">We connect students with industry professionals, providing them with valuable networking opportunities.</p>
-            </div>
-          </div>
-        </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
   </section>
@@ -70,7 +88,7 @@
           {% for member in team_members %}
           <div class="col-md-6 col-lg-4 mb-4">
             <div class="card border-0 text-center">
-              <img src="{{ member.photo.url }}" alt="Photo of {{ member.name }}" class="card-img-top rounded-circle mx-auto mt-3" style="width: 150px; height: 150px; object-fit: cover;">
+              <img src="{{ member.photo.url }}" alt="Photo of {{ member.name }}" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
               <div class="card-body">
                 <h3 class="card-title">{{ member.name }}</h3>
                 <p class="card-text">{{ member.title }}</p>
@@ -81,7 +99,7 @@
         {% else %}
           <div class="col-md-6 col-lg-4 mb-4">
             <div class="card border-0 text-center">
-              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3" style="width: 150px; height: 150px; object-fit: cover;">
+              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
               <div class="card-body">
                 <h3 class="card-title">Demo Team Member</h3>
                 <p class="card-text">Founder & CEO</p>
@@ -90,7 +108,7 @@
           </div>
           <div class="col-md-6 col-lg-4 mb-4">
             <div class="card border-0 text-center">
-              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3" style="width: 150px; height: 150px; object-fit: cover;">
+              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
               <div class="card-body">
                 <h3 class="card-title">Demo Team Member</h3>
                 <p class="card-text">CTO</p>
@@ -99,7 +117,7 @@
           </div>
           <div class="col-md-6 col-lg-4 mb-4">
             <div class="card border-0 text-center">
-              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3" style="width: 150px; height: 150px; object-fit: cover;">
+              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
               <div class="card-body">
                 <h3 class="card-title">Demo Team Member</h3>
                 <p class="card-text">Head of Training</p>
@@ -110,4 +128,5 @@
       </div>
     </div>
   </section>
+  
 {% endblock %}
