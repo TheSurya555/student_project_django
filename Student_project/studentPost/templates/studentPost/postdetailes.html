@@ -10,10 +10,26 @@
 <link rel="stylesheet" href="{% static 'css/services.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/social_icon.css' %}">
+<link rel="stylesheet" href="{% static 'css/postdetail.css' %}">
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/postdetail.css' %}">
+<link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
+<style>
+  .uniform-img {
+    width: 100%;
+    height: 400px; /* Adjust the height as needed */
+    object-fit: cover;
+  }
+  .post_avatar {
+    border-radius: 50%;
+  }
+
+  .post-image {
+    max-height: 600px; /* Adjust the maximum height as per your design */
+    object-fit: cover; /* Ensures the image covers the entire container */
+  }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -22,22 +38,15 @@
         <div class="row">
             <div class="col-12 col-md-8">
                 <h1 class="ezy__blogdetails1-heading mb-5">{{ post.title }}</h1>
-                {% if post.blog_image %}
-                <img
-                  src="{{ post.blog_image.url }}"
-                  alt="Blog image"
-                  class="img-fluid w-100 ezy-blog7-banner"
-                />
-                {% else %}
-                <!-- Use a sample image -->
-                <img
-                  src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
-                  alt="Sample Image"
-                  class="img-fluid w-100 ezy-blog7-banner"
-                />
-                {% endif %}
-                <div class="d-flex justify-content-between my-5 me-5 flex-column">
-                    <h2 class="mb-4 fw-bolder">{{ post.title }}</h2>
+                <div class="blog-details-image">
+                    {% if post.blog_image %}
+                    <img src="{{ post.blog_image.url }}" alt="Blog image" class="img-fluid w-100 post-image">
+                    {% else %}
+                    <!-- Use a sample image -->
+                    <img src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}" alt="Sample Image" class="img-fluid w-100 post-image">
+                    {% endif %}
+                </div>
+                <div class="author-details my-5">
                     <div class="d-flex align-items-center mb-2">
                         <div class="avatar">
                             {% if user_profile.profile_image %}
@@ -45,36 +54,30 @@
                             {% else %}
                             <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
                             {% endif %}
-                            <span class="fw-bold m-2">{{ post.user.first_name }} {{ post.user.last_name }}</span>
+                            <span class="fw-bold m-2">{{ post.user.get_full_name }}</span>
                         </div>
                         <p class="mb-0 ms-3">{{ post.publication_date }}</p>
                     </div>
-                    <!-- Add social media links here if needed -->
                 </div>
                 <div class="ezy__blogdetails1-content">
                     {{ post.content|safe }}
                 </div>
             </div>
+            
             <div class="col-12 col-md-4 col-lg-3">
-                <!-- Payment section -->
+                <!-- Candidate Preference section -->
                 <div class="ezy__blogdetails1-top py-4 px-3 mb-4">
-                  <h5 class="mb-0">Go with this candidate</h5>
+                    <h5 class="mb-0">Candidate Preference</h5>
                 </div>
-                <div class="tab-content" id="packageTabsContent">
-                  <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
-                    <div class="price_card">
-                      <h5 class="price_card-title">I WILL EDIT REAL ESTATE 5 PHOTOS</h5>
-                      <p>Lens Correction, White Balance, Sky replacement, Repair Straight, vertical Horizontal</p>
-                      <ul class="features">
-                          <li><i class="fas fa-clock"></i> 1-day delivery</li>
-                          <li><i class="fas fa-sync"></i> Unlimited Revisions</li>
-                          <li><i class="fas fa-images"></i> 5 images</li>
-                          <li><i class="fas fa-file-image"></i> Printable resolution file</li>
-                      </ul>
-                      <p class="price">Price: <span>₹4056</span></p>
-                      <button class="px-3"><span>Continue</span></button>
-                    </div>
-                  </div>
+                <div class="ezy__blogdetails1-content" style="border-left: 2px solid;padding-left: 15px;">
+                    <h5 class="price_card-title">{{ candidate_preference.service_title }}</h5>
+                    <p>{{ candidate_preference.description|safe }}</p>
+                    <ul class="features">
+                        <li><i class="fas fa-clock"></i> Delivery Time: {{ candidate_preference.delivery_time }}</li>
+                        <li><i class="fas fa-sync"></i> Revisions: {{ candidate_preference.revisions }}</li>
+                    </ul>
+                    <p class="price">Price: <span>₹{{ candidate_preference.price }}</span></p>
+                    <a href="#"><button class="px-3"><span>Continue</span></button></a>
                 </div>
             </div>
         </div>
@@ -97,16 +100,17 @@
                         <img
                           src="{{ related_post.blog_image.url }}"
                           alt="Blog image"
-                          class="img-fluid w-100 ezy-blog7-banner"
+                          class="img-fluid w-100  uniform-img ezy-blog7-banner"
                         />
                         {% else %}
                         <!-- Use a sample image -->
                         <img
                           src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
                           alt="Sample Image"
-                          class="img-fluid w-100 ezy-blog7-banner"
+                          class="img-fluid w-100  uniform-img ezy-blog7-banner"
                         />
                         {% endif %}
+                        <div class="px-4 py-3 ezy__blog7-calendar">{{ post.publication_date|date:"d M Y" }}</div>
                     </div>
                     <div class="p-3 p-md-4">
                         <h4 class="mt-3 ezy__blog3-title fs-4 mb-3">{{ related_post.title }}</h4>
@@ -119,7 +123,7 @@
                             <span class="fw-bold m-2">{{ related_post.user.first_name }} {{ related_post.user.last_name }}</span>
                         </div>
                         <p class="ezy__blog3-description mt-3 mb-4">
-                            {{ related_post.content|truncatewords:20 }}
+                            {{ related_post.content|safe }}
                         </p>
                         <a href="{% url 'postdetail' related_post.id %}"><button class="px-3"><span>Read More</span></button></a>
                     </div>

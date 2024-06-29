@@ -14,3 +14,16 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class CandidatePreference(models.Model):
+    blog_post = models.OneToOneField(BlogPost, on_delete=models.CASCADE)
+    service_title = models.CharField(max_length=200)
+    description = models.TextField()
+    delivery_time = models.CharField(max_length=100)
+    revisions = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.service_title

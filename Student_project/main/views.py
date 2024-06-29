@@ -7,10 +7,11 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def layout_View(request):
-    profile_image_url = None
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
-    print("profile_image_url :" ,profile_image_url)
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    except UserProfile.DoesNotExist:
+        profile_image_url = None
 
     return render(request, 'main/Layout.html', {
         'profile_image_url': profile_image_url,
@@ -29,5 +30,3 @@ def home_View(request):
         'services': services,
         'page_obj': page_obj,
     })
-
-

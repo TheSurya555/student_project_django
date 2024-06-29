@@ -1,7 +1,7 @@
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
-from .forms import BlogPostForm
-from .models import BlogPost
+from .forms import BlogPostForm , CandidatePreferenceForm
+from .models import BlogPost, CandidatePreference
 from profiles.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -14,7 +14,6 @@ def studentPost(request):
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     print('profile_image_url' ,profile_image_url)
     return render(request, 'studentPost/studentPost.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
-
 
 def postDetail(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
@@ -31,46 +30,43 @@ def postDetail(request, post_id):
             user_profile = None
             profile_image_url = None
 
+    # Fetch candidate preference related to the post
+    try:
+        candidate_preference = CandidatePreference.objects.get(blog_post=post)
+    except CandidatePreference.DoesNotExist:
+        candidate_preference = None
+
     return render(request, 'studentPost/postdetailes.html', {
         'post': post,
         'user_profile': user_profile,
         'related_posts': related_posts,
-        'profile_image_url': profile_image_url
+        'profile_image_url': profile_image_url,
+        'candidate_preference': candidate_preference  # Pass candidate preference to the template
     })
 
 
 @login_required
 def create_blog_post(request):
     if request.method == 'POST':
-        form = BlogPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                blog_post = form.save(commit=False)
-                blog_post.user = request.user  # Assign the current user
-                blog_image = request.FILES.get('blog_image')
-                if blog_image:
-                    # Print debug information
-                    print(f'Uploaded image name: {blog_image.name}')
-                    print(f'Uploaded image size: {blog_image.size}')
-                    max_filename_length = 1000
-                    if len(blog_image.name) > max_filename_length:
-                        blog_image.name = blog_image.name[:max_filename_length]
-                    blog_post.blog_image = blog_image  # Save the image
-                blog_post.save()
-                messages.success(request, 'Blog post created successfully.')
-                print('Blog post created successfully.')
-                return redirect('studentpost')  # Redirect to a success page or the list of posts
-            except ValidationError as e:
-                error_messages = e.message_dict
-                print(f'Validation errors: {error_messages}')
-                form = BlogPostForm()
-                return render(request, 'studentPost/post_creation_form.html', {'form': form, 'error_messages': error_messages})
-            except Exception as e:
-                messages.error(request, f'Error while creating the post: {e}')
-                print(f'Error while creating the post: {e}')
-        else:
-            messages.error(request, 'Form is not valid. Please check the fields.')
-            print('Form is not valid. Please check the fields.')
+        blog_post_form = BlogPostForm(request.POST, request.FILES)
+        candidate_preference_form = CandidatePreferenceForm(request.POST)
+        
+        if blog_post_form.is_valid() and candidate_preference_form.is_valid():
+            blog_post = blog_post_form.save(commit=False)
+            blog_post.user = request.user
+            blog_post.save()
+
+            # Create a CandidatePreference based on form data
+            candidate_preference = candidate_preference_form.save(commit=False)
+            candidate_preference.blog_post = blog_post
+            candidate_preference.save()
+
+            return redirect('studentpost')  # Redirect to the blog list page
     else:
-        form = BlogPostForm()
-    return render(request, 'studentPost/post_creation_form.html', {'form': form})
+        blog_post_form = BlogPostForm()
+        candidate_preference_form = CandidatePreferenceForm()
+
+    return render(request, 'studentPost/post_creation_form.html', {
+        'blog_post_form': blog_post_form,
+        'candidate_preference_form': candidate_preference_form,
+    })

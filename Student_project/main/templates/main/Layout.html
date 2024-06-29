@@ -170,6 +170,12 @@
                 {% if request.session.user_role == "Candidate" %}
                 <li><a href="{% url "studentpost" %}">Posts</a></li>
                 {% endif %}
+
+                {% if request.session.user_role == "Admin" %}
+                <li><a href="{% url "talents" %}">Talents</a></li>
+                <li><a href="{% url "services" %}">Services</a></li>
+                <li><a href="{% url "subscription_list" %}">Payment</a></li>
+                {% endif %}
               </ul>
             </div>
             <div class="col-sm-6 col-lg-3 mt-4 mt-lg-0">

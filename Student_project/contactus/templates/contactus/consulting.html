@@ -13,7 +13,6 @@ contactus
 {% endblock %}
 
 {% block extra_css %}
-<!-- Link to the custom CSS file for this page -->
 <link rel="stylesheet" href="{% static 'css/contact.css' %}">
 {% endblock %}
 
@@ -22,33 +21,31 @@ contactus
         <div class="container">
             <div class="row py-4">
                 <div class="col-lg-7 mb-3 mb-lg-0">
-                    <div class="ezy__contact4-bg-holder h-100"
-                        style="background-image: url(https://cdn.easyfrontend.com/pictures/contact/contact_4.png);">
+                    <div class="ezy__contact4-bg-holder h-100" style="background-image: url(https://cdn.easyfrontend.com/pictures/contact/contact_4.png);">
                     </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="card ezy__contact4-form-card">
                         <div class="card-body p-md-5">
-                            <h2 class="ezy__contact4-heading mb-3">Cunsult With Us</h2>
-                            <p class="ezy__contact4-sub-heading mb-5">We list your menu online, help you process orders.
-                            </p>
+                            <h2 class="ezy__contact4-heading mb-3">Consult With Us</h2>
+                            <p class="ezy__contact4-sub-heading mb-5">We list your menu online, help you process orders.</p>
 
                             <form method="post">
                                 {% csrf_token %}
                                 <div class="form-group mb-3 mt-2">
-                                    {{form.name}}
+                                    {{ form.name }}
                                 </div>
                                 <div class="form-group mb-3 mt-2">
-                                    {{form.email}}
+                                    {{ form.email }}
                                 </div>
                                 <div class="form-group mb-3 mt-2">
-                                    {{form.phone}}
+                                    {{ form.phone }}
                                 </div>
                                 <div class="form-group mb-3">
-                                    {{form.message}}
+                                    {{ form.message }}
                                 </div>
                                 <div>
-                                    <button type="submit" class="px-3"> <span>Submit</span></button>
+                                    <button type="submit" class="px-3"><span>Submit</span></button>
                                 </div>
                             </form>
                         </div>
@@ -58,8 +55,6 @@ contactus
         </div>
     </section>
 
-
-    <!-- Pop-up message -->
     {% if messages %}
         <div id="popup-message" class="popup-message">
             {% for message in messages %}
@@ -67,22 +62,18 @@ contactus
             {% endfor %}
         </div>
     {% endif %}
-
 {% endblock %}
-
 
 {% block scripts %}
     <script>
-        // JavaScript to show the pop-up message if the form was successfully submitted
         document.addEventListener('DOMContentLoaded', function() {
             var popup = document.getElementById('popup-message');
             if (popup) {
                 popup.style.display = 'block';
                 setTimeout(function() {
                     popup.style.display = 'none';
-                    // Remove the popup element after hiding it
                     popup.parentNode.removeChild(popup);
-                }, 3000);  // Hide the pop-up after 3 seconds
+                }, 3000);
             }
         });
     </script>
