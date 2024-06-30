@@ -23,7 +23,7 @@
 
   
     .shadow-effect {
-      box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
     }
   </style>
 {% endblock %}
@@ -45,9 +45,9 @@
         </div>
         <div class="col-md-6 text-center">
           {% if about_us_content and about_us_content.image %}
-            <img src="{{ about_us_content.image.url }}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect">
+            <img src="{{ about_us_content.image.url }}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect shadow-effect">
           {% else %}
-            <img src="{% static 'assets/talentsprout.jpeg' %}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect">
+            <img src="{% static 'assets/talentsprout.jpeg' %}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect shadow-effect">
           {% endif %}
         </div>
       </div>

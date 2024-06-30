@@ -24,7 +24,7 @@
    
    .input:focus, input:valid {
     outline: none;
-    border: 1.5px solid #70dcc5;
+    border: 1.5px solid #098761;
    }
    
    .input:focus ~ label, input:valid ~ label {

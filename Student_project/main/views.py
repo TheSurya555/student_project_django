@@ -12,11 +12,13 @@ def layout_View(request):
         profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     except UserProfile.DoesNotExist:
         profile_image_url = None
+    
+    user_online = request.user.is_online()
 
     return render(request, 'main/Layout.html', {
         'profile_image_url': profile_image_url,
+        'user_online': user_online,
     })
-
 def home_View(request):
     users = CustomUser.objects.select_related('recruiter_profile', 'candidate_profile').all()
     services = Service.objects.all()

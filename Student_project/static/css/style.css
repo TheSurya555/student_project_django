@@ -155,6 +155,27 @@
         border-color: rgba(var(--ezy-theme-color-rgb), .9);
     }
 
+    /* Online dot */
+    .online-dot {
+      position: absolute;
+      bottom: 10px;
+      left: 15px;
+      width: 15px;
+      height: 15px;
+      background-color: #098761; /* Green dot color */
+      border-radius: 50%; /* Rounded shape */
+    }
+
+    /* Offline dot */
+    .offline-dot {
+      position: absolute;
+      bottom: 10px;
+      left: 15px;
+      width: 15px;
+      height: 15px;
+      background-color: #A9A9A9; /* Gray dot color */
+      border-radius: 50%; /* Rounded shape */
+    }
 
 
       /* Headers*/

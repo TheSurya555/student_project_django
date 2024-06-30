@@ -35,7 +35,7 @@ Home
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background-color: #70dcc5; /* Adjust to your desired color */
+        background-color: #098761; /* Adjust to your desired color */
         margin: 0 5px;
         cursor: pointer;
     }
@@ -54,6 +54,29 @@ Home
       margin: 0 20px;
       cursor: pointer;
     }
+
+
+    /* Online dot */
+    .testimonial-online-dot {
+      position: relative;
+      bottom: 20px;
+      left: 150px;
+      width: 15px;
+      height: 15px;
+      background-color: #098761; /* Green dot color */
+      border-radius: 50%; /* Rounded shape */
+    }
+
+    /* Offline dot */
+    .testimonial-offline-dot {
+      position: relative;
+      bottom: 20px;
+      left: 150px;
+      width: 15px;
+      height: 15px;
+      background-color: #A9A9A9; /* Gray dot color */
+      border-radius: 50%; /* Rounded shape */
+    }    
   </style>
 
 {% endblock %}
@@ -240,7 +263,7 @@ Home
     <!-- Service section end -->
 
 
-    {% comment %} testimonial section  {% endcomment %}
+    {% comment %} testimonial section {% endcomment %}
     <section class="ezy__testimonial5 light" id="Talents">
       <div class="container">
           <div class="row justify-content-center mb-4 mb-md-5">
@@ -255,12 +278,19 @@ Home
               {% for user in users %}
                   {% if user.role == 'candidate' %}
                       <div class="col-md-6 col-lg-4">
-                          <div class="ezy__testimonial5-item p-4 py-lg-5 mt-4 text-center">
-                              {% if user.userprofile.profile_image %}
-                                  <img class="post_avatar" src="{{ user.userprofile.profile_image.url }}" alt="avatar" style="width: 80px; height: 80px;">
-                              {% else %}
-                                  <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" style="width: 80px; height: 80px;">
-                              {% endif %}
+                          <div class="ezy__testimonial5-item p-4 py-lg-5 mt-4 text-center position-relative">
+                              <div>
+                                {% if user.userprofile.profile_image %}
+                                <img class="post_avatar" src="{{ user.userprofile.profile_image.url }}" alt="avatar" style="width: 80px; height: 80px;">
+                                {% else %}
+                                    <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" style="width: 80px; height: 80px;">
+                                {% endif %}
+                                {% if user.is_online %}
+                                    <div class="testimonial-online-dot"></div>
+                                {% else %}
+                                    <div class="testimonial-offline-dot"></div>
+                                {% endif %}
+                              </div>
                               <div class="ezy__testimonial5-content mt-3">
                                   <h4 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h4>
                                   <p class="mb-4 ezy__testimonial5-rating">

@@ -13,6 +13,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
     </style> -->
     
+    <link rel="shortcut icon" href="{% static 'assets/favicon.png' %}" type="image/x-icon">
     <script src="https://kit.fontawesome.com/ff6ad5e464.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
@@ -56,6 +57,11 @@
                               {% else %}
                                   <img src="{% static 'assets/candidate.jpg' %}" alt="Profile Image" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                               {% endif %}
+                              {% if request.user.is_online %}
+                                <div class="online-dot"></div>
+                              {% else %}
+                                <div class="offline-dot"></div>
+                              {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
@@ -78,6 +84,11 @@
                               {% else %}
                                   <img src="{% static 'assets/candidate.jpg' %}" alt="Profile Image" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                               {% endif %}
+                              {% if request.user.is_online %}
+                                <div class="online-dot"></div>
+                              {% else %}
+                                <div class="offline-dot"></div>
+                              {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url "profiles" %}">Profile</a></li>
@@ -99,6 +110,11 @@
                                   <img src="{{ profile_image_url }}" alt="Profile Image" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                               {% else %}
                                   <img src="{% static 'assets/candidate.jpg' %}" alt="Profile Image" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                              {% endif %}
+                              {% if request.user.is_online %}
+                                <div class="online-dot"></div>
+                              {% else %}
+                                <div class="offline-dot"></div>
                               {% endif %}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -189,7 +205,7 @@
                     <ul class="example-2" style="padding: 0;">
                       <li class="icon-content">
                         <a
-                          href="https://linkedin.com/"
+                          href="https://www.linkedin.com/company/boostr-netwave/mycompany/"
                           aria-label="LinkedIn"
                           data-social="linkedin"
                         >
@@ -212,7 +228,7 @@
                         <div class="tooltip">LinkedIn</div>
                       </li>
                       <li class="icon-content">
-                        <a href="https://www.github.com/" aria-label="GitHub" data-social="github">
+                        <a href="https://github.com/TheSurya555?tab=repositories" aria-label="GitHub" data-social="github">
                           <div class="filled"></div>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
