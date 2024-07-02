@@ -188,7 +188,10 @@ Payment Page
         <p>You will be charged ₹{{ total_amount }}. Total amount includes currency conversion fees.</p>
     </div>
 </div>
+{% endblock %}
 
+
+{% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const cardPaymentSection = document.getElementById('card_payment_section');
@@ -231,4 +234,5 @@ Payment Page
         });
     });
 </script>
+
 {% endblock %}

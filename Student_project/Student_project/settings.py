@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# DEBUG = False
+
+# ALLOWED_HOSTS = ['yourdomain.com', 'localhost', '127.0.0.1']
+
 
 # Application definition
 
@@ -50,7 +54,6 @@ INSTALLED_APPS = [
     'examination',
     'tinymce',
     'channels',
-    # 'djstripe',
     
 ]
 
@@ -101,6 +104,19 @@ DATABASES = {
 }
 
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'your_db_name',
+#         'USER': 'your_db_user',
+#         'PASSWORD': 'your_password',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -143,7 +159,6 @@ STATICFILES_DIRS = [
 ]
 
 
-# settings.py
 import os
 
 MEDIA_URL = 'media/'

@@ -75,6 +75,7 @@ Talents
 
 {% endblock %}
 
+
 {% block scripts %}
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -87,15 +88,16 @@ Talents
                         document.querySelector('.section-heading').textContent = `Specialized ${data.random_skill} experts you can count on`;
                         document.querySelector('.stat:nth-child(2) h3').textContent = data.random_contracts + ' contracts';
                         document.querySelector('.stat:nth-child(2) p').textContent = `Involving ${data.random_skill} work in the past year.`;
-    
+
                         const servicesContainer = document.getElementById('services-container');
                         servicesContainer.innerHTML = '';
-    
+
                         data.related_services.forEach(service => {
                             const serviceCard = document.createElement('div');
                             serviceCard.classList.add('col-12', 'col-sm-6', 'col-lg-3', 'mb-4', 'd-flex', 'justify-content-center');
+                            const serviceUrl = `{% url 'skill_service_candidates' 0 %}`.replace('0', service.id);
                             serviceCard.innerHTML = `
-                                <a href="{% url 'skill_service_candidates' 0 %}".replace('0', service.id)" class="card-link" style="text-decoration: none; color: black;">
+                                <a href="${serviceUrl}" class="card-link" style="text-decoration: none; color: black;">
                                     <div class="card card-custom h-100">
                                         <div class="card-body">
                                             <h5 class="card-title">${service.name}</h5>

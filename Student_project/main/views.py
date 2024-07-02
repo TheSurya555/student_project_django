@@ -32,3 +32,7 @@ def home_View(request):
         'services': services,
         'page_obj': page_obj,
     })
+    
+    
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)

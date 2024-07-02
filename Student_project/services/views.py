@@ -9,7 +9,7 @@ from signUp.models import CandidateProfile
 def services_View(request):
     posts = BlogPost.objects.all()
     services = Service.objects.all()
-    paginator = Paginator(posts, 6)  # Show 6 posts per page
+    paginator = Paginator(posts, 8)  # Show 6 posts per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     profile_image_url = None
