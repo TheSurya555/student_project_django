@@ -17,29 +17,29 @@ Installation
 Clone the repository:
 
 bash
-Copy code
+
 git clone https://github.com/TheSurya555/student_project_django.git
 cd student_project_django
 Create and activate a virtual environment:
 
 bash
-Copy code
+
 python -m venv env
 source env/bin/activate  # On Windows, use `env\Scripts\activate`
 Install the dependencies:
 
 bash
-Copy code
+
 pip install -r requirements.txt
 Apply migrations:
 
 bash
-Copy code
+
 python manage.py migrate
 Run the development server:
 
 bash
-Copy code
+
 python manage.py runserver
 Access the application:
 
