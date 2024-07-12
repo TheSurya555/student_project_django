@@ -6,6 +6,20 @@
 Admin Login
 {% endblock %}
 
+{% block extra_css %}
+<style>
+  .text-error {
+    font-size: 12px; /* Adjust the size as needed */
+    text-align: left;
+    color: #E76F51;
+  }
+
+  .bg-success {
+    font-size: 12px; /* Adjust the size as needed */
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="ezy__signup14 light d-flex align-items-center justify-content-center">
     <div class="container">
@@ -25,11 +39,17 @@ Admin Login
                     {% csrf_token %}
                     <div class="form-group position-relative mb-3">
                       {{ form.username }}
-                      <label class="user-label" for="username">Username</label>
+                      <label class="user-label" for="username">Email or Phone</label>
+                      {% if form.username.errors %}
+                          <div class="text-error small">{{ form.username.errors|striptags }}</div>
+                      {% endif %}
                     </div>
                     <div class="form-group position-relative mb-3">
                       {{ form.password }}
                       <label class="user-label" for="password">Password</label>
+                      {% if form.password.errors %}
+                          <div class="text-error small">{{ form.password.errors|striptags }}</div>
+                      {% endif %}
                     </div>
                     <div class="form-group form-check d-flex">
                       <div>
@@ -46,7 +66,7 @@ Admin Login
                     </div>
                     <!-- Messages -->
                     {% for Admin_lmsg in messages %}
-                      <div class="bg-success">{{ Admin_lmsg }}</div> <br>
+                      <div class="text-danger small">{{ Admin_lmsg }}</div><br>
                     {% endfor %}
                   </form>
                 </div>

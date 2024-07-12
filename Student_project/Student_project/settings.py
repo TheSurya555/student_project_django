@@ -104,7 +104,6 @@ DATABASES = {
 }
 
 
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -116,6 +115,8 @@ DATABASES = {
 #     }
 # }
 
+
+FILE_CHARSET = 'utf-8'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -132,6 +133,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'signUp.validators.CustomPasswordValidator',  # Add your custom password validator
     },
 ]
 
@@ -179,9 +183,11 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = 'signUp.CustomUser'
 
-# Set the maximum upload size
-FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
+# settings.py
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB (adjust as needed)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB (adjust as needed)
+
 
 # Configure Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
