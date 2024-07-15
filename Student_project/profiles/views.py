@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from .forms import ProjectExperienceForm ,EditUserForm ,CustomPasswordChangeForm ,UserProfileForm
-from .models import UserProfile ,ProjectExperience
-from signUp.models import CustomUser ,RecruiterProfile ,CandidateProfile
+from .forms import ProjectExperienceForm, EditUserForm, CustomPasswordChangeForm, UserProfileForm
+from .models import UserProfile, ProjectExperience
+from signUp.models import CustomUser, RecruiterProfile, CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
@@ -12,16 +12,17 @@ from django.contrib.auth import update_session_auth_hash
 def profiles_View(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
-        print(user_profile)
     except UserProfile.DoesNotExist:
-        # Handle the case where the user profile does not exist
         user_profile = UserProfile.objects.create(user=request.user)
-        # Optionally, you can redirect the user to an edit profile page or display a message
+
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     project_experiences = ProjectExperience.objects.filter(user_profile=user_profile)
 
-    return render(request, 'profiles/profiles.html', {'user_profile': user_profile ,'profile_image_url': profile_image_url ,'project_experiences': project_experiences,})
-
+    return render(request, 'profiles/profiles.html', {
+        'user_profile': user_profile,
+        'profile_image_url': profile_image_url,
+        'project_experiences': project_experiences
+    })
 
 @login_required
 def settings_View(request):
@@ -69,10 +70,10 @@ def settings_View(request):
 
 
 
-# profile view
+@login_required
 def edit_profile_View(request):
     try:
-        user_profile = get_object_or_404(UserProfile, user=request.user)
+        user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
         user_profile = UserProfile(user=request.user)
 
@@ -86,14 +87,26 @@ def edit_profile_View(request):
                 max_filename_length = 1000
                 if len(profile_image.name) > max_filename_length:
                     profile_image.name = profile_image.name[:max_filename_length]
+                    
+            # Handle resume upload
+            if 'resume' in request.FILES:
+                resume_file = request.FILES['resume']
+                # Truncate or rename the filename if it exceeds the limit
+                max_filename_length = 5000
+                if len(resume_file.name) > max_filename_length:
+                    resume_file.name = resume_file.name[:max_filename_length]
+                user_profile.resume = resume_file
+
             try:
                 form.save()
                 messages.success(request, 'Profile updated successfully.')
                 return redirect('profiles')  # Redirect to the profile view after successful update
             except ValidationError as e:
                 edit_messages = e.message_dict
-                form = UserProfileForm(instance=user_profile)
-                return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_message': edit_messages })
+                return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages})
+        else:
+            edit_messages = form.errors
+            return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages})
     else:
         form = UserProfileForm(instance=user_profile)
     return render(request, 'profiles/edit_profile.html', {'form': form})

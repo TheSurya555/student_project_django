@@ -1,20 +1,23 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+  // Function to show active section and highlight link
   function showSection(sectionId, linkId) {
       const sections = document.querySelectorAll('.content-section');
       const links = document.querySelectorAll('.sidebar a');
-      
+
       sections.forEach(section => section.classList.remove('active'));
       links.forEach(link => link.classList.remove('active'));
-      
+
       const section = document.getElementById(sectionId);
       const link = document.getElementById(linkId);
-      
+
       if (section && link) {
           section.classList.add('active');
           link.classList.add('active');
       }
   }
 
+  // Array of links and sections
   const links = [
       { linkId: 'myInfoLink', sectionId: 'myInfoSection' },
       { linkId: 'projectsLink', sectionId: 'projectsSection' },
@@ -24,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
       { linkId: 'connectLink', sectionId: 'connectSection' }
   ];
 
+  // Add event listeners for each link
   links.forEach(({ linkId, sectionId }) => {
       const link = document.getElementById(linkId);
       if (link) {
@@ -34,6 +38,30 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   });
 
+  // Handle resume display in modal
+  const resumeModal = document.getElementById('resumeModal');
+  const resumeEmbed = document.getElementById('resumeEmbed');
+
+  if (resumeModal && resumeEmbed) {
+      resumeModal.addEventListener('show.bs.modal', function(event) {
+          // Load resume into the embed element
+          if (resumeEmbed && resumeEmbed.src === '') {
+              const resumeUrl = resumeEmbed.dataset.resumeUrl;
+              if (resumeUrl) {
+                  resumeEmbed.src = resumeUrl;
+              } else {
+                  resumeEmbed.parentElement.innerHTML = '<p>No resume uploaded.</p>';
+              }
+          }
+      });
+
+      resumeModal.addEventListener('hidden.bs.modal', function(event) {
+          // Clear the resume embed when modal is closed
+          resumeEmbed.src = '';
+      });
+  }
+
+  // Handle file upload button
   const uploadButton = document.getElementById('uploadButton');
   const fileInput = document.getElementById('fileInput');
 
@@ -41,55 +69,48 @@ document.addEventListener('DOMContentLoaded', function() {
       uploadButton.addEventListener('click', function() {
           fileInput.click();
       });
-
-      fileInput.addEventListener('change', function(event) {
-          const file = event.target.files[0];
-          if (file) {
-              console.log('File selected:', file.name);
-              // You can add further processing here, like uploading the file
-          }
-      });
   }
 
+  // Handle social media form submission
   const socialMediaForm = document.getElementById('socialMediaForm');
 
   if (socialMediaForm) {
       socialMediaForm.addEventListener('submit', function(event) {
           event.preventDefault();
-          
+
           const platform = document.getElementById('socialMediaPlatform').value;
           const link = document.getElementById('socialMediaLink').value;
-          
+
           if (link) {
               const container = document.getElementById('socialMediaLinksContainer');
               const existingLinks = container.querySelectorAll('p strong');
               let duplicateFound = false;
-      
+
               existingLinks.forEach(function(existingLink) {
                   if (existingLink.textContent.includes(platform)) {
                       duplicateFound = true;
                   }
               });
-      
+
               if (duplicateFound) {
                   alert(`You have already added a link for ${platform}.`);
               } else {
                   // Hide the no links message
                   document.getElementById('noLinksMessage').style.display = 'none';
-                  
+
                   // Create a new link element
                   const newLink = document.createElement('div');
                   newLink.className = 'mb-2';
                   newLink.innerHTML = `
                       <p><strong>${platform}:</strong> <a href="${link}" target="_blank">${link}</a></p>
                   `;
-                  
+
                   // Append the new link to the container
                   container.appendChild(newLink);
-                  
+
                   // Close the modal after submission
                   $('#socialMediaModal').modal('hide');
-                  
+
                   // Optionally, clear the form fields
                   document.getElementById('socialMediaPlatform').selectedIndex = 0;
                   document.getElementById('socialMediaLink').value = '';
@@ -98,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
+  // Handle completed project form submission
   const completedProjectForm = document.getElementById('completedProjectForm');
 
   if (completedProjectForm) {
@@ -110,10 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
               alert('Please enter a valid link.');
           }
-          // Show the success message
+          // Show the success message or handle further actions
       });
   }
 
+  // Handle answer link submission
   const submitAnswerLinkButton = document.getElementById('submitAnswerLinkButton');
 
   if (submitAnswerLinkButton) {
@@ -125,6 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
               alert('Please enter a valid link.');
           }
+          // Show the success message or handle further actions
       });
   }
 });

@@ -1,13 +1,13 @@
 from django import forms
 from .models import UserProfile, ProjectExperience
+from django.contrib.auth.forms import PasswordChangeForm ,UserChangeForm
 from django.contrib.auth import authenticate
 from signUp.models import CustomUser
-from datetime import date, timedelta
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['dob', 'phone', 'address', 'role', 'position', 'experience', 'skills', 'languages', 'education', 'vat_id', 'profile_image','resume']
+        fields = ['dob', 'phone', 'address', 'role', 'position', 'experience', 'skills', 'languages', 'education', 'vat_id', 'profile_image']
         
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -22,17 +22,6 @@ class UserProfileForm(forms.ModelForm):
         self.fields['education'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['vat_id'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['profile_image'].widget.attrs.update({'class': 'input', 'type': 'file'})
-        self.fields['resume'].widget.attrs.update({'class': 'input', 'type': 'file'})
-        
-    def clean_dob(self):
-        dob = self.cleaned_data.get('dob')
-        if dob:
-            today = date.today()
-            min_age_date = today - timedelta(days=365*27)
-            max_age_date = today - timedelta(days=365*18)
-            if not (min_age_date <= dob <= max_age_date):
-                raise forms.ValidationError("Date of birth must be between 18 and 27 years from today.")
-        return dob        
 
 class ProjectExperienceForm(forms.ModelForm):
     class Meta:

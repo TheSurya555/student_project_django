@@ -17,73 +17,54 @@ Edit Profile Form
                                 <h2 class="ezy__signup14-heading">USER PROFILE FORM</h2>
                                 <form class="mt-4" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
+                                    {% if edit_messages %}
+                                        <div class="alert alert-danger" role="alert">
+                                            <ul>
+                                                {% for field, errors in edit_messages.items %}
+                                                    <li>{{ field }}: {{ errors }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                    <div class="form-group position-relative mb-3">
+                                        {% if form.profile_image.value %}
+                                            <img id="profileImagePreview" src="{{ form.profile_image.value.url }}" alt="Profile Image" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                                        {% elif user_profile.profile_image %}
+                                            <img id="profileImagePreview" src="{{ user_profile.profile_image.url }}" alt="Profile Image" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                                        {% else %}
+                                            <img id="profileImagePreview" src="{% static 'assets/requiter2.jpg' %}" alt="Default Profile Image" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                                        {% endif %}
+                                        {{ form.profile_image }}
+                                        <label class="user-label" for="profile_image">Profile Image</label>
+                                    </div>
+                                    
                                     {% if request.session.user_role == "Candidate" %}
-                                      {% if error_messages %}
-                                      <div class="alert alert-danger" role="alert">
-                                          <ul>
-                                              {% for field, errors in error_messages.items %}
-                                              <li>{{ field }}: {{ errors }}</li>
-                                              {% endfor %}
-                                          </ul>
-                                      </div>
-                                      {% endif %}
-                                    <div class="form-group position-relative mb-3">
-                                        {% if user_profile.profile_image %}
-                                        <img id="profileImagePreview" src="{{ user_profile.profile_image.url }}" alt="Profile Image" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
-                                        {% endif %}
-                                        {{ form.profile_image }}
-                                        <label class="user-label" for="profile_image">Profile Image</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                        {{ form.dob }}
-                                        <label class="user-label" for="dob">Date of Birth</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                        {{ form.address }}
-                                        <label class="user-label" for="address">Address</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                        {{ form.experience }}
-                                        <label class="user-label" for="experience">Experience</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                      {{ form.position }}
-                                      <label class="user-label" for="position">Position</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                        {{ form.skills }}
-                                        <label class="user-label" for="skills">Skills</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                        {{ form.languages }}
-                                        <label class="user-label" for="languages">Languages</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                        {{ form.education }}
-                                        <label class="user-label" for="education">Education</label>
-                                    </div>
-                                    <div class="form-group position-relative mb-3">
-                                        {{ form.vat_id }}
-                                        <label class="user-label" for="vat_id">VAT ID No</label>
-                                    </div>
-
-                                    {% elif request.session.user_role == "Recruiter"  %}
-                                    <div class="form-group position-relative mb-3">
-                                        {% if user_profile.profile_image %}
-                                          {% if error_messages %}
-                                          <div class="alert alert-danger" role="alert">
-                                              <ul>
-                                                  {% for field, errors in error_messages.items %}
-                                                  <li>{{ field }}: {{ errors }}</li>
-                                                  {% endfor %}
-                                              </ul>
-                                          </div>
-                                          {% endif %}
-                                        <img id="profileImagePreview" src="{{ user_profile.profile_image.url }}" alt="Profile Image" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
-                                        {% endif %}
-                                        {{ form.profile_image }}
-                                        <label class="user-label" for="profile_image">Profile Image</label>
-                                    </div>
+                                        <div class="form-group position-relative mb-3">
+                                            {{ form.resume }}
+                                            <label class="user-label" for="resume">Upload Resume</label>
+                                        </div>
+                                        <div class="form-group position-relative mb-3">
+                                            {{ form.dob }}
+                                            <label class="user-label" for="dob">Date of Birth</label>
+                                        </div>
+                                        <div class="form-group position-relative mb-3">
+                                            {{ form.experience }}
+                                            <label class="user-label" for="experience">Experience</label>
+                                        </div>
+                                        <div class="form-group position-relative mb-3">
+                                            {{ form.skills }}
+                                            <label class="user-label" for="skills">Skills</label>
+                                        </div>
+                                        <div class="form-group position-relative mb-3">
+                                            {{ form.languages }}
+                                            <label class="user-label" for="languages">Languages</label>
+                                        </div>
+                                        <div class="form-group position-relative mb-3">
+                                            {{ form.education }}
+                                            <label class="user-label" for="education">Education</label>
+                                        </div>
+                                    {% endif %}
+                                    
                                     <div class="form-group position-relative mb-3">
                                         {{ form.address }}
                                         <label class="user-label" for="address">Address</label>
@@ -92,16 +73,12 @@ Edit Profile Form
                                         {{ form.position }}
                                         <label class="user-label" for="position">Position</label>
                                     </div>
-                                    <div class="form-group position-relative mb-3">
+                                    {% comment %} <div class="form-group position-relative mb-3">
                                         {{ form.vat_id }}
                                         <label class="user-label" for="vat_id">VAT ID No</label>
-                                    </div>
-                                    {% endif %}
+                                    </div> {% endcomment %}
+                                    
                                     <button type="submit" class="px-3"><span>Save</span></button>
-                                    <!-- Messages -->
-                                    {% for edit_message in edit_messages %}
-                                    <div class="text-red-500">{{ edit_message }}</div> <br>
-                                    {% endfor %}                    
                                 </form>
                             </div>
                         </div>
@@ -113,18 +90,17 @@ Edit Profile Form
 </section>
 
 <script>
-    document.getElementById('id_profile_image').onchange = function (evt) {
-        var tgt = evt.target || window.event.srcElement,
-            files = tgt.files;
-
-        // FileReader support
-        if (FileReader && files && files.length) {
-            var fr = new FileReader();
-            fr.onload = function () {
-                document.getElementById('profileImagePreview').src = fr.result;
+    // JavaScript to preview profile image
+    document.getElementById('id_profile_image').addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('profileImagePreview').setAttribute('src', event.target.result);
             }
-            fr.readAsDataURL(files[0]);
+            reader.readAsDataURL(file);
         }
-    };
+    });
 </script>
+
 {% endblock %}
