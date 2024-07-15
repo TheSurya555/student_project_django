@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-services
+Services
 {% endblock %}
 
 {% block extra_css %}
@@ -17,13 +17,13 @@ services
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background-color: #098761; /* Adjust to your desired color */
+        background-color: #098761;
         margin: 0 5px;
         cursor: pointer;
     }
 
     .pagination .dot.active {
-        background-color: #000; /* Adjust to your desired active color */
+        background-color: #000;
     }
 
     .pagination .arrow {
@@ -39,7 +39,7 @@ services
 
     .uniform-img {
         width: 100%;
-        height: 300px; /* Adjust the height as needed */
+        height: 300px;
         object-fit: cover;
     }
 
@@ -60,7 +60,6 @@ services
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-
     .ezy__service23-card-icon img {
         transition: transform 0.3s ease;
     }
@@ -68,11 +67,54 @@ services
     .ezy__service23-card:hover .ezy__service23-card-icon img {
         transform: scale(1.1);
     }
+
+    /* Fixed card size and alignment */
+    .ezy__service23-card,
+    .ezy__blog3-post {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .ezy__service23-card .card-body,
+    .ezy__blog3-post .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .ezy__service23-card-title,
+    .ezy__blog3-title {
+        height: 50px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ezy__service23-card-sub-title,
+    .ezy__blog3-description {
+        height: 72px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ezy__service23-card,
+    .ezy__blog3-post {
+        max-height: 450px; /* Adjust the max height as needed */
+    }
+
+    .ezy__service23-card-body,
+    .ezy__blog3-post-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-    
+
 <!-- Service section start -->
 <section class="ezy__service23 light service" id="ezy__service23">
     <div class="container">
@@ -100,7 +142,7 @@ services
                             <!-- Use the icon field from the Service model -->
                             <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
                         </div>
-                        <div class="card-body pb-4 text-center">
+                        <div class="card-body pb-4 text-center ezy__service23-card-body">
                             <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
                             <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
                             <a href="{% url 'service_candidates' service.id %}"><button class="px-3 mt-3"><span>View Candidates</span></button></a>

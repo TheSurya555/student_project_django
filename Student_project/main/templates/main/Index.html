@@ -77,6 +77,49 @@ Home
       background-color: #A9A9A9; /* Gray dot color */
       border-radius: 50%; /* Rounded shape */
     }    
+
+    /* Fixed card size and alignment */
+    .ezy__service23-card,
+    .ezy__blog3-post {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .ezy__service23-card .card-body,
+    .ezy__blog3-post .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .ezy__service23-card-title,
+    .ezy__blog3-title {
+        height: 50px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ezy__service23-card-sub-title,
+    .ezy__blog3-description {
+        height: 72px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ezy__service23-card,
+    .ezy__blog3-post {
+        max-height: 450px; /* Adjust the max height as needed */
+    }
+
+    .ezy__service23-card-body,
+    .ezy__blog3-post-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }    
   </style>
 
 {% endblock %}
@@ -238,7 +281,7 @@ Home
                   <!-- End loop -->
               </div>
               <!-- End: Services container -->
-
+               
               <!-- Pagination controls -->
               <div class="col-12 mt-4">
                   <nav aria-label="Page navigation">
