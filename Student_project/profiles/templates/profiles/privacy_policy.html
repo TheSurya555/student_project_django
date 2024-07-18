@@ -7,93 +7,14 @@
 Privacy Policy
 {% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Add any specific styles for the privacy policy page */
-    .privacy-policy-section {
-        margin-bottom: 20px;
-    }
-    .privacy-policy-section h4 {
-        margin-top: 20px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-10 offset-md-1">
-            <h2>Privacy Policy</h2>
-
+            <h2 class="my-5">{{ privacy_policy.title }}</h2>
             <div class="privacy-policy-section">
-                <h4>1. Information We Collect</h4>
-                <h5>Personal Information</h5>
-                <p>We may collect the following types of personal information:</p>
-                <ul>
-                    <li><strong>Name</strong>: We collect your name when you register or fill out forms on our site.</li>
-                    <li><strong>Contact Information</strong>: This includes email address, phone number, and address.</li>
-                    <li><strong>Account Credentials</strong>: Usernames, passwords, and other security information used for authentication and account access.</li>
-                    <li><strong>Profile Information</strong>: Information you provide in your profile, such as date of birth, gender, and preferences.</li>
-                    <li><strong>Payment Information</strong>: Payment details for transactions processed through our services.</li>
-                    <li><strong>Device Information</strong>: Information about the device or browser used to access our services.</li>
-                </ul>
-
-                <h5>Usage Data</h5>
-                <p>We collect information about how you interact with our website and services, such as:</p>
-                <ul>
-                    <li><strong>Log Data</strong>: Log files that track actions taken on our site, IP addresses, browser type, and referring pages.</li>
-                    <li><strong>Analytics</strong>: Usage patterns, traffic data, and other metrics to improve our services.</li>
-                </ul>
-            </div>
-
-            <div class="privacy-policy-section">
-                <h4>2. How We Use Your Information</h4>
-                <p>We use the collected information for the following purposes:</p>
-                <ul>
-                    <li><strong>Provide Services</strong>: To deliver and maintain our services, process transactions, and provide customer support.</li>
-                    <li><strong>Personalization</strong>: Customize content and services based on your preferences.</li>
-                    <li><strong>Communication</strong>: Send newsletters, updates, and promotional materials.</li>
-                    <li><strong>Security</strong>: Protect against unauthorized access and ensure the integrity of our services.</li>
-                </ul>
-            </div>
-
-            <div class="privacy-policy-section">
-                <h4>3. Sharing Your Information</h4>
-                <p>We may share your information with:</p>
-                <ul>
-                    <li><strong>Service Providers</strong>: Third-party vendors and service providers who assist in delivering our services.</li>
-                    <li><strong>Legal Compliance</strong>: When required by law, or to protect our rights and safety.</li>
-                </ul>
-            </div>
-
-            <div class="privacy-policy-section">
-                <h4>4. Security</h4>
-                <p>We implement appropriate security measures to protect your information from unauthorized access and misuse. However, no data transmission over the internet or storage system can be guaranteed as completely secure.</p>
-            </div>
-
-            <div class="privacy-policy-section">
-                <h4>5. Your Choices</h4>
-                <p>You can:</p>
-                <ul>
-                    <li><strong>Access and Update</strong>: Access and update your personal information through your account settings.</li>
-                    <li><strong>Communication Preferences</strong>: Opt-out of receiving promotional emails by following the unsubscribe instructions included in these emails.</li>
-                </ul>
-            </div>
-
-            <div class="privacy-policy-section">
-                <h4>6. Children's Privacy</h4>
-                <p>Our services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If we discover that a child under 13 has provided us with personal information, we will promptly delete such information.</p>
-            </div>
-
-            <div class="privacy-policy-section">
-                <h4>7. Changes to This Privacy Policy</h4>
-                <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on our website.</p>
-            </div>
-
-            <div class="privacy-policy-section">
-                <h4>8. Contact Us</h4>
-                <p>If you have any questions about this Privacy Policy, please contact us at [Your Contact Information].</p>
+                {{ privacy_policy.content|safe }}
             </div>
         </div>
     </div>

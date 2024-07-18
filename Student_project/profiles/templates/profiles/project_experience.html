@@ -7,8 +7,15 @@ Add Project / Experience
 
 {% block head_css %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
-<!-- Include CKEditor -->
-<script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
+<!-- Include TinyMCE -->
+<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+<script>
+  tinymce.init({
+    selector: '#id_description',
+    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+    toolbar_mode: 'floating',
+  });
+</script>
 {% endblock %}
 
 {% block content %}
@@ -42,11 +49,13 @@ Add Project / Experience
                         {{ form.description }}
                     </div>
                     {% if messages %}
-                        <ul>
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
+                        <div class="alert alert-info" role="alert">
+                            <ul class="mb-0">
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     {% endif %}
                     <button type="submit" class="btn btn-dark border-0 rounded-3"><span>Save Project</span></button>
                 </form>
@@ -56,13 +65,3 @@ Add Project / Experience
   </div>
 </div>
 {% endblock %}
-{% comment %} 
-{% block scripts %}
-<script>
-    ClassicEditor
-        .create(document.querySelector('#id_description'))
-        .catch(error => {
-            console.error(error);
-        });
-</script>
-{% endblock %} {% endcomment %}

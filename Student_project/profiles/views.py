@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from .forms import ProjectExperienceForm, EditUserForm, CustomPasswordChangeForm, UserProfileForm
-from .models import UserProfile, ProjectExperience
+from .models import UserProfile, ProjectExperience ,PrivacyPolicy
 from signUp.models import CustomUser, RecruiterProfile, CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
@@ -129,6 +129,6 @@ def add_project(request):
         form = ProjectExperienceForm()
     return render(request, 'profiles/project_experience.html', {'form': form})
 
-
 def privacy_policy_view(request):
-    return render(request, 'profiles/privacy_policy.html')
+    privacy_policy = get_object_or_404(PrivacyPolicy)
+    return render(request, 'profiles/privacy_policy.html', {'privacy_policy': privacy_policy})
