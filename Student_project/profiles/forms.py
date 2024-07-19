@@ -98,11 +98,18 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['first_name', 'last_name', 'email', 'phone']  # include all relevant fields
-        def __init__(self, *args, **kwargs):
-            super(EditUserForm, self).__init__(*args, **kwargs)
         widgets = {
-            'first_name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'First Name'}),
-            'last_name': forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Last Name'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
-            'email': forms.EmailInput(attrs={'class':'form-control', 'placeholder': 'Email Address'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super(EditUserForm, self).__init__(*args, **kwargs)
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if len(phone) != 10 or not phone.isdigit():
+            raise forms.ValidationError("Phone number must be exactly 10 digits.")
+        return phone

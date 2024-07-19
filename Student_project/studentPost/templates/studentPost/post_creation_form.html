@@ -18,7 +18,7 @@ Create Blog Post
 
 {% block content %}
 <section class="container my-5">
-    <h2 class="mb-4">Post a Project Blog</h2>
+    <h2 class="mb-4 fw-bold">Post a Project Blog</h2>
     <form id="postBlogForm" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ blog_post_form.non_field_errors }}
@@ -44,7 +44,7 @@ Create Blog Post
         </div>
         <hr>
         {% comment %} candidate_preference_form {% endcomment %}
-        <h3>Candidate Preference</h3>
+        <h3 class="mt-5 fw-bold">Candidate Preference</h3>
         <div class="mb-3">
             <label for="serviceTitle" class="form-label">Service Title</label>
             {{ candidate_preference_form.service_title }}
@@ -58,7 +58,7 @@ Create Blog Post
             {{ candidate_preference_form.delivery_time }}
         </div>
         <div class="mb-3">
-            <label for="revisions" class="form-label">Revisions</label>
+            <label for="revisions" class="form-label">Project Revisions</label>
             {{ candidate_preference_form.revisions }}
         </div>
         <div class="mb-3">

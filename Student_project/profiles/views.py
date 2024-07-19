@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from .forms import ProjectExperienceForm, EditUserForm, CustomPasswordChangeForm, UserProfileForm
-from .models import UserProfile, ProjectExperience ,PrivacyPolicy
+from .models import UserProfile, ProjectExperience, PrivacyPolicy
 from signUp.models import CustomUser, RecruiterProfile, CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
@@ -37,37 +37,35 @@ def settings_View(request):
     elif request.user.role == CustomUser.CANDIDATE:
         profile = get_object_or_404(CandidateProfile, user=request.user)
 
+    form = EditUserForm(instance=request.user)
+    change_passform = CustomPasswordChangeForm(request.user)
+
     if request.method == 'POST':
         if 'save_changes' in request.POST:
             form = EditUserForm(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Settings updated successfully.')
+                messages.success(request, 'Personal information updated successfully.')
                 return redirect('settings')
             else:
-                messages.error(request, 'Error updating settings. Please check the form and try again.')
+                messages.error(request, 'Please correct the errors below.')
         elif 'change_password' in request.POST:
             change_passform = CustomPasswordChangeForm(request.user, request.POST)
             if change_passform.is_valid():
-                change_passform.save()
-                update_session_auth_hash(request, request.user)  # Update the session with the new password hash
-                messages.success(request, 'Your password has been changed successfully!')
+                user = change_passform.save()
+                update_session_auth_hash(request, user)  # Important!
+                messages.success(request, 'Password changed successfully.')
                 return redirect('settings')
             else:
-                messages.error(request, 'Please correct the error below.')
-    else:
-        form = EditUserForm(instance=request.user)
-        change_passform = CustomPasswordChangeForm(request.user)
+                messages.error(request, 'Please correct the errors below.')
 
     context = {
         'custom_user': request.user,
-        'form': form,
         'profile': profile,
+        'form': form,
         'change_passform': change_passform,
     }
-
     return render(request, 'profiles/settings.html', context)
-
 
 
 @login_required
@@ -110,7 +108,6 @@ def edit_profile_View(request):
     else:
         form = UserProfileForm(instance=user_profile)
     return render(request, 'profiles/edit_profile.html', {'form': form})
-
 
 @login_required
 def add_project(request):

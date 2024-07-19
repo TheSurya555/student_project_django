@@ -14,124 +14,125 @@ Settings
 {% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-3 sidebar">
-        <h3 class="mb-4">Settings</h3>
-        <a href="#accountSection" id="accountLink" class="active">Account</a>
-        <a href="#securitySection" id="securityLink">Security</a>
-        {% comment %} <a href="#appearanceSection" id="appearanceLink">Appearance</a> {% endcomment %}
-      </div>
-      <div class="col-md-9 main-content">
-        <div id="accountSection" class="content-section active">
-          <h4 class="section-heading">Account Settings</h4>
-          <div class="card card-custom mb-4">
-            <h5 class="mb-4">Personal Information</h5>
-            <div class="d-flex flex-column">
-              <p><strong>Name:</strong> {{ custom_user.first_name }} {{ custom_user.last_name }}</p>
-              <p><strong>Email:</strong> {{ custom_user.email }}</p>
-              <p><strong>Phone:</strong> {{ custom_user.phone }}</p>
-              {% if custom_user.role == "recruiter" %}
-                <p><strong>Company:</strong> {{ profile.company }}</p>
-              {% endif %}
-              <div>
-                <button type="button" class="px-3" data-toggle="modal" data-target="#editPersonalInfoModal"><span>Edit</span></button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="securitySection" class="content-section">
-          <h4 class="section-heading">Security</h4>
-          <p>Manage your security settings:</p>
-          <div class="card card-custom mb-4">
-            <h5 class="mb-4">Change Password</h5>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3 sidebar">
+      <h3 class="mb-4">Settings</h3>
+      <a href="#accountSection" id="accountLink" class="active">Account</a>
+      <a href="#securitySection" id="securityLink">Security</a>
+    </div>
+    <div class="col-md-9 main-content">
+      <div id="accountSection" class="content-section active">
+        <h4 class="section-heading">Account Settings</h4>
+        <div class="card card-custom mb-4">
+          <h5 class="mb-4">Personal Information</h5>
+          <div class="d-flex flex-column">
+            <p><strong>Name:</strong> {{ custom_user.first_name }} {{ custom_user.last_name }}</p>
+            <p><strong>Email:</strong> {{ custom_user.email }}</p>
+            <p><strong>Phone:</strong> {{ custom_user.phone }}</p>
+            {% if custom_user.role == "recruiter" %}
+              <p><strong>Company:</strong> {{ profile.company }}</p>
+            {% endif %}
             <div>
-                <button type="button" class="px-3" data-toggle="modal" data-target="#changePasswordModal">
-                  <span>Change Password</span>
-                </button>
-            </div>
-          </div>
-          <div class="card card-custom mb-4">
-            <h5 class="mb-4">Privacy Policy</h5>
-            <div class="privacy-policy-content">
-              <p>We value your privacy and are committed to protecting your personal information. Our privacy policy outlines how we collect, use, and protect your data. We do not share your information with third parties without your consent, and we take all necessary measures to ensure its security.</p>
-              <p>For more details, please read our full <a href="{% url "privacy_policy" %}">Privacy Policy</a>.</p>
+              <button type="button" class="px-3" data-toggle="modal" data-target="#editPersonalInfoModal"><span>Edit</span></button>
             </div>
           </div>
         </div>
-        
-        {% comment %} <div id="appearanceSection" class="content-section">
-            <h4 class="section-heading">Appearance</h4>
-            <p>Customize the appearance of your profile:</p>
-            <div class="card card-custom mb-4">
-              <h5 class="mb-4">Theme</h5>
-              <div class="form-group">
-                <label for="themeToggle" class="mb-4">Dark / Light Mode</label>
-                <div class="custom-control custom-switch ">
-                    <input type="checkbox" class="custom-control-input" id="themeToggle">
-                    <label class="custom-control-label" for="themeToggle">Toggle to switch mode</label>
-                </div>
-              </div>
-            </div>
-        </div> {% endcomment %}
+      </div>
+
+      <div id="securitySection" class="content-section">
+        <h4 class="section-heading">Security</h4>
+        <p>Manage your security settings:</p>
+        <div class="card card-custom mb-4">
+          <h5 class="mb-4">Change Password</h5>
+          <div>
+            <button type="button" class="px-3" data-toggle="modal" data-target="#changePasswordModal"><span>Change Password</span></button>
+          </div>
+        </div>
+        <div class="card card-custom mb-4">
+          <h5 class="mb-4">Privacy Policy</h5>
+          <div class="privacy-policy-content">
+            <p>We value your privacy and are committed to protecting your personal information. Our privacy policy outlines how we collect, use, and protect your data. We do not share your information with third parties without your consent, and we take all necessary measures to ensure its security.</p>
+            <p>For more details, please read our full <a href="{% url "privacy_policy" %}">Privacy Policy</a>.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-<!-- Edit Personal Information Modal -->
-<div class="modal fade" id="editPersonalInfoModal" tabindex="-1" aria-labelledby="editPersonalInfoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="editPersonalInfoModalLabel">Edit Personal Information</h5>
-              <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
-                  <span><i class="fa-solid fa-xmark"></i></span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <form id="editPersonalInfoForm" method="post" action="{% url 'settings' %}">
-                  {% csrf_token %}
-                  <input type="hidden" name="save_changes" value="1">
-                  {{ form.as_p }}
-                  <div class="modal-footer">
-                      <button type="button" class="px-3" data-dismiss="modal"><span>Cancel</span></button>
-                      <button type="submit" class="px-3"><span>Save Changes</span></button>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
 </div>
 
+<!-- Edit Personal Information Modal -->
+<div class="modal fade" id="editPersonalInfoModal" tabindex="-1" aria-labelledby="editPersonalInfoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editPersonalInfoModalLabel">Edit Personal Information</h5>
+        <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
+          <span><i class="fa-solid fa-xmark"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editPersonalInfoForm" method="post" action="{% url 'settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="save_changes" value="1">
+          {{ form.non_field_errors }}
+          <div class="form-group">
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.phone.label_tag }}
+            {{ form.phone }}
+            {{ form.phone.errors }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="px-3" data-dismiss="modal"><span>Cancel</span></button>
+            <button type="submit" class="px-3" id="saveChangesButton"><span>Save Changes</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-              <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
-                  <span><i class="fa-solid fa-xmark"></i></span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <form id="changePasswordForm" method="post" action="{% url 'settings' %}">
-                  {% csrf_token %}
-                  <input type="hidden" name="change_password" value="1">
-                  {{ change_passform.as_p }}
-                  <div class="form-group form-check">
-                      <input type="checkbox" class="form-check-input" id="showPasswordCheckbox">
-                      <label class="form-check-label" for="showPasswordCheckbox">Show Password</label>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                      <button type="submit" class="btn btn-primary">Change Password</button>
-                  </div>
-              </form>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+        <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
+          <span><i class="fa-solid fa-xmark"></i></span>
+        </button>
       </div>
+      <div class="modal-body">
+        <form id="changePasswordForm" method="post" action="{% url 'settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="change_password" value="1">
+          {{ change_passform.as_p }}
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="showPasswordCheckbox">
+            <label class="form-check-label" for="showPasswordCheckbox">Show Password</label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="px-3" data-dismiss="modal"><span>Cancel</span></button>
+            <button type="submit" class="px-3"><span>Change Password</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -156,16 +157,15 @@ Settings
     });
   });
 
-
   document.addEventListener('DOMContentLoaded', function () {
     const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
     const passwordFields = document.querySelectorAll('input[type="password"]');
 
     showPasswordCheckbox.addEventListener('change', function () {
-        const showPassword = this.checked;
-        passwordFields.forEach(function (field) {
-            field.type = showPassword ? 'text' : 'password';
-        });
+      const showPassword = this.checked;
+      passwordFields.forEach(function (field) {
+        field.type = showPassword ? 'text' : 'password';
+      });
     });
   });  
 </script>
