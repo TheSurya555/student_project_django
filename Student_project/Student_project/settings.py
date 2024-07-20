@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(*u_jb_s)#i^(vgdv#1of#4qz49+$3ttgiv*(@+h%zo3bh7(s8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # DEBUG = False
 
@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'payment',
     'aboutUs',
     'examination',
+    'password_reset',
     'tinymce',
     'channels',
     
@@ -229,6 +230,24 @@ TINYMCE_DEFAULT_CONFIG = {
     'menubar': True,
     'statusbar': True,
 }
+
+# settings.py
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
+# settings.py
+USE_I18N = True
 
 
 # Stripe API keys

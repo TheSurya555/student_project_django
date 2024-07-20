@@ -69,6 +69,9 @@ Login
                                             Don't have an account?
                                             <a href="{% url 'requiterSignUp' %}">Register</a>
                                         </p>
+                                        <p class="mb-0 small">
+                                            <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                                        </p>
                                     </div>
                                     {% for message in messages %}
                                         <div class="text-danger small">{{ message }}</div><br>

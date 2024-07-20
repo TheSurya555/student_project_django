@@ -60,6 +60,9 @@ Login
                         Don't Have an account?
                         <a href="{% url 'signup' %}">Register</a>
                       </p>
+                      <p class="mb-0 small">
+                        <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                      </p>
                     </div>
                     <!-- Messages -->
                     {% for message in messages %}
