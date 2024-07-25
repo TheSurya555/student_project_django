@@ -1,6 +1,6 @@
 # forms.py
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import CustomUser, RecruiterProfile, CandidateProfile, AdminProfile
 from django.core.validators import RegexValidator
 from django.contrib.auth.password_validation import validate_password

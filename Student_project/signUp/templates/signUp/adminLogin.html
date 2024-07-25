@@ -63,6 +63,9 @@ Admin Login
                         Don't have an account?
                         <a href="{% url 'adminSignUp' %}">Sign Up</a>
                       </p>
+                      <p class="mb-0 small">
+                        <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                      </p>                      
                     </div>
                     <!-- Messages -->
                     {% for Admin_lmsg in messages %}

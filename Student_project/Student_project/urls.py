@@ -3,7 +3,6 @@ from django.urls import path ,include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import handler404
-from main import views as main_views
 
 urlpatterns = [
     path('sproutadmin/', admin.site.urls),
@@ -21,6 +20,3 @@ urlpatterns = [
     path('', include('password_reset.urls')),
     path('tinymce/', include('tinymce.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# Handler for 404 errors
-handler404 = 'main.views.custom_404'

@@ -155,27 +155,27 @@
         border-color: rgba(var(--ezy-theme-color-rgb), .9);
     }
 
-    /* Online dot */
+    .position-relative {
+      position: relative;
+    }
+    
+    .online-dot, .offline-dot {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        bottom: 5px;
+        right: 5px;
+    }
+    
     .online-dot {
-      position: absolute;
-      bottom: 10px;
-      left: 15px;
-      width: 15px;
-      height: 15px;
-      background-color: #098761; /* Green dot color */
-      border-radius: 50%; /* Rounded shape */
+        background-color: #098761;
     }
-
-    /* Offline dot */
+    
     .offline-dot {
-      position: absolute;
-      bottom: 10px;
-      left: 15px;
-      width: 15px;
-      height: 15px;
-      background-color: #A9A9A9; /* Gray dot color */
-      border-radius: 50%; /* Rounded shape */
+        background-color:#A9A9A9;
     }
+    
 
 
       /* Headers*/
@@ -207,7 +207,7 @@
         }
       }
 
-
+/* 
       header {
         width: 100%;
         height: 100%;
@@ -215,8 +215,10 @@
         background-color: #F3F3F3;
         background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
         background-size: 80px 80px;
-      }    
-      
+      }     */
+
+
+
       /* Gray Block Style */
       .gray .ezy__header41,
       .ezy__header41.gray {
