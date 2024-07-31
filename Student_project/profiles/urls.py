@@ -7,5 +7,8 @@ urlpatterns = [
     path('profile_edit', views.edit_profile_View , name= 'profile_edit'),
     path('add_project/', views.add_project, name='add_project'), 
     path('privacy-policy/', views.privacy_policy_view, name='privacy_policy'),
+    path('delete_project_experience/<int:project_experience_id>/', views.delete_project_experience, name='delete_project_experience'),
     
 ]
+
+

@@ -6,8 +6,8 @@ from signUp.models import CustomUser, RecruiterProfile, CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from progress_tracker.models import Project
 
-# profile view
 @login_required
 def profiles_View(request):
     try:
@@ -17,11 +17,13 @@ def profiles_View(request):
 
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     project_experiences = ProjectExperience.objects.filter(user_profile=user_profile)
+    projects = Project.objects.filter(user=request.user)
 
     return render(request, 'profiles/profiles.html', {
         'user_profile': user_profile,
         'profile_image_url': profile_image_url,
-        'project_experiences': project_experiences
+        'project_experiences': project_experiences,
+        'projects': projects,
     })
 
 @login_required
@@ -45,19 +47,19 @@ def settings_View(request):
             form = EditUserForm(request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Personal information updated successfully.')
+                messages.success(request, 'Personal information updated successfully.', extra_tags='settings')
                 return redirect('settings')
             else:
-                messages.error(request, 'Please correct the errors below.')
+                messages.error(request, 'Please correct the errors below.', extra_tags='settings')
         elif 'change_password' in request.POST:
             change_passform = CustomPasswordChangeForm(request.user, request.POST)
             if change_passform.is_valid():
                 user = change_passform.save()
-                update_session_auth_hash(request, user)  # Important!
-                messages.success(request, 'Password changed successfully.')
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Password changed successfully.', extra_tags='settings')
                 return redirect('settings')
             else:
-                messages.error(request, 'Please correct the errors below.')
+                messages.error(request, 'Please correct the errors below.', extra_tags='settings')
 
     context = {
         'custom_user': request.user,
@@ -66,7 +68,6 @@ def settings_View(request):
         'change_passform': change_passform,
     }
     return render(request, 'profiles/settings.html', context)
-
 
 @login_required
 def edit_profile_View(request):
@@ -78,18 +79,14 @@ def edit_profile_View(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
-            # Check if a file is uploaded for the profile image
             if 'profile_image' in request.FILES:
                 profile_image = request.FILES['profile_image']
-                # Truncate or rename the filename if it exceeds the limit
                 max_filename_length = 1000
                 if len(profile_image.name) > max_filename_length:
                     profile_image.name = profile_image.name[:max_filename_length]
                     
-            # Handle resume upload
             if 'resume' in request.FILES:
                 resume_file = request.FILES['resume']
-                # Truncate or rename the filename if it exceeds the limit
                 max_filename_length = 5000
                 if len(resume_file.name) > max_filename_length:
                     resume_file.name = resume_file.name[:max_filename_length]
@@ -97,8 +94,8 @@ def edit_profile_View(request):
 
             try:
                 form.save()
-                messages.success(request, 'Profile updated successfully.')
-                return redirect('profiles')  # Redirect to the profile view after successful update
+                messages.success(request, 'Profile updated successfully.', extra_tags='edit_profile')
+                return redirect('profiles')
             except ValidationError as e:
                 edit_messages = e.message_dict
                 return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages})
@@ -115,16 +112,27 @@ def add_project(request):
     if request.method == 'POST':
         form = ProjectExperienceForm(request.POST)
         if form.is_valid():
-            project = form.save(commit=False)
-            project.user_profile = user_profile  # Assign the current user's profile to the project
-            project.save()
-            messages.success(request, 'Project added successfully.')
+            project_experience = form.save(commit=False)
+            project_experience.user_profile = user_profile
+            project_experience.save()
+            messages.success(request, 'Project/Experience added successfully.', extra_tags='add_project')
             return redirect('profiles')
         else:
-            messages.error(request, 'Error adding project. Please check the form and try again.')
+            messages.error(request, 'Error adding project/experience. Please check the form and try again.', extra_tags='add_project')
     else:
         form = ProjectExperienceForm()
     return render(request, 'profiles/project_experience.html', {'form': form})
+
+@login_required
+def delete_project_experience(request, project_experience_id):
+    project_experience = get_object_or_404(ProjectExperience, id=project_experience_id)
+
+    if request.method == 'POST':
+        project_experience.delete()
+        messages.success(request, 'Project experience deleted successfully.', extra_tags='delete_project')
+        return redirect('profiles')
+
+    return render(request, 'profiles/confirm_delete.html', {'project_experience': project_experience})
 
 def privacy_policy_view(request):
     privacy_policy = get_object_or_404(PrivacyPolicy)

@@ -1,0 +1,30 @@
+{% extends "main/Layout.html" %}
+
+{% block title %}
+Confirm Deletion
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="border m-5 p-5">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete the project experience titled "<strong>{{ project_experience.title }}</strong>"?</p>
+            <form action="{% url 'delete_project_experience' project_experience_id=project_experience.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="px-3"><span>confirm</span></button>
+                <a href="{% url 'profiles' %}"><button class="px-3"><span>Cancel</span></button></a>
+            </form>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    {% if 'delete_project' in message.tags %}
+                        <div class="alert {{ message.tags }}">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

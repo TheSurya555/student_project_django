@@ -1,0 +1,98 @@
+{% extends "main/Layout.html" %}
+{% block title %}Update Progress{% endblock %}
+
+{% block extra_css %}
+<style>
+    .update-progress-form {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .update-progress-form .form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        box-shadow: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .update-progress-form .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
+
+    .alert {
+        border-radius: 8px;
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn-custom {
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px 20px;
+        transition: background-color 0.3s, transform 0.2s;
+        margin-right: 10px;
+    }
+
+    .btn-custom:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+
+    .btn-custom:active {
+        transform: translateY(1px);
+    }
+
+    .btn-back {
+        background-color: #6c757d;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px 20px;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-back:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    .btn-back:active {
+        transform: translateY(1px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Update Progress for Stage {{ progress.stage }}</h2>
+    
+    {% if error %}
+    <div class="alert alert-danger mb-4">
+        {{ error }}
+    </div>
+    {% endif %}
+    
+    <form method="post" class="update-progress-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="px-3"><span>Update</span></button>
+    </form>
+
+    <div class="my-3">
+        <a href="{% url 'project_progress' project_id=project.id %}"><button class="px-3"><span>Back</samp></button></a>
+    </div>
+</div>
+{% endblock %}

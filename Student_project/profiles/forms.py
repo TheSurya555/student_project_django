@@ -3,6 +3,7 @@ from .models import UserProfile, ProjectExperience
 from django.contrib.auth import authenticate
 from signUp.models import CustomUser
 from datetime import date, timedelta
+from tinymce.widgets import TinyMCE
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -39,7 +40,7 @@ class ProjectExperienceForm(forms.ModelForm):
         model = ProjectExperience
         fields = ['title', 'contribution', 'technologies', 'duration', 'description']
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'description': TinyMCE(attrs={'class': 'form-control', 'rows': 8}),
         }
 
     def __init__(self, *args, **kwargs):

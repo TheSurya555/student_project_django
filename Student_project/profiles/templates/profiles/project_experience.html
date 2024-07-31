@@ -7,15 +7,6 @@ Add Project / Experience
 
 {% block head_css %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
-<!-- Include TinyMCE -->
-<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
-<script>
-  tinymce.init({
-    selector: '#id_description',
-    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-    toolbar_mode: 'floating',
-  });
-</script>
 {% endblock %}
 
 {% block content %}
@@ -48,15 +39,15 @@ Add Project / Experience
                         <label for="id_description" class="form-label">Description</label>
                         {{ form.description }}
                     </div>
+                    
                     {% if messages %}
-                        <div class="alert alert-info" role="alert">
-                            <ul class="mb-0">
-                                {% for message in messages %}
-                                    <li>{{ message }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                        {% for message in messages %}
+                            {% if 'add_project' in message.tags %}
+                                <div class="alert {{ message.tags }}">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
+                    
                     <button type="submit" class="btn btn-dark border-0 rounded-3"><span>Save Project</span></button>
                 </form>
             </div>
@@ -64,4 +55,17 @@ Add Project / Experience
     </div>
   </div>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        menubar: false,
+        plugins: 'link code',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code'
+    });
+</script>
 {% endblock %}

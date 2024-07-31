@@ -1,0 +1,169 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Progress Tracker
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .progress-stages {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+    }
+    
+    .progress-stage {
+        display: flex;
+        align-items: center;
+        margin: 10px 15px;
+        position: relative;
+        padding-left: 40px; /* Space for the dot */
+        border-left: 2px solid #ddd; /* Default line color */
+        width: calc(50% - 30px); /* Two columns */
+        transition: border-color 0.3s; /* Smooth line color transition */
+    }
+    
+    .progress-stage.completed {
+        border-left-color: #28a745; /* Line color for completed stages */
+    }
+    
+    .progress-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #ddd; /* Default dot color */
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: background-color 0.3s; /* Smooth dot color transition */
+    }
+    
+    .progress-stage.completed .progress-dot {
+        background-color: #28a745; /* Dot color for completed stages */
+    }
+    
+    .progress-stage span {
+        margin-left: 15px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .progress-number {
+        font-weight: bold;
+        margin-right: 15px;
+        color: #555;
+    }
+    
+    .project-image-thumbnail {
+        border-radius: 8px;
+    }
+
+    .project-details {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-container {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-container h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+    }
+    
+    .progress-stage a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: auto;
+    }
+
+    .progress-stage a:hover {
+        text-decoration: underline;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .alert {
+        margin-bottom: 20px;
+    }
+
+    .terminated-status {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    {% if messages %}
+    <div class="alert alert-warning">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="project-details mb-5">
+        <div class="d-flex flex-row">
+            {% if project.image %}
+            <div class="project-image" style="margin-right: 20px;">
+                <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 120px; height: 120px; object-fit: cover;">
+            </div>
+            {% endif %}
+            <div class="align-items-center">
+                <h5>Project {{ project.id }}: <span> {{ project.name }}</span></h5>
+                <p><strong>Client Name:</strong> {{ project.client_name }}</p>
+                <p>Project Costing: {{ project.project_costing }}</p>
+
+                {% if project.status == 'terminated' %}
+                <p class="terminated-status">Status: Terminated</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="progress-container mb-5">
+        <h2>Update Your Progress</h2>
+        <div class="progress-stages">
+            {% for progress_item in progress_data %}
+            <div class="progress-stage {% if progress_item.progress.is_completed %}completed{% endif %} my-4">
+                <div class="progress-dot"></div>
+                <div class="progress-number">{{ forloop.counter }}</div>
+                <p class="p-0 m-0">{{ progress_item.progress.stage }} <span class="p-2" style="border-radius: 10px; background-color: #C6E3DB;"> ({{ progress_item.cost_per_stage }})</span></p>
+                {% if not progress_item.progress.is_completed and project.status != 'terminated' %}
+                <a href="{% url 'update_progress' progress_item.progress.id %}">Edit</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="d-flex justify-content-between m-5">
+        <div class="back-button mb-5">
+            <a href="{% url 'profiles' %}" class="btn btn-secondary">Back</a>
+        </div>
+    
+        {% if project.status != 'terminated' %}
+        <div class="terminate-button mb-5">
+            <a href="{% url 'update_project_status' project.id %}" class="btn btn-danger">Terminate Project</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

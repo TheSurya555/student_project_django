@@ -18,200 +18,128 @@ Profile
         <div class="col-md-3 sidebar">
           <h3 class="mb-4">Profile</h3>
           {% if request.session.user_role == "Candidate" %}
-          <a href="#" id="myInfoLink" class="active">My Info</a>
-          <a href="#" id="projectsLink">Projects / Experience</a>
-          <a href="#" id="testLink">Take your Test</a>
-          <a href="#" id="projectcompleteLink">Projects Completed</a>
-          <a href="#" id="connectLink">Connect With</a>
+            <a href="#" id="myInfoLink" class="active">My Info</a>
+            <a href="#" id="projectsLink">Projects / Experience</a>
+            <a href="#" id="testLink">Take your Test</a>
+            <a href="#" id="projectProgressLink">Project Progress</a>
           {% elif request.session.user_role == "Recruiter" %}
-          <a href="#" id="myInfoLink" class="active">My Info</a>
-          <a href="#" id="billingLink">Billing & Payments</a>
+            <a href="#" id="myInfoLink" class="active">My Info</a>
+            {% comment %} <a href="#" id="billingLink">Billing & Payments</a> {% endcomment %}
           {% endif %}
         </div>
+
         <div class="col-md-9 main-content">
           <div id="myInfoSection" class="content-section active">
             <h4 class="section-heading">My Info</h4>
             <p>{{ user.role }} Account</p>
-            {% if request.session.user_role == "Candidate" %}
             <div class="card card-custom mb-4">
                 <h5>Account</h5>
                 <div class="d-flex align-items-center">
                     <div class="profile" style="margin-right: 15px;">
-                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
+                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-image">
                     </div>
                     <div>
                         <p class="mb-1 profile_name">{{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="mb-1 ">{{ user_profile.position }}</p>
+                        <p class="mb-1">{{ user_profile.position }}</p>
                         <small>Email: {{ user.email }}</small>
                     </div>
                 </div>
             </div>
-            {% elif request.session.user_role == "Recruiter" %}
-            <div class="card card-custom mb-4">
-                <h5>Account</h5>
-                <div class="d-flex align-items-center">
-                    <div class="profile" style="margin-right: 15px;">
-                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
-                    </div>
-                    <div>
-                        <p class="mb-1 profile_name">{{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="mb-1 ">Role : {{ user_profile.position }}</p>
-                        <small>Email: {{ user.email }}</small>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
 
             <div class="card card-custom mb-4">
                 <h5>Profile details</h5>
                 <div class="d-flex">
                     <div class="profile" style="margin-right: 15px;">
-                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
+                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-image">
                     </div>
                     <div>
                         <p class="profile_detailes"><span>Name :</span><br>{{ user.first_name }} {{ user.last_name }}</p>
-                        <!-- Add other profile details specific to candidate or recruiter -->
                         {% if request.session.user_role == "Candidate" %}
-                        <p class="profile_detailes"> <span>Date of Birth :</span> <br>{{ user_profile.dob }}</p>
-                        <p class="profile_detailes"> <span>Phone :</span> <br> {{ user.phone }}</p>
-                        <p class="profile_detailes"> <span>Address :</span> <br> {{ user_profile.address }}</p>
-                        <p class="profile_detailes"> <span>Position:</span> <br> {{ user_profile.position }}</p>
-                        <p class="profile_detailes"> <span>Experience :</span> <br>  {{ user_profile.experience }}</p>
-                        <p class="profile_detailes"> <span>Skills :</span> <br>  {{ user_profile.skills }}</p>
-                        <p class="profile_detailes"> <span>Language :</span> <br>  {{ user_profile.languages }}</p>
-                        <p class="profile_detailes"> <span>Education :</span> <br>  {{ user_profile.education }}</p>
-                        {% comment %} <p class="profile_detailes"> <span>VAT ID No:</span> <br> {{ user_profile.vat_id }}</p> {% endcomment %}
-                        <!-- Candidate specific details -->
+                          <p class="profile_detailes"><span>Date of Birth :</span><br>{{ user_profile.dob }}</p>
+                          <p class="profile_detailes"><span>Phone :</span><br>{{ user.phone }}</p>
+                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}</p>
+                          <p class="profile_detailes"><span>Position:</span><br>{{ user_profile.position }}</p>
+                          <p class="profile_detailes"><span>Experience :</span><br>{{ user_profile.experience }}</p>
+                          <p class="profile_detailes"><span>Skills :</span><br>{{ user_profile.skills }}</p>
+                          <p class="profile_detailes"><span>Language :</span><br>{{ user_profile.languages }}</p>
+                          <p class="profile_detailes"><span>Education :</span><br>{{ user_profile.education }}</p>
                         {% elif request.session.user_role == "Recruiter" %}
-                        <p class="profile_detailes"> <span>Phone :</span> <br> {{user.phone}}</p>
-                        <p class="profile_detailes"> <span>Address :</span> <br> {{ user_profile.address }}</p>
-                        <p class="profile_detailes"> <span>Position:</span> <br> {{ user_profile.position }}</p>
-                        {% comment %} <p class="profile_detailes"> <span>VAT ID No:</span> <br> {{ user_profile.vat_id }}</p> {% endcomment %}
-                        <!-- Recruiter specific details -->
+                          <p class="profile_detailes"><span>Phone :</span><br>{{ user.phone }}</p>
+                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}</p>
+                          <p class="profile_detailes"><span>Position:</span><br>{{ user_profile.position }}</p>
                         {% endif %}
                     </div>
                     <div class="ml-auto" style="display: flex; right: 20px; position: absolute;">
-                        <a href="{% url "profile_edit" %}"><span class="edit-icon"><i class="fa-regular fa-pen-to-square"></i></span></a>
+                        <a href="{% url 'profile_edit' %}"><span class="edit-icon"><i class="fa-regular fa-pen-to-square"></i></span></a>
                     </div>
                 </div>
-                <div>
-                    <!-- Display attempts left only for candidates -->
-                    {% if request.session.user_role == "Candidate" %}
+                {% if request.session.user_role == "Candidate" %}
+                  <div>
                     <h5 class="balance m-3">Attempts left : <span>3</span></h5>
+                  </div>
+                {% endif %}
+            </div>
+
+            {% if request.session.user_role == "Candidate" %}
+              <div class="card card-custom mb-4">
+                <h5>Resume</h5>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    {% if user_profile.resume %}
+                      <button type="button" class="px-3" onclick="viewResume('{{ user_profile.resume.url }}')">
+                        <span>View Resume</span>
+                      </button>
+                    {% else %}
+                      <p>No resume uploaded.</p>
                     {% endif %}
+                  </div>
                 </div>
-            </div>
-
-            <div class="card card-custom mb-4">
-              {% if request.session.user_role == "Candidate" %}
-              <h5>Resume</h5>
-              <div class="d-flex justify-content-between">
-                <div>
-                  {% if user_profile.resume %}
-                  <button type="button" class="px-3" onclick="viewResume('{{ user_profile.resume.url }}')">
-                    <span>View Resume</span>
-                  </button>
-                  {% else %}
-                  <p>No resume uploaded.</p>
-                  {% endif %}
-                </div>
-              </div>
-              {% endif %}
-            </div>            
-
+              </div>            
+            {% endif %}
           </div>
 
-            
-          {% comment %} project section start {% endcomment %}
           <div id="projectsSection" class="content-section">
-              <h4 class="section-heading">Projects / Experience</h4>
-              <p>Below is a summary of my professional projects and experiences:</p>
-
-              {% if project_experiences %}
-                {% for project in project_experiences %}
-                  <div class="card card-custom mb-4">
-                    <h5>Project {{project.id}}: <span> {{ project.title }}</span></h5>
-                    <div class="d-flex align-items-center">
-                      <div class="profile" style="margin-right: 15px;">
-                        <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/alchemyrefiner_alchemymagic_2_e5784fc4-a8ed-4dfc-ba42-a091b7aa846a_0.jpg' %}{% endif %}" alt="Profile" class="profile-image">
-                      </div>
-                      <div>
-                        <p><strong>Contribution:</strong>{{ project.contribution }}</p>
-                        <p><strong>Technologies:</strong>{{ project.technologies }}</p>
-                        <p><strong>Description:</strong>{{ project.description }}</p>
-                      </div>
+            <h4 class="section-heading">Projects / Experience</h4>
+            <p>Below is a summary of my professional projects and experiences:</p>
+            {% if project_experiences %}
+            {% for project in project_experiences %}
+                <div class="card card-custom mb-4">
+                    <h5 class="mb-3">Project {{ project.project_number }}: <span>{{ project.title }}</span></h5>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex">
+                          <div class="profile" style="margin-right: 15px;">
+                              <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-image">
+                          </div>
+                          <div>
+                              <p><strong>Contribution:</strong>{{ project.contribution }}</p>
+                              <p><strong>Technologies:</strong>{{ project.technologies }}</p>
+                              <p><strong>Description:</strong>{{ project.description|safe }}</p>
+                          </div>
+                        </div>
+                        <div>
+                          <a href="{% url 'delete_project_experience' project_experience_id=project.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project experience?');">Delete</a>
+                        </div>
                     </div>
-                  </div>       
-                  {% endfor %}
-                  <a href="{% url "add_project" %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
-              {% else %}
+                </div>
+            {% endfor %}
+            <a href="{% url 'add_project' %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
+            {% else %}
                 <div class="no-projects">
-                  <p>No projects or experiences to display.</p>
-                  <a href="{% url "add_project" %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
+                    <p>No projects or experiences to display.</p>
+                    <a href="{% url 'add_project' %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
                 </div>
-              {% endif %}    
-                
-              </div>
-          {% comment %} project section end {% endcomment %}
-
-          {% comment %}  BILL AND PAYMENT SECTION {% endcomment %}
-          <div id="billingSection" class="content-section">
-            <h4 class="section-heading">Billing & Payments</h4>
-            <p>Manage your billing information and payment methods here:</p>
-            <!-- Add your billing and payments content here -->
-
-            <div class="card card-custom mb-4">
-              <h3 class="balance mb-5">Balance : <span>10.00$</span> </h3>
-              <div class="d-flex align-items-center">
-                <div class="withdraw">
-                  <button type="button"  class="px-3"><span>Withdraw</span></button>
-                </div>
-              </div>
-            </div>
-
-            <div class="card card-custom mb-4">
-              <h5 class="mb-4">Payment Methods</h5>
-              <div class="d-flex flex-column">
-                <div class="mb-4">
-                  <p>You haven’t set up any billing methods yet. Add a method so you can hire when you’re ready.</p>
-                </div>
-                <div>
-                  <button type="button" class="px-3" data-toggle="modal" data-target="#paymentMethodModal"><span>+ Add Payment Method</span></button>
-                </div>
-              </div>
-            </div>
+            {% endif %}
+        
           </div>
 
-          <!-- Project Completed start -->
-          <div id="projectcompleteSection" class="content-section">
-            <h4 class="section-heading">Project Completed</h4>
-            <p>Submit the link to your completed project:</p>
-
-            <form id="completedProjectForm">
-              <div class="form-group mb-4">
-                <label for="projectLink" class="mb-2">Project Link</label>
-                <input type="url" class="form-control" id="projectLink" placeholder="Enter your project link" required>
-              </div>
-              <div>
-                <button type="submit" class="px-3"><span>Submit</span></button>
-              </div>
-            </form>
-          </div>
-          <!-- Project Completed end -->
-
-          <!-- test section start -->
           <div id="testSection" class="content-section">
             <h4 class="section-heading">Take your Test</h4>
             <p>Start your test and submit your answer link below:</p>
-
-            <!-- Start Test Button -->
             <div class="card card-custom mb-4">
               <div class="d-flex align-items-center">
-                <a href="{% url "rules_and_regulations" %}"><button type="button" class="px-3"><span>Start Test</span></button></a>
+                <a href="{% url 'rules_and_regulations' %}"><button type="button" class="px-3"><span>Start Test</span></button></a>
               </div>
             </div>
-
-            <!-- Submit Answer Link -->
             <div class="card card-custom mb-4">
               <div class="form-group mb-4">
                 <label for="answerLink" class="mb-2">Submit your answer link:</label>
@@ -222,174 +150,84 @@ Profile
               </div>
             </div>
           </div>
-          <!-- test section end -->
 
-
-          <!-- Connect With -->
-
-          <div id="connectSection" class="content-section">
-            <h4 class="section-heading">Connect With</h4>
-            <p>Add your social media links here:</p>
-            <div class="card card-custom mb-4">
-              <h5 class="mb-4">Social Media Links</h5>
-              <div id="socialMediaLinksContainer" class="d-flex flex-column mb-4">
-                <p id="noLinksMessage">No social media links added yet. Add your social media links to connect with others.</p>
+          <div id="projectProgressSection" class="content-section">
+            <h4 class="section-heading mt-5">Project Progress</h4>
+            <p>Track your project progress</p>
+            {% if projects %}
+              {% for project in projects %}
+                <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
+                  <div class="card card-custom mb-4 d-flex flex-row">
+                    {% if project.image %}
+                    <div class="project-image" style="margin-right: 15px;">
+                      <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                    </div>
+                    {% endif %}
+                    <div class="align-items-center">
+                      <h5>Project {{ project.id }}: <span> {{ project.name }}</span></h5>
+                      <p><strong>Client Name:</strong> {{ project.client_name }}</p>
+                      <p> <strong>Project Costing:</strong> {{ project.project_costing }}</p>
+      
+                      {% if project.status == 'terminated' %}
+                      <p class="terminated-status">Status: Terminated</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </a>
+              {% endfor %}
+            {% else %}
+              <div class="no-projects">
+                <p>No project progress to display.</p>
               </div>
-              <div>
-                <button type="button" class="px-3" data-toggle="modal" data-target="#socialMediaModal"><span>+ Add Social Media Link</span></button>
-              </div>
-            </div>
+            {% endif %}
           </div>
 
-        </div>
-      </div>
-    </div>
-
-    <!-- Resume Modal -->
-    <div class="modal fade" id="resumeModal" tabindex="-1" aria-labelledby="resumeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="resumeModalLabel">Your Resume</h5>
-                    <button type="button" class="px-3" data-dismiss="modal" aria-label="Close">
-                        <span><i class="fa-solid fa-xmark"></i></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <embed id="resumeEmbed" src="" type="application/pdf" width="100%" height="600px" />
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="px-3" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Method Modal -->
-    <div class="modal fade" id="paymentMethodModal" tabindex="-1" aria-labelledby="paymentMethodModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="paymentMethodModalLabel">Add Payment Method</h5>
-            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
-              <span><i class="fa-solid fa-xmark"></i></span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="list-group">
-              <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#debitCardModal" data-dismiss="modal">Add Debit Card</a>
-              <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#onlinePaymentModal" data-dismiss="modal">Online Payment Method</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Debit Card Modal -->
-    <div class="modal fade" id="debitCardModal" tabindex="-1" aria-labelledby="debitCardModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="debitCardModalLabel">Add Debit Card</h5>
-            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
-              <span><i class="fa-solid fa-xmark"></i></span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="cardNumber">Card Number</label>
-                <input type="number" class="form-control" id="cardNumber" placeholder="Enter card number">
-              </div>
-              <div class="form-group">
-                <label for="cardName">Name on Card</label>
-                <input type="text" class="form-control" id="cardName" placeholder="Enter name on card">
-              </div>
-              <div class="form-group">
-                <label for="expiryDate">Expiry Date</label>
-                <input type="date" class="form-control" id="expiryDate" placeholder="MM/YY">
-              </div>
-              <div class="form-group">
-                <label for="cvv">CVV</label>
-                <input type="text" class="form-control" id="cvv" placeholder="CVV">
-              </div>
-              <button type="submit" class="px-3 "><span>Add Card</span></button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Online Payment Modal -->
-    <div class="modal fade" id="onlinePaymentModal" tabindex="-1" aria-labelledby="onlinePaymentModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="onlinePaymentModalLabel">Online Payment Method</h5>
-            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
-              <span><i class="fa-solid fa-xmark"></i></span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="paymentMethod">Select Payment Method</label>
-                <select class="form-control" id="paymentMethod">
-                  <option>PayPal</option>
-                  <option>Google Pay</option>
-                  <option>Apple Pay</option>
-                  <option>Stripe</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="paymentId">Payment ID</label>
-                <input type="text" class="form-control" id="paymentId" placeholder="Enter payment ID">
-              </div>
-              <button type="submit" class="px-3"><span>Add Payment Method</span></button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Social Media Modal -->
-    <div class="modal fade" id="socialMediaModal" tabindex="-1" aria-labelledby="socialMediaModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="socialMediaModalLabel">Add Social Media Link</h5>
-            <button type="button" class=" px-3" data-dismiss="modal" aria-label="Close">
-              <span><i class="fa-solid fa-xmark"></i></span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="socialMediaForm">
-              <div class="form-group">
-                <label for="socialMediaPlatform">Select Platform</label>
-                <select class="form-control" id="socialMediaPlatform">
-                  <option>GitHub</option>
-                  <option>LinkedIn</option>
-                  <option>Twitter</option>
-                  <option>Facebook</option>
-                  <option>Instagram</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="socialMediaLink">Profile Link</label>
-                <input type="url" class="form-control" id="socialMediaLink" placeholder="Enter your profile link">
-              </div>
-              <button type="submit" class="px-3 mt-2"><span>Add Link</span></button>
-            </form>
-          </div>
         </div>
       </div>
     </div>
 
     <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Function to show a specific content section and hide others
+        function showSection(sectionId) {
+          const sections = document.querySelectorAll('.content-section');
+          sections.forEach(function(section) {
+            section.classList.remove('active');
+          });
+          const selectedSection = document.getElementById(sectionId);
+          if (selectedSection) {
+            selectedSection.classList.add('active');
+          }
+        }
+
+        // Event listeners for sidebar links
+        const sidebarLinks = document.querySelectorAll('.sidebar a');
+        sidebarLinks.forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const sectionId = this.id.replace('Link', 'Section');
+            showSection(sectionId);
+
+            // Remove 'active' class from all links and add to the clicked link
+            sidebarLinks.forEach(function(link) {
+              link.classList.remove('active');
+            });
+            this.classList.add('active');
+          });
+        });
+
+        // Set the initial active section based on the initial active link
+        const initialActiveLink = document.querySelector('.sidebar a.active');
+        if (initialActiveLink) {
+          const initialSectionId = initialActiveLink.id.replace('Link', 'Section');
+          showSection(initialSectionId);
+        }
+      });
+
+      // Function to view resume in a new window
       function viewResume(url) {
         window.open(url, '_blank');
       }
-    </script>    
+    </script>
 
-{% endblock %}
+{% endblock content %}

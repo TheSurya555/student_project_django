@@ -17,15 +17,14 @@ Edit Profile Form
                                 <h2 class="ezy__signup14-heading">USER PROFILE FORM</h2>
                                 <form class="mt-4" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    {% if edit_messages %}
-                                        <div class="alert alert-danger" role="alert">
-                                            <ul>
-                                                {% for field, errors in edit_messages.items %}
-                                                    <li>{{ field }}: {{ errors }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            {% if 'edit_profile' in message.tags %}
+                                                <div class="alert {{ message.tags }}">{{ message }}</div>
+                                            {% endif %}
+                                        {% endfor %}
                                     {% endif %}
+                                    
                                     <div class="form-group position-relative mb-3">
                                         {% if form.profile_image.value %}
                                             <img id="profileImagePreview" src="{{ form.profile_image.value.url }}" alt="Profile Image" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
