@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from progress_tracker.models import Project
 
+
 @login_required
 def profiles_View(request):
     try:
@@ -17,14 +18,21 @@ def profiles_View(request):
 
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     project_experiences = ProjectExperience.objects.filter(user_profile=user_profile)
-    projects = Project.objects.filter(user=request.user)
+
+    # Fetch projects where the logged-in user is the client
+    candidate_projects = Project.objects.filter(user=request.user)
+    projects = Project.objects.filter(client=request.user)
+
 
     return render(request, 'profiles/profiles.html', {
         'user_profile': user_profile,
         'profile_image_url': profile_image_url,
         'project_experiences': project_experiences,
         'projects': projects,
+        'candidate_projects':candidate_projects,
     })
+
+
 
 @login_required
 def settings_View(request):

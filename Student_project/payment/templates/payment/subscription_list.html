@@ -51,13 +51,17 @@ subscription_list
             <h3>{{ subscription.name }}</h3>
             <h1>${{ subscription.price }}</h1>
             <p>{{ subscription.description }}</p>
+
             <ul style="text-align: left; list-style: initial;">
                 {% for feature in subscription.features_list %}
                     <li>{{ feature }}</li>
                 {% endfor %}
             </ul>
+
             <a href="{% url 'payment_page' subscription.id %}"><button class="px-3"><span>Reserve</span></button></a>
         </div>
     {% endfor %}
 </div>
 {% endblock %}
+
+

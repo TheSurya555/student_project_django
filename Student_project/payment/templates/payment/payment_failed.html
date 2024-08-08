@@ -1,0 +1,27 @@
+<!-- payment_failed.html -->
+{% extends "main/Layout.html" %}
+{% block title %}
+Payment Failed
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="my-5">
+        <h1>Payment Failed</h1>
+        <p>Unfortunately, your payment could not be processed. Please try again.</p>
+        <p><strong>Error Code:</strong> {{ error_code }}</p>
+        <p><strong>Description:</strong> {{ error_description }}</p>
+    </div>
+    <div class="mb-5">
+        <button onclick="goBack()" class="px-3"><span>Go Back</span></button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+{% endblock %}

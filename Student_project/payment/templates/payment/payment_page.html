@@ -13,7 +13,7 @@ Payment Page
         padding: 20px;
         justify-content: center;
     }
-    .billing-info, .payment-options, .order-summary, .preferred-candidate {
+    .billing-info, .order-summary, .preferred-candidate {
         width: 100%;
         height: 100%;
         padding: 20px;
@@ -24,7 +24,7 @@ Payment Page
     .order-summary {
         width: 35%;
     }
-    .billing-info h3, .payment-options h3, .order-summary h3 {
+    .billing-info h3, .order-summary h3 {
         margin-bottom: 20px;
         font-size: 1.2rem;
     }
@@ -39,18 +39,6 @@ Payment Page
         font-weight: bold;
     }
 
-    .radio_button {
-        display: flex;
-        align-items: baseline;
-        background: #ddd;
-        margin: 5px;
-        padding: 10px;
-        border-radius: 5px;
-    }
-
-    .radio_button i {
-        margin: 0 5px;
-    }
     .form-group input {
         padding: 10px;
         border: 1px solid #ccc;
@@ -58,20 +46,7 @@ Payment Page
         margin-bottom: 5px;
         margin-right: 5px;
     }
-    .payment-options .form-group {
-        display: flex;
-    }
-    .payment-options .form-group input[type="radio"] {
-        width: auto;
-        margin-right: 10px;
-    }
-    .form-group .card-details {
-        display: flex;
-        justify-content: space-between;
-    }
-    .form-group .card-details input {
-        width: 48%;
-    }
+
     .order-summary img {
         width: 20%;
         height: auto;
@@ -119,58 +94,6 @@ Payment Page
                 </div>
             </form>
         </div>
-
-        <div class="payment-options">
-            <h3>Payment Options</h3>
-            <form id="payment-form" method="post" action="{% url 'process_payment' subscription.id %}">
-                {% csrf_token %}
-                <input type="hidden" id="hidden_candidate_username" name="candidate_username">
-                <input type="hidden" id="hidden_candidate_name" name="candidate_name">
-        
-                <!-- Credit & Debit Cards Option -->
-                <div class="radio_button">
-                    <div class="mx-2">
-                        <input type="radio" name="payment_method" value="card" checked id="payment_card">
-                    </div>
-                    <p class="m-0">Credit & Debit Cards</p>
-                    <i class="fa-brands fa-cc-mastercard"></i>
-                    <i class="fa-brands fa-cc-visa"></i>
-                    <i class="fa-brands fa-cc-discover"></i>
-                </div>
-                <hr>
-                <div id="card_payment_section">
-                    <!-- Card Payment Details -->
-                    <div class="form-group d-flex flex-column">
-                        <input type="text" name="card_number" placeholder="Card number">
-                        <div class="card-details">
-                            <input type="text" name="card_expiry" placeholder="MM / YY">
-                            <input type="text" name="card_cvv" placeholder="CVV">
-                        </div>
-                        <input type="text" name="card_holder" placeholder="Cardholder's name">
-                        <div class="form-group">
-                            <input type="checkbox" name="save_card" value="yes"><span style="margin-bottom: 5px;"> Save as account default</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- UPI Option -->
-                <div class="radio_button m-0">
-                    <div class="mx-2">
-                        <input type="radio" name="payment_method" value="upi" id="payment_upi">
-                    </div>
-                    <p class="m-0">UPI</p>
-                </div>
-                <hr>
-                <div id="upi_payment_section" class="hidden">
-                    <!-- UPI Payment Details -->
-                    <div class="form-group">
-                        <input type="text" name="upi_id" placeholder="Enter UPI ID" class="w-100">
-                    </div>
-                </div>
-                <button type="submit" class="px-3"><span>Confirm & Pay</span></button>
-            </form>
-        </div>
-        
     </div>
 
     <div class="order-summary" style="margin-left: 50px;">
@@ -184,55 +107,86 @@ Payment Page
         <p class="d-flex justify-content-between"><strong>GST (12%):</strong> ₹{{ gst }}</p>
         <hr>
         <p class="d-flex justify-content-between"><strong>Total:</strong> ₹{{ total_amount }}</p>
-        <button type="submit" class="px-3" form="payment-form"><span>Confirm & Pay</span></button>
         <p>You will be charged ₹{{ total_amount }}. Total amount includes currency conversion fees.</p>
+        <button type="button" id="rzp-button" class="px-3"><span>Confirm & Pay</span></button>
     </div>
 </div>
 {% endblock %}
 
-
 {% block extra_js %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const cardPaymentSection = document.getElementById('card_payment_section');
-        const upiPaymentSection = document.getElementById('upi_payment_section');
-        const cardPaymentRadio = document.getElementById('payment_card');
-        const upiPaymentRadio = document.getElementById('payment_upi');
+        const rzpButton = document.getElementById('rzp-button');
 
-        cardPaymentRadio.addEventListener('change', function() {
-            if (cardPaymentRadio.checked) {
-                cardPaymentSection.classList.remove('hidden');
-                upiPaymentSection.classList.add('hidden');
+        // Prepare the Razorpay payment options
+        const options = {
+            key: '{{ razorpay_key_id }}', // Enter the Key ID generated from the Razorpay Dashboard
+            amount: {{ total_amount|floatformat:0 }} * 100, // Amount in paise (e.g., ₹100 is 10000 paise)
+            currency: 'INR',
+            name: 'Talent Sprout',
+            description: 'Order Payment',
+            image: '{% static "assets/LOGOWHITE.png" %}',
+            order_id: '{{ razorpay_order_id }}',
+            handler: function (response) {
+                // Handle successful payment here
+                console.log(response);
+
+                // Redirect to payment callback URL
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{{ callback_url }}";
+
+                let csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                form.appendChild(csrfToken);
+
+                let razorpayPaymentId = document.createElement('input');
+                razorpayPaymentId.type = 'hidden';
+                razorpayPaymentId.name = 'razorpay_payment_id';
+                razorpayPaymentId.value = response.razorpay_payment_id;
+                form.appendChild(razorpayPaymentId);
+
+                let razorpayOrderId = document.createElement('input');
+                razorpayOrderId.type = 'hidden';
+                razorpayOrderId.name = 'razorpay_order_id';
+                razorpayOrderId.value = response.razorpay_order_id;
+                form.appendChild(razorpayOrderId);
+
+                let razorpaySignature = document.createElement('input');
+                razorpaySignature.type = 'hidden';
+                razorpaySignature.name = 'razorpay_signature';
+                razorpaySignature.value = response.razorpay_signature;
+                form.appendChild(razorpaySignature);
+
+                document.body.appendChild(form);
+                form.submit();
+            },
+            prefill: {
+                name: '{{ request.user.profile.full_name }}',
+                email: '{{ request.user.email }}'
+            },
+            notes: {
+                address: "{{ request.user.profile.address }}"
+            },
+            theme: {
+                color: '#000'
             }
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.on('payment.failed', function (response) {
+            console.log(response.error);
+            // Redirect to payment failed page
+            window.location.href = "{% url 'payment_failed' %}?error_code=" + response.error.code + "&error_description=" + response.error.description;
         });
 
-        upiPaymentRadio.addEventListener('change', function() {
-            if (upiPaymentRadio.checked) {
-                upiPaymentSection.classList.remove('hidden');
-                cardPaymentSection.classList.add('hidden');
-            }
-        });
-
-        // Initial check
-        if (cardPaymentRadio.checked) {
-            cardPaymentSection.classList.remove('hidden');
-            upiPaymentSection.classList.add('hidden');
-        } else if (upiPaymentRadio.checked) {
-            upiPaymentSection.classList.remove('hidden');
-            cardPaymentSection.classList.add('hidden');
-        }
-
-        // Copy candidate details from the preferred candidate form to the payment form
-        const candidateForm = document.getElementById('candidate-form');
-        const paymentForm = document.getElementById('payment-form');
-        const hiddenCandidateUsername = document.getElementById('hidden_candidate_username');
-        const hiddenCandidateName = document.getElementById('hidden_candidate_name');
-
-        paymentForm.addEventListener('submit', function() {
-            hiddenCandidateUsername.value = candidateForm.querySelector('#candidate_username').value;
-            hiddenCandidateName.value = candidateForm.querySelector('#candidate_name').value;
+        rzpButton.addEventListener('click', function() {
+            rzp.open();
         });
     });
 </script>
-
 {% endblock %}

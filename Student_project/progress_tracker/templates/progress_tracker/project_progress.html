@@ -107,6 +107,27 @@ Progress Tracker
         font-weight: bold;
         margin-top: 10px;
     }
+
+    .client-confirmation {
+        margin-left: 15px;
+        font-size: 14px;
+        color: #888;
+    }
+
+    .client-confirmation.confirmed {
+        color: #28a745; /* Color for confirmed status */
+        font-weight: bold;
+    }
+
+    .client-confirmation.pending {
+        color: #ffc107; /* Color for pending status */
+        font-weight: bold;
+    }
+
+    .client-confirmation.rejected {
+        color: #dc3545; /* Color for rejected status */
+        font-weight: bold;
+    }
 </style>
 {% endblock %}
 
@@ -147,8 +168,18 @@ Progress Tracker
                 <div class="progress-dot"></div>
                 <div class="progress-number">{{ forloop.counter }}</div>
                 <p class="p-0 m-0">{{ progress_item.progress.stage }} <span class="p-2" style="border-radius: 10px; background-color: #C6E3DB;"> ({{ progress_item.cost_per_stage }})</span></p>
-                {% if not progress_item.progress.is_completed and project.status != 'terminated' %}
-                <a href="{% url 'update_progress' progress_item.progress.id %}">Edit</a>
+                {% if request.session.user_role == "Recruiter" %}
+                    <p class="client-confirmation {% if progress_item.progress.client_confirmation %}confirmed{% else %}pending{% endif %}">
+                        {% if progress_item.progress.client_confirmation %}
+                            Confirmed
+                        {% else %}
+                            <a href="{% url 'confirm_progress' progress_item.progress.id %}">Confirm Completion</a>
+                        {% endif %}
+                    </p>
+                {% else %}
+                    {% if not progress_item.progress.is_completed and project.status != 'terminated' %}
+                    <a href="{% url 'update_progress' progress_item.progress.id %}">Edit</a>
+                    {% endif %}
                 {% endif %}
             </div>
             {% endfor %}

@@ -1,5 +1,5 @@
 from django.db import models
-from signUp.models import CustomUser  # Adjust the import according to your project structure
+from signUp.models import CustomUser
 
 class Project(models.Model):
     STATUS_CHOICES = [
@@ -10,7 +10,7 @@ class Project(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='projects')
     client = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='client_projects')
     name = models.CharField(max_length=100)
-    client_name = models.CharField(max_length=100)  # You might want to remove or use this if it's redundant
+    client_name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='project_images/', blank=True, null=True)
     stages = models.TextField(default='')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
@@ -30,11 +30,18 @@ class Project(models.Model):
         return f"{self.name} (Client: {self.client.username})" if self.client else self.name
 
 class Progress(models.Model):
+    ROLE_CHOICES = [
+        ('candidate', 'Candidate'),
+        ('recruiter', 'Recruiter'),
+    ]
+    
     project = models.ForeignKey(Project, related_name='progresses', on_delete=models.CASCADE)
     stage = models.CharField(max_length=100)
     is_completed = models.BooleanField(default=False)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)  # Use a valid default user ID
-    status = models.CharField(max_length=255, blank=True, null=True)  # Add this line
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='candidate')
+    status = models.CharField(max_length=255, blank=True, null=True)  # Optional status field
+    client_confirmation = models.BooleanField(default=False)  # New field for client confirmation
 
     def __str__(self):
-        return f'{self.project.name} - {self.stage}'
+        return f'{self.project.name} - {self.stage} ({self.role})'

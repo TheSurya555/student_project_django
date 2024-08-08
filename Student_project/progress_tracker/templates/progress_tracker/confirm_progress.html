@@ -1,0 +1,12 @@
+{% extends "main/Layout.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Confirm Progress Stage: {{ progress.stage }} </h2>
+    <p>Are you sure you want to confirm that the progress stage "{{ progress.stage }}" is completed?</p>
+    <form method="post" class="my-5">
+        {% csrf_token %}
+        <button type="submit" class="px-3"><span>Confirm</span></button>
+        <a href="{% url 'project_progress' project.id %}" ><button class="px-3"><span>Cancel</span></button></a>
+    </form>
+</div>
+{% endblock %}

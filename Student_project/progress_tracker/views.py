@@ -1,32 +1,32 @@
-# views.py
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Project, Progress
 from .forms import ProgressForm, StatusForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 @login_required
 def project_progress_view(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    progresses = Progress.objects.filter(project=project, user=request.user)
     
-    if not progresses.exists():
-        # Create initial progress records for each stage
+    # Create initial progress records only if they don't exist for the project
+    if not Progress.objects.filter(project=project).exists():
         stages = project.get_stages()
         for stage in stages:
             Progress.objects.create(project=project, stage=stage, user=request.user)
-
-    progresses = Progress.objects.filter(project=project, user=request.user)
+    
+    progresses = Progress.objects.filter(project=project)
     cost_per_stage = project.get_cost_per_stage()
     
-    # Add cost per stage to each progress item
     progress_data = [
         {
             'progress': progress,
             'cost_per_stage': cost_per_stage
         }
-    for progress in progresses]
+        for progress in progresses
+    ]
     
     return render(request, 'progress_tracker/project_progress.html', {
         'project': project,
@@ -36,7 +36,7 @@ def project_progress_view(request, project_id):
 
 @login_required
 def update_progress_view(request, progress_id):
-    progress = get_object_or_404(Progress, id=progress_id, user=request.user)
+    progress = get_object_or_404(Progress, id=progress_id)
     project = progress.project
     
     # Check if the project is terminated
@@ -62,7 +62,9 @@ def update_progress_view(request, progress_id):
     if request.method == 'POST':
         form = ProgressForm(request.POST, instance=progress)
         if form.is_valid():
-            form.save()
+            progress = form.save(commit=False)
+            progress.user = request.user  # Ensure user is set
+            progress.save()
             return redirect('project_progress', project_id=project.id)
     else:
         form = ProgressForm(instance=progress)
@@ -75,19 +77,22 @@ def update_progress_view(request, progress_id):
 
 @login_required
 def update_project_status_view(request, project_id):
-    project = get_object_or_404(Project, id=project_id, user=request.user)
+    project = get_object_or_404(Project, id=project_id)
+    
+    # Check if the user is a recruiter
+    if request.user.role != 'recruiter':
+        messages.error(request, 'You do not have permission to update the project status.')
+        return redirect('project_progress', project_id=project.id)
     
     if request.method == 'POST':
         form = StatusForm(request.POST, instance=project)
         if form.is_valid():
             if form.cleaned_data.get('terminate'):
-                # Handle termination
                 project.status = 'terminated'
                 project.save()
                 messages.success(request, 'Project has been successfully terminated.')
                 return redirect('project_progress', project_id=project.id)
             else:
-                # Handle status update
                 form.save()
                 messages.success(request, 'Project status has been updated.')
                 return redirect('project_progress', project_id=project.id)
@@ -96,5 +101,31 @@ def update_project_status_view(request, project_id):
     
     return render(request, 'progress_tracker/update_project_status.html', {
         'form': form,
+        'project': project
+    })
+
+@login_required
+def confirm_progress_view(request, progress_id):
+    progress = get_object_or_404(Progress, id=progress_id)
+    project = progress.project
+    
+    # Check if the user is a recruiter (client)
+    if request.user.role != 'recruiter':
+        messages.error(request, 'You do not have permission to confirm progress.')
+        return redirect('project_progress', project_id=project.id)
+    
+    # Check if the progress stage is completed
+    if not progress.is_completed:
+        messages.error(request, 'You cannot confirm an incomplete progress stage.')
+        return redirect('project_progress', project_id=project.id)
+    
+    if request.method == 'POST':
+        progress.client_confirmation = True
+        progress.save()
+        messages.success(request, 'Progress stage has been confirmed.')
+        return redirect('project_progress', project_id=project.id)
+    
+    return render(request, 'progress_tracker/confirm_progress.html', {
+        'progress': progress,
         'project': project
     })

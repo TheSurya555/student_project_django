@@ -19,22 +19,20 @@ class Profile(models.Model):
     preferred_candidate_name = models.CharField(max_length=255, blank=True, null=True)
     preferred_candidate_username = models.CharField(max_length=255, blank=True, null=True)
 
-
-def __str__(self):
+    def __str__(self):
         return f"{self.user.username} - {self.full_name} Profile"
 
 class Payment(models.Model):
-    PAYMENT_METHOD_CHOICES = [
-        ('card', 'Card'),
-        ('upi', 'UPI'),
-        # Add more choices as needed
-    ]
-    
     recruiter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments_made')
     candidate = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='payments_received')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES)
     payment_date = models.DateTimeField(auto_now_add=True)
+    
+    # Razorpay-specific fields
+    razorpay_payment_id = models.CharField(max_length=255, blank=True, null=True)
+    razorpay_order_id = models.CharField(max_length=255, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=50, default='pending')
 
     def candidate_username(self):
         return self.candidate.user.username

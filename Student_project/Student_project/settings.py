@@ -256,3 +256,9 @@ LOGGING = {
 
 # settings.py
 USE_I18N = True
+
+
+# Razorpay
+
+RAZORPAY_KEY_ID = 'rzp_live_JKw17fibb1IAuG'
+RAZORPAY_KEY_SECRET = '5ubXerl3jfHhzDVjkdQbHBGK'

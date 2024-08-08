@@ -22,8 +22,10 @@ Profile
             <a href="#" id="projectsLink">Projects / Experience</a>
             <a href="#" id="testLink">Take your Test</a>
             <a href="#" id="projectProgressLink">Project Progress</a>
-          {% elif request.session.user_role == "Recruiter" %}
+            {% elif request.session.user_role == "Recruiter" %}
             <a href="#" id="myInfoLink" class="active">My Info</a>
+            <a href="#" id="projectProgressLink">Project Progress</a>
+            <a href="#" id="billingLink">Billing & Payments</a>
             {% comment %} <a href="#" id="billingLink">Billing & Payments</a> {% endcomment %}
           {% endif %}
         </div>
@@ -152,34 +154,91 @@ Profile
           </div>
 
           <div id="projectProgressSection" class="content-section">
+            {% if request.session.user_role == "Recruiter" %}
+              <h5>Your Assigned Projects:</h5>
+              <p>Track your project progress</p>
+              {% if projects %}
+                  {% for project in projects %}
+                      <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
+                          <div class="card card-custom mb-4 d-flex flex-row">
+                              {% if project.image %}
+                              <div class="project-image" style="margin-right: 15px;">
+                                  <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                              </div>
+                              {% endif %}
+                              <div class="align-items-center">
+                                  <h5>Project {{ project.id }}: <span> {{ project.name }}</span></h5>
+                                  <p><strong>Assigned Candidate:</strong> {{ project.user.first_name }} {{ project.user.last_name }}</p>
+                                  <p><strong>Project Costing:</strong> {{ project.project_costing }}</p>
+                                  {% if project.status == 'terminated' %}
+                                      <p class="terminated-status">Status: Terminated</p>
+                                  {% endif %}
+                              </div>
+                          </div>
+                      </a>
+                  {% endfor %}
+              {% else %}
+                  <div class="no-projects">
+                      <p>No project progress to display.</p>
+                  </div>
+              {% endif %}   
+            {% else %}      
             <h4 class="section-heading mt-5">Project Progress</h4>
             <p>Track your project progress</p>
-            {% if projects %}
-              {% for project in projects %}
-                <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
-                  <div class="card card-custom mb-4 d-flex flex-row">
-                    {% if project.image %}
-                    <div class="project-image" style="margin-right: 15px;">
-                      <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                    </div>
-                    {% endif %}
-                    <div class="align-items-center">
-                      <h5>Project {{ project.id }}: <span> {{ project.name }}</span></h5>
-                      <p><strong>Client Name:</strong> {{ project.client_name }}</p>
-                      <p> <strong>Project Costing:</strong> {{ project.project_costing }}</p>
-      
-                      {% if project.status == 'terminated' %}
-                      <p class="terminated-status">Status: Terminated</p>
+              {% if candidate_projects %}
+                {% for project in candidate_projects %}
+                  <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
+                    <div class="card card-custom mb-4 d-flex flex-row">
+                      {% if project.image %}
+                      <div class="project-image" style="margin-right: 15px;">
+                        <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                      </div>
                       {% endif %}
+                      <div class="align-items-center">
+                        <h5>Project {{ project.id }}: <span> {{ project.name }}</span></h5>
+                        <p><strong>Client Name:</strong> {{ project.client_name }}</p>
+                        <p> <strong>Project Costing:</strong> {{ project.project_costing }}</p>
+        
+                        {% if project.status == 'terminated' %}
+                        <p class="terminated-status">Status: Terminated</p>
+                        {% endif %}
+                      </div>
                     </div>
-                  </div>
-                </a>
-              {% endfor %}
-            {% else %}
-              <div class="no-projects">
-                <p>No project progress to display.</p>
-              </div>
-            {% endif %}
+                  </a>
+                {% endfor %}
+              {% else %}
+                <div class="no-projects">
+                  <p>No project progress to display.</p>
+                </div>
+              {% endif %}    
+            {% endif %}                    
+          </div>
+
+          <div id="billingSection" class="content-section">
+            <h4 class="section-heading">Billing & Payments</h4>
+            <div class="card card-custom mb-4">
+                <h5>Current Balance</h5>
+                <div class="d-flex align-items-center">
+                    <p>Your current balance is: <strong> <i class="fa-solid fa-indian-rupee-sign"></i> 5000 </strong></p>
+                </div>
+            </div>
+            <div class="card card-custom mb-4">
+                <h5>Payment Methods</h5>
+                <p>Manage your payment methods:</p>
+                <div class="d-flex align-items-center">
+                  <button type="button" class="px-3" onclick="showPaymentMethodsModal()"><span>Add Payment Method</span></button>
+                </div>
+
+            </div>
+            <div class="card card-custom mb-4">
+                <h5>Billing History</h5>
+                <p>Review your billing history:</p>
+                <ul>
+                    {% for billing in billing_history %}
+                        <li>{{ billing.date }} - ${{ billing.amount }} - {{ billing.description }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
           </div>
 
         </div>

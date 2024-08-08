@@ -15,21 +15,16 @@ class ProfileAdmin(admin.ModelAdmin):
 admin.site.register(Profile, ProfileAdmin)
 
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('recruiter', 'get_preferred_candidate_username', 'amount', 'get_payment_method', 'payment_date')
-    search_fields = ('recruiter', 'payment_method')
-    list_filter = ('payment_method', 'payment_date')
+    list_display = ('recruiter', 'candidate_username', 'amount', 'payment_date', 'status')
+    search_fields = ('recruiter__email', 'candidate__user__username', 'amount', 'status')
+    list_filter = ('payment_date', 'status')
+    readonly_fields = ('razorpay_payment_id', 'razorpay_order_id', 'razorpay_signature')
 
-    def get_preferred_candidate_username(self, obj):
-        return obj.recruiter.profile.preferred_candidate_username if obj.recruiter.profile else None
-
-    get_preferred_candidate_username.short_description = 'Preferred Candidate Username'
-    
-    def get_payment_method(self, obj):
-        return obj.get_payment_method_display()  # Use get_payment_method_display() to show human-readable value
-    
-    get_payment_method.short_description = 'Payment Method'    
-
-admin.site.register(Payment, PaymentAdmin) 
+    def candidate_username(self, obj):
+        return obj.candidate.user.username
+    candidate_username.admin_order_field = 'candidate__user__username'  # Allows column sorting
+    candidate_username.short_description = 'Candidate Username'
+admin.site.register(Payment, PaymentAdmin)
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'description')

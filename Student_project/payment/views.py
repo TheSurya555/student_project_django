@@ -1,18 +1,23 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Payment, Profile  # Make sure to import the Profile model
-from signUp.models import CustomUser  # Adjust the import according to your project structure
+from django.urls import reverse
 from django.contrib import messages
-from django.http import JsonResponse
-from django.core.mail import send_mail ,EmailMultiAlternatives
-from smtplib import SMTPAuthenticationError, SMTPException
+from django.http import JsonResponse, HttpResponse
+from django.core.mail import EmailMultiAlternatives
+from smtplib import SMTPAuthenticationError
 from django.utils import timezone
 from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from django.conf import settings
-from .models import Subscription
+from .models import Payment, Profile, Subscription
+from signUp.models import CustomUser  # Adjust the import according to your project structure
 import logging
-from decimal import Decimal 
+from decimal import Decimal
+import razorpay
+
+# Initialize Razorpay client
+razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def payment_page(request, subscription_id):
@@ -22,58 +27,79 @@ def payment_page(request, subscription_id):
     subscription_price = Decimal(subscription.price)
     
     # Calculate service fee and GST based on subscription price (using Decimal)
-    service_fee = subscription_price * Decimal('0.02')
-    gst = subscription_price * Decimal('0.12')
+    service_fee = subscription_price * Decimal('0.00')  # Update if needed
+    gst = subscription_price * Decimal('0.0')           # Update if needed
     total_amount = subscription_price + service_fee + gst
+
+    # Create Razorpay order
+    razorpay_order = razorpay_client.order.create(dict(amount=int(total_amount * 100), currency='INR', payment_capture='1'))
+    razorpay_order_id = razorpay_order['id']
     
+    print("###########################")
+    print(razorpay_order)
+    print("###########################")
+
     return render(request, 'payment/payment_page.html', {
         'subscription': subscription,
         'service_fee': service_fee,
         'gst': gst,
         'total_amount': total_amount,
+        'razorpay_order_id': razorpay_order_id,
+        'razorpay_key_id': settings.RAZORPAY_KEY_ID,
+        'callback_url': request.build_absolute_uri(reverse('payment_callback'))
     })
 
-
-logger = logging.getLogger(__name__)
-
 @login_required
-def process_payment(request , subscription_id):
+def payment_callback(request):
     if request.method == 'POST':
         try:
-            # Retrieve form data
-            upi_id = request.POST.get('upi_id', '')
-            card_number = request.POST.get('card_number', '')
-            card_expiry = request.POST.get('card_expiry', '')
-            card_cvv = request.POST.get('card_cvv', '')
+            print("POST request received")
+            print("Request POST data:", request.POST)
 
-            # Fetch subscription details
-            subscription = get_object_or_404(Subscription, id=subscription_id)
-            subscription_price = Decimal(subscription.price)
+            razorpay_payment_id = request.POST.get('razorpay_payment_id')
+            razorpay_order_id = request.POST.get('razorpay_order_id')
+            razorpay_signature = request.POST.get('razorpay_signature')
 
-            # Calculate total amount including service fee and GST
-            service_fee = subscription_price * Decimal('0.02')
-            gst = subscription_price * Decimal('0.12')
-            total_amount = subscription_price + service_fee + gst
+            print("Razorpay Payment ID:", razorpay_payment_id)
+            print("Razorpay Order ID:", razorpay_order_id)
+            print("Razorpay Signature:", razorpay_signature)
 
-            # Determine the payment method
-            payment_method = 'UPI' if upi_id else 'Card'
+            # Verify Razorpay payment signature
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': razorpay_payment_id,
+                'razorpay_signature': razorpay_signature
+            }
+            razorpay_client.utility.verify_payment_signature(params_dict)
 
-            # Save the payment details in the database
-            Payment.objects.create(
-                recruiter=request.user,
-                candidate=request.user.profile,
-                amount=total_amount,
-                payment_method=payment_method
+            # Retrieve the amount from the POST data (adjust as needed)
+            amount = Decimal(request.POST.get('amount', '0')) / 100
+
+            print("Amount:", amount)
+
+            # Update payment details in the database
+            payment, created = Payment.objects.update_or_create(
+                razorpay_payment_id=razorpay_payment_id,
+                defaults={
+                    'recruiter': request.user,
+                    'candidate': request.user.profile,
+                    'amount': amount,
+                    'razorpay_order_id': razorpay_order_id,
+                    'razorpay_signature': razorpay_signature,
+                    'status': 'successful'
+                }
             )
+
+            print("Payment saved:", payment)
 
             # Send invoice email
             context = {
                 'recruiter': request.user,
                 'candidate_name': request.user.profile.preferred_candidate_name,
                 'candidate_username': request.user.profile.preferred_candidate_username,
-                'amount': total_amount,
-                'payment_method': payment_method,
-                'date': timezone.now()
+                'amount': amount,
+                'payment_method': 'Razorpay',
+                'date': payment.payment_date
             }
             subject = 'Payment Confirmation and Invoice'
             html_message = render_to_string('payment/invoice.html', context)
@@ -86,30 +112,54 @@ def process_payment(request , subscription_id):
             logger.info("Email sent successfully")
 
             messages.success(request, 'Payment processed successfully! An invoice has been sent to your email.')
-            return redirect('success_page')  # Redirect to a success page or any other page
+            return redirect('payment_successful')
 
-        except SMTPAuthenticationError as e:
-            logger.error(f'SMTP Authentication Error: {e}')
-            messages.error(request, 'Failed to send email due to authentication error. Please check your email settings.')
-            return redirect('payment_page', subscription_id=subscription_id)
+        except razorpay.errors.SignatureVerificationError as e:
+            logger.error(f'Razorpay Signature Verification Error: {e}')
+            print(f'Razorpay Signature Verification Error: {e}')
+            messages.error(request, 'Payment verification failed. Please try again.')
+
+            # Update payment status to failed
+            payment, created = Payment.objects.update_or_create(
+                razorpay_payment_id=razorpay_payment_id,
+                defaults={
+                    'recruiter': request.user,
+                    'candidate': request.user.profile,
+                    'amount': Decimal(request.POST.get('amount', '0')) / 100,
+                    'razorpay_order_id': razorpay_order_id,
+                    'razorpay_signature': razorpay_signature,
+                    'status': 'failed'
+                }
+            )
+            print("Payment update to failed:", payment)
+            return redirect('payment_failed', error_code='INVALID_SIGNATURE', error_description=str(e))
 
         except Exception as e:
-            logger.error(f'Error processing payment: {e}')
-            messages.error(request, 'An error occurred while processing your payment. Please try again later.')
-            return redirect('payment_page', subscription_id=subscription_id)
-    else:
-        messages.error(request, 'Invalid request')
+            logger.error(f'Error processing payment callback: {e}')
+            print(f'Error processing payment callback: {e}')
+            messages.error(request, 'An error occurred while processing the payment. Please try again later.')
 
-    # Handle case where redirection is needed but subscription_id is None
-    return redirect('payment_page', subscription_id=subscription_id)
+            # Update payment status to failed
+            payment, created = Payment.objects.update_or_create(
+                razorpay_payment_id=razorpay_payment_id,
+                defaults={
+                    'recruiter': request.user,
+                    'candidate': request.user.profile,
+                    'amount': Decimal(request.POST.get('amount', '0')) / 100,
+                    'razorpay_order_id': razorpay_order_id,
+                    'razorpay_signature': razorpay_signature,
+                    'status': 'failed'
+                }
+            )
+            print("Payment update to failed:", payment)
+            return redirect('payment_failed', error_code='UNKNOWN_ERROR', error_description=str(e))
+
+    return HttpResponse("Payment callback received.")
 
 
-def success_page(request):
-    return render(request, 'payment/success.html')
-    
 
 @login_required
-def edit_billing_info(request ,subscription_id):
+def edit_billing_info(request, subscription_id):
     # Fetch or create the profile associated with the current user
     profile, created = Profile.objects.get_or_create(user=request.user, defaults={
         'full_name': '',
@@ -139,18 +189,25 @@ def edit_billing_info(request ,subscription_id):
         profile.preferred_candidate_username = request.POST.get('preferred_candidate_username', '')
         profile.save()
         
-        # Retrieve the subscription associated with the user's profile
-        subscription = get_object_or_404(Subscription, id=subscription_id)  # Adjust this based on your model structure
-        
-        print("subscription.id" ,subscription.id)
         # Redirect to payment page with the correct subscription_id
-        return redirect('payment_page', subscription_id=subscription.id)
+        return redirect('payment_page', subscription_id=subscription_id)
 
     return render(request, 'payment/edit_billing_info.html', {'profile': profile})
-
 
 def subscription_list(request):
     subscriptions = Subscription.objects.all()
     for subscription in subscriptions:
         subscription.features_list = subscription.features.split(",")
     return render(request, 'payment/subscription_list.html', {'subscriptions': subscriptions})
+
+def payment_successful(request):
+    payment_id = request.GET.get('payment_id')
+    return render(request, 'payment/payment_successful.html', {'payment_id': payment_id})
+
+def payment_failed(request):
+    error_code = request.GET.get('error_code')
+    error_description = request.GET.get('error_description')
+    return render(request, 'payment/payment_failed.html', {
+        'error_code': error_code,
+        'error_description': error_description,
+    })

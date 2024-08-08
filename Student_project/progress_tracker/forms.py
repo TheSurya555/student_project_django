@@ -1,10 +1,10 @@
 from django import forms
-from .models import Progress ,Project
+from .models import Progress, Project
 
 class ProgressForm(forms.ModelForm):
     class Meta:
         model = Progress
-        fields = ['stage', 'is_completed']  # Include 'status' field here
+        fields = ['stage', 'is_completed',]
         widgets = {
             'stage': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -22,11 +22,6 @@ class ProgressForm(forms.ModelForm):
         self.fields['stage'].label = 'Stage Name'
         self.fields['is_completed'].label = 'Completed'
         self.fields['is_completed'].required = False  # Optional: make the checkbox optional
-
-
-
-from django import forms
-from .models import Project
 
 class StatusForm(forms.ModelForm):
     terminate = forms.BooleanField(required=True, label='Terminate Project')
