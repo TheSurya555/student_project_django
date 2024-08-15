@@ -7,7 +7,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from progress_tracker.models import Project
-
+from payment.models import Payment  # Import the Payment model
+from django.db.models import Sum
 
 @login_required
 def profiles_View(request):
@@ -23,13 +24,31 @@ def profiles_View(request):
     candidate_projects = Project.objects.filter(user=request.user)
     projects = Project.objects.filter(client=request.user)
 
+    # Initialize variables for payments made and received
+    total_payments_made = 0
+    total_payments_received = 0
+
+    # Handle recruiter payments made
+    payments_made = Payment.objects.filter(recruiter=request.user)
+    total_payments_made = payments_made.aggregate(Sum('amount'))['amount__sum'] or 0
+
+    # Handle candidate payments received
+    if hasattr(request.user, 'candidateprofile'):
+        payments_received = Payment.objects.filter(candidate=request.user.candidateprofile)
+        total_payments_received = payments_received.aggregate(Sum('amount'))['amount__sum'] or 0
+
+    # Calculate the current balance
+    current_balance = total_payments_received - total_payments_made
 
     return render(request, 'profiles/profiles.html', {
         'user_profile': user_profile,
         'profile_image_url': profile_image_url,
         'project_experiences': project_experiences,
         'projects': projects,
-        'candidate_projects':candidate_projects,
+        'candidate_projects': candidate_projects,
+        'payments_made': payments_made,  # Pass payments made to the template
+        'total_payments_received': total_payments_received,  # Pass the total payments received to the template
+        'current_balance': current_balance,  # Pass the current balance to the template
     })
 
 

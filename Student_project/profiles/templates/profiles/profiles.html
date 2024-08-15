@@ -12,6 +12,33 @@ Profile
 <link rel="stylesheet" href="{% static 'css/social_icon.css' %}">
 {% endblock %}
 
+{% block extra_css %}
+<style>
+  .card-title {
+    font-weight: bold;
+}
+
+.btn-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+.accordion .card-header {
+    background-color: #f8f9fa;
+}
+
+.accordion .card-header .btn-link {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
     <div class="container">
       <div class="row">
@@ -56,6 +83,7 @@ Profile
                     </div>
                     <div>
                         <p class="profile_detailes"><span>Name :</span><br>{{ user.first_name }} {{ user.last_name }}</p>
+                        <p class="profile_detailes"><span>User Name :</span><br>{{ user.username }}</p>
                         {% if request.session.user_role == "Candidate" %}
                           <p class="profile_detailes"><span>Date of Birth :</span><br>{{ user_profile.dob }}</p>
                           <p class="profile_detailes"><span>Phone :</span><br>{{ user.phone }}</p>
@@ -215,32 +243,120 @@ Profile
           </div>
 
           <div id="billingSection" class="content-section">
-            <h4 class="section-heading">Billing & Payments</h4>
-            <div class="card card-custom mb-4">
-                <h5>Current Balance</h5>
-                <div class="d-flex align-items-center">
-                    <p>Your current balance is: <strong> <i class="fa-solid fa-indian-rupee-sign"></i> 5000 </strong></p>
+            <h4 class="mb-4">Billing & Payments</h4>
+        
+            <!-- Current Balance -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Current Balance</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0">Your current balance is:</p>
+                        <p class="mb-0 h4 text-primary">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            {{ current_balance|floatformat:2 }}
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="card card-custom mb-4">
-                <h5>Payment Methods</h5>
-                <p>Manage your payment methods:</p>
-                <div class="d-flex align-items-center">
-                  <button type="button" class="px-3" onclick="showPaymentMethodsModal()"><span>Add Payment Method</span></button>
+        
+            <!-- Billing History -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Billing History</h5>
+                    <p>Review your billing history:</p>
+        
+                    <div class="accordion" id="billingHistoryAccordion">
+                        <div class="card">
+                            <div class="card-header" id="headingPaymentsMade">
+                                <h6 class="mb-0">
+                                    <button class="px-3" type="button" data-toggle="collapse" data-target="#collapsePaymentsMade" aria-expanded="true" aria-controls="collapsePaymentsMade">
+                                        <span>Payments Made</span>
+                                    </button>
+                                </h6>
+                            </div>
+        
+                            <div id="collapsePaymentsMade" class="collapse show" aria-labelledby="headingPaymentsMade" data-parent="#billingHistoryAccordion">
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        {% if payments_made %}
+                                            {% for payment in payments_made %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>{{ payment.payment_date|date:"Y-m-d" }}</span>
+                                                    <span class="text-muted">₹{{ payment.amount }}</span>
+                                                    <span class="text-muted">Status: {{ payment.status }}</span>
+                                                    <!-- Button to trigger the modal -->
+                                                    <button type="button" class="px-3" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal-{{ payment.id }}">
+                                                        <span>View Payment Details</span>
+                                                    </button>
+                                                </li>
+        
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="paymentDetailsModal-{{ payment.id }}" tabindex="-1" aria-labelledby="paymentDetailsModalLabel-{{ payment.id }}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="paymentDetailsModalLabel-{{ payment.id }}">Payment Details</h5>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p><strong>Candidate:</strong> {{ payment.candidate.user.username }}</p>
+                                                                <p><strong>Amount:</strong> ₹{{ payment.amount }}</p>
+                                                                <p><strong>Payment ID:</strong> {{ payment.razorpay_payment_id }}</p>
+                                                                <p><strong>Order ID:</strong> {{ payment.razorpay_order_id }}</p>
+                                                                <p><strong>Recruiter:</strong> {{ payment.recruiter.username }}</p>
+                                                                <p><strong>Date:</strong> {{ payment.payment_date }}</p>
+                                                                <p><strong>Status:</strong> {{ payment.status }}</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="px-3" data-bs-dismiss="modal"><span>Close</span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li class="list-group-item">No payments made yet.</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% comment %}
+                        <div class="card">
+                            <div class="card-header" id="headingPaymentsReceived">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link text-decoration-none collapsed" type="button" data-toggle="collapse" data-target="#collapsePaymentsReceived" aria-expanded="false" aria-controls="collapsePaymentsReceived">
+                                        Payments Received
+                                    </button>
+                                </h6>
+                            </div>
+        
+                            <div id="collapsePaymentsReceived" class="collapse" aria-labelledby="headingPaymentsReceived" data-parent="#billingHistoryAccordion">
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        {% if payments_received %}
+                                            {% for payment in payments_received %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>{{ payment.payment_date|date:"Y-m-d" }}</span>
+                                                    <span class="text-muted">₹{{ payment.amount }}</span>
+                                                    <span class="badge badge-primary">Status: {{ payment.status }}</span>
+                                                    <span class="text-muted">From: {{ payment.recruiter.email }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <li class="list-group-item">No payments received yet.</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endcomment %}
+                    </div>
                 </div>
-
             </div>
-            <div class="card card-custom mb-4">
-                <h5>Billing History</h5>
-                <p>Review your billing history:</p>
-                <ul>
-                    {% for billing in billing_history %}
-                        <li>{{ billing.date }} - ${{ billing.amount }} - {{ billing.description }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-          </div>
-
+        </div>
+        
+        
         </div>
       </div>
     </div>

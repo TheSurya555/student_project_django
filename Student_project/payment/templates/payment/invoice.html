@@ -1,28 +1,113 @@
-<!-- templates/emails/invoice.html -->
+<!DOCTYPE html>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f6f6;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .header img {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        .details {
+            margin-bottom: 40px;
+        }
+        .details .info {
+            margin-bottom: 20px;
+        }
+        .details .info h2 {
+            margin: 0 0 10px;
+        }
+        .details .info p {
+            margin: 0;
+        }
+        .items {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        .items th, .items td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .items th {
+            background-color: #f0f0f0;
+        }
+        .total {
+            text-align: right;
+        }
+        .total .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
 <body>
-    <h2>Invoice for Your Payment</h2>
-    <p>Dear {{ recruiter.profile.full_name }},</p>
-    <p>Thank you for your payment. Here are the details:</p>
-    <table>
-        <tr>
-            <td>Amount:</td>
-            <td>{{ amount }}</td>
-        </tr>
-        <tr>
-            <td>Payment Method:</td>
-            <td>{{ payment_method }}</td>
-        </tr>
-        <tr>
-            <td>Candidate:</td>
-            <td>{{ candidate.username }}</td>
-        </tr>
-        <tr>
-            <td>Date:</td>
-            <td>{{ date }}</td>
-        </tr>
-    </table>
-    <p>Best regards,</p>
-    <p>Your Company Name</p>
+    <div class="invoice-container">
+        <div class="header">
+            <img src="https://your-logo-url.com/logo.png" alt="Your Company Logo">
+            <h1>Invoice</h1>
+        </div>
+        <div class="details">
+            <div class="info">
+                <h2>Billing Information</h2>
+                <p><strong>Name:</strong> {{ recruiter.profile.full_name }}</p>
+                <p><strong>Email:</strong> {{ recruiter.email }}</p>
+                <p><strong>Phone:</strong> {{ recruiter.profile.phone }}</p>
+            </div>
+            <div class="info">
+                <h2>Payment Information</h2>
+                <table>
+                    <tr>
+                        <td>Amount:</td>
+                        <td>{{ amount }}</td>
+                    </tr>
+                    <tr>
+                        <td>Payment Method:</td>
+                        <td>{{ payment_method }}</td>
+                    </tr>
+                    <tr>
+                        <td>Candidate:</td>
+                        <td>{{ candidate.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td>{{ date }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Thank you for your business!</p>
+            <p>If you have any questions about this invoice, please contact us at <a href="mailto:support@yourcompany.com">support@yourcompany.com</a>.</p>
+            <p>Your Company Name</p>
+        </div>
+    </div>
 </body>
 </html>

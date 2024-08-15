@@ -53,16 +53,9 @@ def payment_page(request, subscription_id):
 def payment_callback(request):
     if request.method == 'POST':
         try:
-            print("POST request received")
-            print("Request POST data:", request.POST)
-
             razorpay_payment_id = request.POST.get('razorpay_payment_id')
             razorpay_order_id = request.POST.get('razorpay_order_id')
             razorpay_signature = request.POST.get('razorpay_signature')
-
-            print("Razorpay Payment ID:", razorpay_payment_id)
-            print("Razorpay Order ID:", razorpay_order_id)
-            print("Razorpay Signature:", razorpay_signature)
 
             # Verify Razorpay payment signature
             params_dict = {
@@ -72,10 +65,10 @@ def payment_callback(request):
             }
             razorpay_client.utility.verify_payment_signature(params_dict)
 
-            # Retrieve the amount from the POST data (adjust as needed)
-            amount = Decimal(request.POST.get('amount', '0')) / 100
+            # Fetch payment details directly from Razorpay
+            payment_details = razorpay_client.payment.fetch(razorpay_payment_id)
+            amount = Decimal(payment_details['amount']) / 100  # Convert paise to INR
 
-            print("Amount:", amount)
 
             # Update payment details in the database
             payment, created = Payment.objects.update_or_create(
@@ -89,8 +82,8 @@ def payment_callback(request):
                     'status': 'successful'
                 }
             )
+            print("Request POST data:", request.POST)
 
-            print("Payment saved:", payment)
 
             # Send invoice email
             context = {
@@ -116,7 +109,6 @@ def payment_callback(request):
 
         except razorpay.errors.SignatureVerificationError as e:
             logger.error(f'Razorpay Signature Verification Error: {e}')
-            print(f'Razorpay Signature Verification Error: {e}')
             messages.error(request, 'Payment verification failed. Please try again.')
 
             # Update payment status to failed
@@ -131,13 +123,12 @@ def payment_callback(request):
                     'status': 'failed'
                 }
             )
-            print("Payment update to failed:", payment)
             return redirect('payment_failed', error_code='INVALID_SIGNATURE', error_description=str(e))
 
         except Exception as e:
             logger.error(f'Error processing payment callback: {e}')
-            print(f'Error processing payment callback: {e}')
             messages.error(request, 'An error occurred while processing the payment. Please try again later.')
+            print(f'Error processing payment callback: {e}')
 
             # Update payment status to failed
             payment, created = Payment.objects.update_or_create(
@@ -151,11 +142,10 @@ def payment_callback(request):
                     'status': 'failed'
                 }
             )
-            print("Payment update to failed:", payment)
             return redirect('payment_failed', error_code='UNKNOWN_ERROR', error_description=str(e))
 
-    return HttpResponse("Payment callback received.")
 
+    return HttpResponse("Payment callback received.")
 
 
 @login_required
@@ -202,6 +192,7 @@ def subscription_list(request):
 
 def payment_successful(request):
     payment_id = request.GET.get('payment_id')
+    print(payment_id)
     return render(request, 'payment/payment_successful.html', {'payment_id': payment_id})
 
 def payment_failed(request):

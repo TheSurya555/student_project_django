@@ -19,9 +19,11 @@ Messages
             <h3 class="mb-4">Messages</h3>
             <a href="#" id="inboxLink" class="active">Inbox</a>
             <a href="#" id="sentLink">Sent</a>
+            <a href="#" id="notificationsLink">Notifications</a> <!-- New Notifications Link -->
             <a href="#" id="composeLink">Compose</a>
         </div>
         <div class="col-md-9 main-content">
+            <!-- Inbox Section -->
             <div id="inboxSection" class="content-section active">
                 <h4 class="section-heading">Inbox</h4>
                 <div class="card card-custom mb-4">
@@ -45,6 +47,7 @@ Messages
                 </div>
             </div>
 
+            <!-- Sent Section -->
             <div id="sentSection" class="content-section">
                 <h4 class="section-heading">Sent</h4>
                 <div class="card card-custom mb-4">
@@ -63,6 +66,7 @@ Messages
                 </div>
             </div>
 
+            <!-- Compose Section -->
             <div id="composeSection" class="content-section">
                 <h4 class="section-heading">Compose</h4>
                 <div class="card card-custom mb-4">
@@ -81,28 +85,64 @@ Messages
                     </form>
                 </div>
             </div>
+
+            <!-- Notifications Section -->
+            <div id="notificationsSection" class="content-section">
+                <h4 class="section-heading">Notifications</h4>
+                <div class="card card-custom mb-4">
+                    <h5 class="mb-4">Recent Notifications</h5>
+                    <div class="notification-list">
+                        {% for notification in notifications %}
+                        <div class="notification-item mb-4" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <p><strong>{{ notification.date }}</strong> <small>{{ notification.time_ago }}</small></p>
+                                <p><strong>{{ notification.sender }}</strong></p>
+                                <p>{{ notification.message_summary }}</p>
+                            </div>
+                            <a href="#" class="view-notification">View</a>
+                        </div>
+                        {% empty %}
+                        <p>No notifications found.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
 <script>
+    // Tab Switching
     document.getElementById('inboxLink').onclick = function() {
         document.getElementById('inboxSection').classList.add('active');
         document.getElementById('sentSection').classList.remove('active');
         document.getElementById('composeSection').classList.remove('active');
+        document.getElementById('notificationsSection').classList.remove('active');
     };
 
     document.getElementById('sentLink').onclick = function() {
         document.getElementById('sentSection').classList.add('active');
         document.getElementById('inboxSection').classList.remove('active');
         document.getElementById('composeSection').classList.remove('active');
+        document.getElementById('notificationsSection').classList.remove('active');
     };
 
     document.getElementById('composeLink').onclick = function() {
         document.getElementById('composeSection').classList.add('active');
         document.getElementById('inboxSection').classList.remove('active');
         document.getElementById('sentSection').classList.remove('active');
+        document.getElementById('notificationsSection').classList.remove('active');
     };
 
+    document.getElementById('notificationsLink').onclick = function() {
+        document.getElementById('notificationsSection').classList.add('active');
+        document.getElementById('inboxSection').classList.remove('active');
+        document.getElementById('sentSection').classList.remove('active');
+        document.getElementById('composeSection').classList.remove('active');
+    };
+
+    // Auto-fill Compose Form for Reply
     document.querySelectorAll('.reply-button').forEach(function(button) {
         button.onclick = function() {
             const username = this.getAttribute('data-username');
@@ -110,6 +150,7 @@ Messages
             document.getElementById('composeSection').classList.add('active');
             document.getElementById('inboxSection').classList.remove('active');
             document.getElementById('sentSection').classList.remove('active');
+            document.getElementById('notificationsSection').classList.remove('active');
         };
     });
 </script>

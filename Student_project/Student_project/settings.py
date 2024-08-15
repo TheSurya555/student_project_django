@@ -191,23 +191,6 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB (adjust as needed)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB (adjust as needed)
 
 
-# Configure Email Settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # SMTP server for gmail
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'suryakingsahoo60063@gmail.com'
-EMAIL_HOST_PASSWORD = 'nzym mzyj rdll tyyu'
-DEFAULT_FROM_EMAIL = 'suryakingsahoo60063@gmail.com'
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-# EMAIL_HOST_USER = 'cf90d6bb053cf7'
-# EMAIL_HOST_PASSWORD = '0821baaff8dc63'
-# EMAIL_PORT = '2525'
-# EMAIL_USE_TLS = True
-
-# nzym mzyj rdll tyyu
 
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -258,7 +241,3 @@ LOGGING = {
 USE_I18N = True
 
 
-# Razorpay
-
-RAZORPAY_KEY_ID = 'rzp_live_JKw17fibb1IAuG'
-RAZORPAY_KEY_SECRET = '5ubXerl3jfHhzDVjkdQbHBGK'
