@@ -24,7 +24,7 @@ class Profile(models.Model):
 
 class Payment(models.Model):
     recruiter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments_made')
-    candidate = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='payments_received')
+    candidate_username = models.CharField(max_length=255, default='default_username')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_date = models.DateTimeField(auto_now_add=True)
     
@@ -34,11 +34,9 @@ class Payment(models.Model):
     razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=50, default='pending')
 
-    def candidate_username(self):
-        return self.candidate.user.username
-
     def __str__(self):
-        return f"Payment from {self.recruiter.email} to {self.candidate_username()} on {self.payment_date.strftime('%Y-%m-%d')}"
+        return f"Payment from {self.recruiter.email} to {self.candidate_username} on {self.payment_date.strftime('%Y-%m-%d')}"
+
 
     class Meta:
         verbose_name = "Payment"

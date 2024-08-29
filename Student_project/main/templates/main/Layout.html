@@ -170,6 +170,7 @@
                 {% if request.session.user_role == "Recruiter" %}
                   <li><a href="{% url "services" %}">Services</a></li>
                 {% endif %}
+                <li><a href="{% url "privacy_policy" %}">Privacy Policy</a></li>
                 {% comment %} <li><a href="{% url 'logout' %}">Logout</a></li>
                 <li><a href="{% url 'adminlogin' %}">Admin Login</a></li> {% endcomment %}
               </ul>

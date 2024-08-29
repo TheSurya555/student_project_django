@@ -79,7 +79,6 @@
                 <h2>Billing Information</h2>
                 <p><strong>Name:</strong> {{ recruiter.profile.full_name }}</p>
                 <p><strong>Email:</strong> {{ recruiter.email }}</p>
-                <p><strong>Phone:</strong> {{ recruiter.profile.phone }}</p>
             </div>
             <div class="info">
                 <h2>Payment Information</h2>
@@ -94,7 +93,7 @@
                     </tr>
                     <tr>
                         <td>Candidate:</td>
-                        <td>{{ candidate.username }}</td>
+                        <td>{{ candidate_name }}</td>
                     </tr>
                     <tr>
                         <td>Date:</td>

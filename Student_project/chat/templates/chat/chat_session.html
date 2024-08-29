@@ -9,11 +9,13 @@ Chat with {{ candidate.first_name }} {{ candidate.last_name }}
 <style>
     .chat-window {
         height: 300px;
-        overflow-y: scroll;
+        overflow-y: auto;
         border: 1px solid #ccc;
         padding: 10px;
         border-radius: 5px;
         background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
     }
 
     .chat-header {
@@ -43,12 +45,18 @@ Chat with {{ candidate.first_name }} {{ candidate.last_name }}
     .message-list {
         list-style-type: none;
         padding: 0;
+        margin: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     .message-item {
         padding: 10px;
         margin-bottom: 10px;
         border-radius: 5px;
+        max-width: 60%;
     }
 
     .sent {
@@ -61,6 +69,15 @@ Chat with {{ candidate.first_name }} {{ candidate.last_name }}
         background-color: #ffd1d1;
         align-self: flex-start;
         text-align: left;
+    }
+
+    .chat-window::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chat-window::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 3px;
     }
 
 </style>
@@ -95,7 +112,7 @@ Chat with {{ candidate.first_name }} {{ candidate.last_name }}
             <form method="post" class="form">
                 {% csrf_token %}
                 <input name="content" class="form-control" placeholder="Type your message..."></input>
-                <button type="submit" class="px-3" style="margin-left: 10px;"><span>Send</span></button>
+                <button type="submit" class="btn btn-primary px-3" style="margin-left: 10px;">Send</button>
             </form>
         </div>
     </div>

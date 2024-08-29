@@ -21,9 +21,11 @@ Payment Page
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+    
     .order-summary {
         width: 35%;
     }
+
     .billing-info h3, .order-summary h3 {
         margin-bottom: 20px;
         font-size: 1.2rem;
@@ -142,6 +144,7 @@ Payment Page
                 csrfToken.name = 'csrfmiddlewaretoken';
                 csrfToken.value = '{{ csrf_token }}';
                 form.appendChild(csrfToken);
+
 
                 let razorpayPaymentId = document.createElement('input');
                 razorpayPaymentId.type = 'hidden';

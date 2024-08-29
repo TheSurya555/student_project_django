@@ -9,18 +9,17 @@ Payment Successful
     <div class="my-5">
         <h1>Payment Successful</h1>
         <p>Thank you for your payment. Your transaction has been completed successfully.</p>
-        <p><strong>Payment ID:</strong> {{ payment_id }}</p>
     </div>
     <div class="mb-5">
-        <button onclick="goBack()" class="px-3"><span>Go Back</span></button>
+        <button onclick="goHome()" class="px-3"><span>Go Back to Home</span></button>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    function goBack() {
-        window.history.back();
+    function goHome() {
+        window.location.href = '/';  // Update this to the correct URL path for your home page if needed
     }
 </script>
 {% endblock %}

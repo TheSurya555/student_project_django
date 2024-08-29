@@ -2,17 +2,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponse
+from django.http import Http404, HttpResponse
 from django.core.mail import EmailMultiAlternatives
-from smtplib import SMTPAuthenticationError
-from django.utils import timezone
 from django.template.loader import render_to_string
 from django.conf import settings
 from .models import Payment, Profile, Subscription
-from signUp.models import CustomUser  # Adjust the import according to your project structure
+from signUp.models import CustomUser
 import logging
 from decimal import Decimal
 import razorpay
+from notifications.signals import notify
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -23,21 +22,20 @@ logger = logging.getLogger(__name__)
 def payment_page(request, subscription_id):
     subscription = get_object_or_404(Subscription, id=subscription_id)
     
-    # Convert subscription price to Decimal if necessary (depending on your model definition)
     subscription_price = Decimal(subscription.price)
-    
-    # Calculate service fee and GST based on subscription price (using Decimal)
-    service_fee = subscription_price * Decimal('0.00')  # Update if needed
-    gst = subscription_price * Decimal('0.0')           # Update if needed
+    service_fee = subscription_price * Decimal('0.00')
+    gst = subscription_price * Decimal('0.0')          
     total_amount = subscription_price + service_fee + gst
 
-    # Create Razorpay order
-    razorpay_order = razorpay_client.order.create(dict(amount=int(total_amount * 100), currency='INR', payment_capture='1'))
+    razorpay_order = razorpay_client.order.create({
+        'amount': int(total_amount * 100),  # Convert to paise
+        'currency': 'INR',
+        'payment_capture': '1'
+    })
     razorpay_order_id = razorpay_order['id']
-    
-    print("###########################")
-    print(razorpay_order)
-    print("###########################")
+
+    # Set the callback URL with HTTPS
+    callback_url = request.build_absolute_uri(reverse('payment_callback'))
 
     return render(request, 'payment/payment_page.html', {
         'subscription': subscription,
@@ -46,8 +44,9 @@ def payment_page(request, subscription_id):
         'total_amount': total_amount,
         'razorpay_order_id': razorpay_order_id,
         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
-        'callback_url': request.build_absolute_uri(reverse('payment_callback'))
+        'callback_url': callback_url  # Pass the callback URL to the template
     })
+
 
 @login_required
 def payment_callback(request):
@@ -57,7 +56,6 @@ def payment_callback(request):
             razorpay_order_id = request.POST.get('razorpay_order_id')
             razorpay_signature = request.POST.get('razorpay_signature')
 
-            # Verify Razorpay payment signature
             params_dict = {
                 'razorpay_order_id': razorpay_order_id,
                 'razorpay_payment_id': razorpay_payment_id,
@@ -65,27 +63,33 @@ def payment_callback(request):
             }
             razorpay_client.utility.verify_payment_signature(params_dict)
 
-            # Fetch payment details directly from Razorpay
             payment_details = razorpay_client.payment.fetch(razorpay_payment_id)
             amount = Decimal(payment_details['amount']) / 100  # Convert paise to INR
+            
+            # Get the profile of the logged-in user
+            user_profile = get_object_or_404(Profile, user=request.user)
+            print("user_profile" ,user_profile)
+            
+            preferred_candidate_username = user_profile.preferred_candidate_username
+            print('preferred_candidate_username' , preferred_candidate_username)
+            
+            if not preferred_candidate_username:
+                raise Http404("Preferred candidate not specified.")
+            
 
 
-            # Update payment details in the database
             payment, created = Payment.objects.update_or_create(
                 razorpay_payment_id=razorpay_payment_id,
                 defaults={
                     'recruiter': request.user,
-                    'candidate': request.user.profile,
+                     'candidate_username': preferred_candidate_username,
                     'amount': amount,
                     'razorpay_order_id': razorpay_order_id,
                     'razorpay_signature': razorpay_signature,
                     'status': 'successful'
                 }
             )
-            print("Request POST data:", request.POST)
 
-
-            # Send invoice email
             context = {
                 'recruiter': request.user,
                 'candidate_name': request.user.profile.preferred_candidate_name,
@@ -94,6 +98,7 @@ def payment_callback(request):
                 'payment_method': 'Razorpay',
                 'date': payment.payment_date
             }
+            
             subject = 'Payment Confirmation and Invoice'
             html_message = render_to_string('payment/invoice.html', context)
             from_email = settings.DEFAULT_FROM_EMAIL
@@ -102,21 +107,21 @@ def payment_callback(request):
             msg = EmailMultiAlternatives(subject, html_message, from_email, [to_email])
             msg.attach_alternative(html_message, "text/html")
             msg.send()
-            logger.info("Email sent successfully")
 
+            logger.info("Email sent successfully")
             messages.success(request, 'Payment processed successfully! An invoice has been sent to your email.')
-            return redirect('payment_successful')
+            # Redirect to success page with payment_id
+            return redirect(reverse('payment_successful') + f'?payment_id={razorpay_payment_id}')
 
         except razorpay.errors.SignatureVerificationError as e:
             logger.error(f'Razorpay Signature Verification Error: {e}')
             messages.error(request, 'Payment verification failed. Please try again.')
 
-            # Update payment status to failed
-            payment, created = Payment.objects.update_or_create(
+            Payment.objects.update_or_create(
                 razorpay_payment_id=razorpay_payment_id,
                 defaults={
                     'recruiter': request.user,
-                    'candidate': request.user.profile,
+                     'candidate_username': preferred_candidate_username,
                     'amount': Decimal(request.POST.get('amount', '0')) / 100,
                     'razorpay_order_id': razorpay_order_id,
                     'razorpay_signature': razorpay_signature,
@@ -128,14 +133,12 @@ def payment_callback(request):
         except Exception as e:
             logger.error(f'Error processing payment callback: {e}')
             messages.error(request, 'An error occurred while processing the payment. Please try again later.')
-            print(f'Error processing payment callback: {e}')
 
-            # Update payment status to failed
-            payment, created = Payment.objects.update_or_create(
+            Payment.objects.update_or_create(
                 razorpay_payment_id=razorpay_payment_id,
                 defaults={
                     'recruiter': request.user,
-                    'candidate': request.user.profile,
+                    'candidate_username': preferred_candidate_username,
                     'amount': Decimal(request.POST.get('amount', '0')) / 100,
                     'razorpay_order_id': razorpay_order_id,
                     'razorpay_signature': razorpay_signature,
@@ -144,13 +147,12 @@ def payment_callback(request):
             )
             return redirect('payment_failed', error_code='UNKNOWN_ERROR', error_description=str(e))
 
-
     return HttpResponse("Payment callback received.")
+
 
 
 @login_required
 def edit_billing_info(request, subscription_id):
-    # Fetch or create the profile associated with the current user
     profile, created = Profile.objects.get_or_create(user=request.user, defaults={
         'full_name': '',
         'company_name': '',
@@ -162,8 +164,8 @@ def edit_billing_info(request, subscription_id):
         'is_indian_citizen': False,
         'receive_invoices_via_email': False
     })
+
     if request.method == 'POST':
-        # Update profile fields based on POST data
         profile.full_name = request.POST.get('full_name', '')
         profile.company_name = request.POST.get('company_name', '')
         profile.country = request.POST.get('country', '')
@@ -174,12 +176,10 @@ def edit_billing_info(request, subscription_id):
         profile.is_indian_citizen = request.POST.get('is_indian_citizen') == 'yes'
         profile.receive_invoices_via_email = 'receive_invoices_via_email' in request.POST
         
-        # Save preferred candidate details
         profile.preferred_candidate_name = request.POST.get('preferred_candidate_name', '')
         profile.preferred_candidate_username = request.POST.get('preferred_candidate_username', '')
         profile.save()
         
-        # Redirect to payment page with the correct subscription_id
         return redirect('payment_page', subscription_id=subscription_id)
 
     return render(request, 'payment/edit_billing_info.html', {'profile': profile})
@@ -190,10 +190,6 @@ def subscription_list(request):
         subscription.features_list = subscription.features.split(",")
     return render(request, 'payment/subscription_list.html', {'subscriptions': subscriptions})
 
-def payment_successful(request):
-    payment_id = request.GET.get('payment_id')
-    print(payment_id)
-    return render(request, 'payment/payment_successful.html', {'payment_id': payment_id})
 
 def payment_failed(request):
     error_code = request.GET.get('error_code')
@@ -202,3 +198,82 @@ def payment_failed(request):
         'error_code': error_code,
         'error_description': error_description,
     })
+
+
+
+@login_required
+def payment_successful(request):
+    payment_id = request.GET.get('payment_id')
+    
+    if not payment_id:
+        return render(request, 'payment/payment_failed.html', {
+            'error_code': 'MISSING_PAYMENT_ID',
+            'error_description': 'Payment ID is missing in the request.'
+        })
+
+    try:
+        payment = get_object_or_404(Payment, razorpay_payment_id=payment_id)
+
+        # Ensure candidate is the preferred candidate
+        preferred_candidate_username = request.user.profile.preferred_candidate_username
+        print("payment success preferred_candidate_username" , preferred_candidate_username) 
+        
+        if not preferred_candidate_username:
+            raise Http404("Preferred candidate not specified.")
+        
+        
+        # Set candidate_username field to the preferred candidate username
+        if payment.candidate_username != preferred_candidate_username:
+            payment.candidate_username = preferred_candidate_username
+            payment.save()
+
+    except Profile.DoesNotExist:
+        return render(request, 'payment/payment_failed.html', {
+            'error_code': 'CANDIDATE_NOT_FOUND',
+            'error_description': f'Preferred candidate with username {preferred_candidate_username} does not exist.'
+        })
+
+    except Http404:
+        return render(request, 'payment/payment_failed.html', {
+            'error_code': 'PAYMENT_NOT_FOUND',
+            'error_description': f'No payment found with ID: {payment_id}'
+        })
+
+    # Prepare notification context
+    context = {
+        'recruiter': request.user,
+        'candidate_name': preferred_candidate_username,
+        'amount': payment.amount,
+        'payment_method': 'Razorpay',
+        'date': payment.payment_date
+    }
+
+    # Send notifications
+    notify.send(
+        request.user,
+        recipient=request.user,
+        verb='Payment successful',
+        description=f'Your payment of INR {payment.amount} was successful.'
+    )
+
+    # Notify candidate if available
+    if preferred_candidate_username:
+        candidate_user = get_object_or_404(CustomUser, username=preferred_candidate_username)
+        notify.send(
+            request.user,
+            recipient=candidate_user,
+            verb='Payment has been made for you',
+            description=f'A payment of INR {payment.amount} has been made for you.'
+        )
+
+    # Notify admins
+    admins = CustomUser.objects.filter(is_superuser=True)
+    for admin in admins:
+        notify.send(
+            request.user,
+            recipient=admin,
+            verb='Payment notification',
+            description=f'A payment of INR {payment.amount} was made by {request.user.username}.'
+        )
+
+    return render(request, 'payment/payment_successful.html', {'payment_id': payment_id})

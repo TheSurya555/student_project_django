@@ -12,6 +12,19 @@ Messages
 <link rel="stylesheet" href="{% static 'css/social_icon.css' %}">
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    .red-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row">
@@ -19,9 +32,14 @@ Messages
             <h3 class="mb-4">Messages</h3>
             <a href="#" id="inboxLink" class="active">Inbox</a>
             <a href="#" id="sentLink">Sent</a>
-            <a href="#" id="notificationsLink">Notifications</a> <!-- New Notifications Link -->
+            <a href="#" id="notificationsLink">
+                Notifications
+                {% if unread_notifications_count > 0 %}
+                <span class="red-dot"></span>
+                {% endif %}
+            </a>
             <a href="#" id="composeLink">Compose</a>
-        </div>
+        </div>        
         <div class="col-md-9 main-content">
             <!-- Inbox Section -->
             <div id="inboxSection" class="content-section active">
@@ -93,16 +111,13 @@ Messages
                     <h5 class="mb-4">Recent Notifications</h5>
                     <div class="notification-list">
                         {% for notification in notifications %}
-                        <div class="notification-item mb-4" style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <p><strong>{{ notification.date }}</strong> <small>{{ notification.time_ago }}</small></p>
-                                <p><strong>{{ notification.sender }}</strong></p>
-                                <p>{{ notification.message_summary }}</p>
-                            </div>
-                            <a href="#" class="view-notification">View</a>
+                        <div class="notification">
+                            <p><strong>Sent on:</strong> <small>{{ notification.timestamp }}</small></p>
+                            <strong>{{ notification.actor.get_full_name }} </strong> {{ notification.verb }}
+                            <p>{{ notification.description }}</p>
                         </div>
                         {% empty %}
-                        <p>No notifications found.</p>
+                        <p>No notifications.</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -111,6 +126,7 @@ Messages
         </div>
     </div>
 </div>
+
 
 <script>
     // Tab Switching
@@ -140,6 +156,21 @@ Messages
         document.getElementById('inboxSection').classList.remove('active');
         document.getElementById('sentSection').classList.remove('active');
         document.getElementById('composeSection').classList.remove('active');
+        
+        // Mark notifications as read
+        fetch('{% url "mark_notifications_as_read" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({}),
+        }).then(response => {
+            if (response.ok) {
+                // Remove the red dot
+                document.querySelector('.red-dot').style.display = 'none';
+            }
+        });
     };
 
     // Auto-fill Compose Form for Reply

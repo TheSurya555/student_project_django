@@ -7,9 +7,9 @@ class ProgressInline(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'client_name', 'status', 'user', 'display_progress_stages')
+    list_display = ('project_name', 'client_name', 'status', 'user', 'display_progress_stages')
     list_filter = ('status',)
-    search_fields = ('name', 'client_name')
+    search_fields = ('project_name', 'client_name')
     inlines = [ProgressInline]
 
     def display_progress_stages(self, obj):
@@ -20,6 +20,8 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(Progress)
 class ProgressAdmin(admin.ModelAdmin):
     list_display = ('project', 'stage', 'is_completed', 'user')
-    list_filter = ('is_completed', 'project__name')
+    list_filter = ('is_completed', 'project__project_name')
     search_fields = ('stage',)
-    
+
+
+# minor chages is needed    

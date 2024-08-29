@@ -9,7 +9,7 @@ class Project(models.Model):
     
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='projects')
     client = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='client_projects')
-    name = models.CharField(max_length=100)
+    project_name = models.CharField(max_length=100)
     client_name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='project_images/', blank=True, null=True)
     stages = models.TextField(default='')
@@ -27,7 +27,7 @@ class Project(models.Model):
         return self.project_costing / num_stages
 
     def __str__(self):
-        return f"{self.name} (Client: {self.client.username})" if self.client else self.name
+        return f"{self.project_name} (Client: {self.client.username})" if self.client else self.project_name
 
 class Progress(models.Model):
     ROLE_CHOICES = [
@@ -44,4 +44,4 @@ class Progress(models.Model):
     client_confirmation = models.BooleanField(default=False)  # New field for client confirmation
 
     def __str__(self):
-        return f'{self.project.name} - {self.stage} ({self.role})'
+        return f'{self.project.project_name} - {self.stage} ({self.role})'

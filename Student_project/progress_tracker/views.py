@@ -4,6 +4,9 @@ from django.contrib import messages
 from .models import Project, Progress
 from .forms import ProgressForm, StatusForm
 from django.contrib.auth import get_user_model
+from notifications.signals import notify
+from notifications.models import Notification
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -65,6 +68,26 @@ def update_progress_view(request, progress_id):
             progress = form.save(commit=False)
             progress.user = request.user  # Ensure user is set
             progress.save()
+            
+            # Notify the client about the progress update
+            notify.send(
+                request.user,
+                recipient=project.client,
+                verb='Updated progress for project',
+                description=f'Progress on stage "{progress.stage}" has been updated.'
+            )
+            
+            # Notify all admins about the progress update
+            admin_users = User.objects.filter(is_staff=True)  # Assuming admins are staff users
+            for admin in admin_users:
+                notify.send(
+                    request.user,
+                    recipient=admin,
+                    verb='Updated progress for project',
+                    description=f'Progress on stage "{progress.stage}" for project "{project.project_name}" has been updated.'
+                )
+            
+            messages.success(request, 'Progress updated successfully.')
             return redirect('project_progress', project_id=project.id)
     else:
         form = ProgressForm(instance=progress)
@@ -90,6 +113,25 @@ def update_project_status_view(request, project_id):
             if form.cleaned_data.get('terminate'):
                 project.status = 'terminated'
                 project.save()
+                
+                # Notify all involved users about project termination
+                notify.send(
+                    request.user,
+                    recipient=project.client,
+                    verb='Project terminated',
+                    description=f'The project "{project.project_name}" has been terminated.'
+                )
+                
+                # Notify all admins about the project termination
+                admin_users = User.objects.filter(is_staff=True)  # Assuming admins are staff users
+                for admin in admin_users:
+                    notify.send(
+                        request.user,
+                        recipient=admin,
+                        verb='Project terminated',
+                        description=f'The project "{project.project_name}" has been terminated.'
+                    )
+                
                 messages.success(request, 'Project has been successfully terminated.')
                 return redirect('project_progress', project_id=project.id)
             else:
@@ -122,6 +164,25 @@ def confirm_progress_view(request, progress_id):
     if request.method == 'POST':
         progress.client_confirmation = True
         progress.save()
+        
+        # Notify the user who updated the progress about the confirmation
+        notify.send(
+            request.user,
+            recipient=progress.user,
+            verb='Progress confirmed',
+            description=f'Your progress on stage "{progress.stage}" for the project "{project.project_name}" has been confirmed.'
+        )
+        
+        # Notify all admins about the progress confirmation
+        admin_users = User.objects.filter(is_staff=True)  # Assuming admins are staff users
+        for admin in admin_users:
+            notify.send(
+                request.user,
+                recipient=admin,
+                verb='Progress confirmed',
+                description=f'Progress on stage "{progress.stage}" for project "{project.project_name}" has been confirmed.'
+            )
+        
         messages.success(request, 'Progress stage has been confirmed.')
         return redirect('project_progress', project_id=project.id)
     

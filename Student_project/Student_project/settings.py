@@ -27,10 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-# DEBUG = False
-
-# ALLOWED_HOSTS = ['yourdomain.com', 'localhost', '127.0.0.1']
-
 
 # Application definition
 
@@ -56,6 +52,7 @@ INSTALLED_APPS = [
     'progress_tracker',
     'tinymce',
     'channels',
+    'notifications',
     
 ]
 
@@ -105,6 +102,8 @@ DATABASES = {
     }
 }
 
+
+#for live database
 
 # DATABASES = {
 #     'default': {
@@ -191,6 +190,17 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB (adjust as needed)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 MB (adjust as needed)
 
 
+# Configure Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # SMTP server for gmail
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'talentsprout8@gmail.com'
+EMAIL_HOST_PASSWORD = 'kucv izka arku hgqn'
+DEFAULT_FROM_EMAIL = 'talentsprout8@gmail.com'
+
+# EMAIL_HOST_PASSWORD = 'nzym mzyj rdll tyyu'
+
 
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -241,3 +251,12 @@ LOGGING = {
 USE_I18N = True
 
 
+# Razorpay
+
+RAZORPAY_KEY_ID = 'rzp_live_JKw17fibb1IAuG'
+RAZORPAY_KEY_SECRET = '5ubXerl3jfHhzDVjkdQbHBGK'
+
+
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False

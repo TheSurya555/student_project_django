@@ -43,10 +43,6 @@ Services
         object-fit: cover;
     }
 
-    .post_avatar {
-        border-radius: 50%;
-    }
-
     /* Hover effects */
     .ezy__service23-card:hover {
         transform: translateY(-5px);
@@ -69,47 +65,80 @@ Services
     }
 
     /* Fixed card size and alignment */
-    .ezy__service23-card,
-    .ezy__blog3-post {
+    .ezy__service23-card{
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
     }
 
-    .ezy__service23-card .card-body,
-    .ezy__blog3-post .card-body {
+    .ezy__service23-card .card-body{
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
 
-    .ezy__service23-card-title,
-    .ezy__blog3-title {
+    .ezy__service23-card-title{
         height: 50px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    .ezy__service23-card-sub-title,
-    .ezy__blog3-description {
+    .ezy__service23-card-sub-title{
         height: 72px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    .ezy__service23-card,
-    .ezy__blog3-post {
+    .ezy__service23-card{
         max-height: 450px; /* Adjust the max height as needed */
     }
 
-    .ezy__service23-card-body,
-    .ezy__blog3-post-body {
+    .ezy__service23-card-body{
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
+    
+    .post_avatar {
+        border-radius: 50%;
+        width: 50px; /* Set a fixed size for the user image */
+        height: 50px;
+    }
+    
+    .ezy__blog3-title {
+        height: 50px; /* Set a fixed height for the title */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .ezy__blog3-description {
+        font-size: 0.9rem;
+        line-height: 1.2em; /* Adjust line height */
+        height: calc(1.2em * 4); /* Limit to 3-4 lines */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4; /* Clamp to 4 lines */
+    }
+    
+    .ezy__blog3-post {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%; /* Ensure all cards have the same height */
+    }
+    
+    .ezy__blog3-post .p-3.p-md-4 {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
 </style>
 {% endblock %}
 
@@ -181,28 +210,28 @@ Services
                         {% if post.blog_image %}
                         <img src="{{ post.blog_image.url }}" alt="Blog image" class="img-fluid uniform-img ezy-blog7-banner"/>
                         {% else %}
-                        <!-- Use a sample image -->
-                        <img src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}" alt="Sample Image" class="img-fluid uniform-img ezy-blog7-banner"/>
+                        <img src="{% static 'assets/sample-image.jpg' %}" alt="Sample Image" class="img-fluid uniform-img ezy-blog7-banner"/>
                         {% endif %}
                         <div class="px-4 py-3 ezy__blog7-calendar">{{ post.publication_date|date:"d M Y" }}</div>
                     </div>
                     <div class="p-3 p-md-4">
                         <div class="avatar mb-2">
                             {% if post.user.userprofile.profile_image %}
-                            <img class="post_avatar" src="{{ post.user.userprofile.profile_image.url }}" alt="avatar" width="80" height="80">
+                            <img class="post_avatar" src="{{ post.user.userprofile.profile_image.url }}" alt="avatar">
                             {% else %}
-                            <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                            <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
                             {% endif %}
                             <span class="fw-bold m-2">{{ post.user.first_name }} {{ post.user.last_name }}</span>
                         </div>                    
                         <h4 class="mt-3 ezy__blog3-title fs-4">{{ post.title }}</h4>
-                        <p class="ezy__blog3-description mt-3 mb-4">{{ post.content|safe }}</p>
+                        {% comment %} <p class="ezy__blog3-description mt-3 mb-4">{{ post.content|safe }}</p> {% endcomment %}
                         <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
                     </div>
                 </article>
             </div>
             {% endfor %}
         </div>
+        
 
         <!-- Pagination controls -->
         <div class="row mt-5">

@@ -31,14 +31,14 @@ def profiles_View(request):
     # Handle recruiter payments made
     payments_made = Payment.objects.filter(recruiter=request.user)
     total_payments_made = payments_made.aggregate(Sum('amount'))['amount__sum'] or 0
-
+    
     # Handle candidate payments received
     if hasattr(request.user, 'candidateprofile'):
         payments_received = Payment.objects.filter(candidate=request.user.candidateprofile)
         total_payments_received = payments_received.aggregate(Sum('amount'))['amount__sum'] or 0
 
     # Calculate the current balance
-    current_balance = total_payments_received - total_payments_made
+    current_balance = total_payments_made
 
     return render(request, 'profiles/profiles.html', {
         'user_profile': user_profile,
