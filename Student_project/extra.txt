@@ -2397,3 +2397,80 @@ def payment_callback(request):
 # def payment_successful(request):
 #     payment_id = request.GET.get('payment_id')
 #     return render(request, 'payment/payment_successful.html', {'payment_id': payment_id})    
+
+
+
+{% load static %}
+<!-- templates/email_verification.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #dddddd;
+        }
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .content p {
+            margin-bottom: 20px;
+        }
+        .content a {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .content a:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #dddddd;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Talent Sprout</h2>
+        </div>
+        <div class="content">
+            <p>Hi {{ user.username }},</p>
+            <p>Thank you for registering on Talent Sprout! Please click the button below to verify your email address and complete your registration.</p>
+            <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Activate my account</a>
+            <p>If you did not sign up for this account, you can ignore this email.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; {{ year }} Talent Sprout. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

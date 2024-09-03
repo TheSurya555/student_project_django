@@ -19,17 +19,19 @@ def signUP_View(request):
 
 def send_verification_email(request, user):
     current_site = get_current_site(request)
-    mail_subject = 'Activate your account.'
-    message = render_to_string('signup/email_verification.html', {
+    mail_subject = 'Activate your Talent Sprout account.'
+    context = {
         'user': user,
         'domain': current_site.domain,
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': email_verification_token.make_token(user),
-    })
+    }
+    message = render_to_string('signup/email_verification.html', context)
     to_email = user.email
     email = EmailMessage(mail_subject, message, to=[to_email])
+    email.content_subtype = "html"  # Ensures the email is sent as HTML
     email.send()
-
+    
 def candidate_SignUp_View(request):
     if request.method == 'POST':
         form = CandidateSignUpForm(request.POST)
@@ -111,6 +113,7 @@ def admin_SignUp_View(request):
 
 def email_verification_notification(request):
     return render(request, 'signUp/email_verification_notification.html')
+
 
 def login_View(request):
     return render(request, 'signUp/chooselogin.html')
