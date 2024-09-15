@@ -1,0 +1,39 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+Add Skill
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6>Add Skill</h6>
+                </div>
+                <div class="card-body px-4 py-3">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.skill.label_tag }}
+                            {{ form.skill }}
+                            {% if form.skill.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.skill.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary me-2">Add Skill</button>
+                            <a href="{% url 'service' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

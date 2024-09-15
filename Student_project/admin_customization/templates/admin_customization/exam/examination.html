@@ -1,0 +1,64 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+Examination Management
+{% endblock %}
+
+
+{% block admin_content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">{{ site_header }}</h2>
+
+    <!-- Section 1: Display Existing Skills -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between pb-0">
+            <h3>Existing Skills</h3>
+            <div class="text-right mb-3">
+                <a href="{% url 'exam_add_skill' %}" class="btn btn-primary">Add Skill</a>
+            </div>
+        </div>
+        <div class="card-body pt-0">
+            <ul class="list-group">
+                {% for skill in skills %}
+                <li class="list-group-item {% if selected_skill and skill.id == selected_skill.id %}active{% endif %}">
+                    <a href="?skill_id={{ skill.id }}" class="text-dark" style="text-decoration: none;">
+                        {{ skill.name }}
+                    </a>
+                    <a href="{% url 'exam_edit_skill' skill.id %}" class="btn btn-warning btn-sm float-end ms-2">Edit</a>
+                    <a href="{% url 'exam_delete_skill' skill.id %}" class="btn btn-danger btn-sm float-end">Delete</a>
+                </li>
+                {% empty %}
+                <li class="list-group-item">No skills available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- Section 2: Display Questions for Selected Skill -->
+    {% if selected_skill %}
+    <div class="card mb-4">
+        <!-- Button to add a new skill related questions -->
+        <div class="text-right pt-4 px-4">
+            <a href="{% url 'add_question' %}" class="btn btn-primary">Add Questions</a>
+        </div>    
+        <div class="card-header">
+            <h3>Questions for "{{ selected_skill.name }}"</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for question in questions %}
+                <li class="list-group-item">
+                    {{ question.text|safe }}
+                    <a href="{% url 'edit_question' question.id %}" class="btn btn-warning btn-sm float-end ms-2">Edit</a>
+                    <a href="{% url 'delete_question' question.id %}" class="btn btn-danger btn-sm float-end">Delete</a>
+                </li>
+                {% empty %}
+                <li class="list-group-item">No questions available for this skill.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

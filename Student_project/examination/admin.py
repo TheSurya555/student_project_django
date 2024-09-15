@@ -17,3 +17,10 @@ class TestAdmin(admin.ModelAdmin):
 
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Test, TestAdmin)
+
+
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ('test', 'question', 'answer', 'is_correct')
+    list_filter = ('is_correct',)
+    search_fields = ('test__user__username', 'question__text')

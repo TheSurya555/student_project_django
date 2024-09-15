@@ -16,7 +16,7 @@ Take Test
       <h3 class="mb-4">Questions</h3>
       <ul class="list-group">
         {% for question in questions %}
-          <li class="list-group-item" data-question-id="{{ forloop.counter0 }}">{{ forloop.counter }}. {{ question.text }}</li>
+          <li class="list-group-item" data-question-id="{{ forloop.counter0 }}">{{ forloop.counter }}. {{ question.text|safe }}</li>
         {% endfor %}
       </ul>
     </div>
@@ -29,7 +29,7 @@ Take Test
             {% for question in questions %}
               <div class="question-section mb-3" data-question-id="{{ forloop.counter0 }}" style="display: none;">
                 <h5>Question {{ forloop.counter }}:</h5>
-                <label for="question_{{ question.id }}">{{ question.text }}</label>
+                <label for="question_{{ question.id }}">{{ question.text|safe }}</label>
                 <textarea id="question_{{ question.id }}" name="question_{{ question.id }}" class="tinymce"></textarea>
               </div>
             {% endfor %}

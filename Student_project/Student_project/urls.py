@@ -6,7 +6,7 @@ from django.conf.urls import handler404
 
 urlpatterns = [
     path('sproutadmin/', admin.site.urls),
-    path('admin/', include('admin_customization.urls')),
+    path('talentadmin/', include('admin_customization.urls')),
     path('', include('main.urls')),
     path('signup/', include('signUp.urls')),
     path('services/', include('services.urls')),

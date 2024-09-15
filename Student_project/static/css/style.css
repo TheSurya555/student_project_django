@@ -307,7 +307,7 @@
         border-radius: 390px;
         z-index: -1;
       }
-      @media (min-width: 991px) {
+      @media (min-width: 992px) {
         .ezy__header41-shape {
           left: -50px;
         }
@@ -317,7 +317,7 @@
         left: 0;
         z-index: -2;
       }
-      @media (min-width: 991px) {
+      @media (min-width: 992px) {
         .ezy__header41-shape-three {
           left: -150px;
         }

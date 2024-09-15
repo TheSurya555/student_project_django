@@ -3,7 +3,7 @@ from django.conf import settings
 
 class Skill(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()  # Ensure this field is present
+    description = models.TextField()
 
     def __str__(self):
         return self.name
@@ -11,7 +11,7 @@ class Skill(models.Model):
 class Question(models.Model):
     skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name='questions')
     text = models.TextField()
-    correct_answer = models.CharField(max_length=255)
+    correct_answer = models.TextField()
 
     def __str__(self):
         return f"{self.skill.name}: {self.text}"

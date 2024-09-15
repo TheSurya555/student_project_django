@@ -1,0 +1,25 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+Edit Skill
+{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">{{ site_header }}</h2>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Edit Skill</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Save Skill</button>
+                <a href="{% url 'examination' %}" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
