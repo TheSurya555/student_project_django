@@ -18,6 +18,7 @@ urlpatterns = [
     path('examination/delete_skill/<int:skill_id>/', exam_delete_skill, name='exam_delete_skill'),
     path('examination/edit_question/<int:question_id>/', edit_question, name='edit_question'),
     path('examination/delete_question/<int:question_id>/', delete_question, name='delete_question'),
+    path('view-student-test/<int:user_id>/',view_student_test, name='view_student_test'),
     path('admin_logout/', admin_logout_view, name='admin_logout'),
     
 ]

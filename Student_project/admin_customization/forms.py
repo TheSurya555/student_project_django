@@ -1,7 +1,7 @@
 from django import forms
 from services.models import Service
 from talents.models import Skills
-from examination.models import Question ,Skill
+from examination.models import *
 from tinymce.widgets import TinyMCE 
 
 
@@ -56,6 +56,7 @@ class Exam_SkillForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter service description'}),
         }
 
+# Exam question form
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
@@ -65,3 +66,18 @@ class QuestionForm(forms.ModelForm):
             'text': TinyMCE(attrs={'class': 'form-control', 'placeholder': 'Enter question'}), 
             'correct_answer': TinyMCE(attrs={'class': 'form-control', 'placeholder': 'Enter correct answer'}), 
         }
+
+
+#exam answer review form        
+class AnswerCorrectionForm(forms.ModelForm):
+    class Meta:
+        model = Answer
+        fields = ['is_correct']
+        widgets = {
+            'is_correct': forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')])
+        }        
+
+class ScoreForm(forms.ModelForm):
+    class Meta:
+        model = Test
+        fields = ['score'] 

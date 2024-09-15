@@ -9,7 +9,8 @@ from services.models import Service
 from talents.models import Skills
 from examination.models import *
 from django.http import HttpResponseForbidden
-from .forms import ServiceForm ,SkillForm ,Exam_SkillForm ,QuestionForm
+from .forms import *
+from django.http import JsonResponse
 
 def admin_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -124,11 +125,18 @@ def delete_skill(request, skill_id):
     messages.success(request, "Skill deleted successfully!")
     return redirect(reverse('service'))
 
+# Admin logout view start
+
 def admin_logout_view(request):
     logout(request)
     messages.success(request, _("You have successfully logged out."))
     return redirect(reverse('admin_login'))
 
+
+# Admin logout view end
+
+
+# Admin Examination view start
 
 @login_required
 @admin_required
@@ -136,6 +144,7 @@ def examination(request):
     skills = Skill.objects.all()
     selected_skill = None
     questions = []
+    student_tests = Test.objects.all()
 
     # Check if a skill has been selected by the admin
     if 'skill_id' in request.GET:
@@ -146,10 +155,12 @@ def examination(request):
         'skills': skills,
         'selected_skill': selected_skill,
         'questions': questions,
+        'student_tests': student_tests,
         'site_header': "Manage Examination Skills and Questions"
     }
 
     return render(request, 'admin_customization/exam/examination.html', context)
+
 
 @login_required
 @admin_required
@@ -207,7 +218,7 @@ def add_question(request):
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
-            skill_id = request.POST.get('skill')  # Get the selected skill ID from POST data
+            skill_id = request.POST.get('skill') 
             skill = get_object_or_404(Skill, id=skill_id)
             question = form.save(commit=False)
             question.skill = skill
@@ -256,3 +267,33 @@ def delete_question(request, question_id):
     question.delete()
     messages.success(request, "Question deleted successfully!")
     return redirect(reverse('examination'))
+
+
+@login_required
+@admin_required
+def view_student_test(request, user_id):
+    # Fetch the test details for the specific user
+    student_tests = Test.objects.filter(user_id=user_id).prefetch_related('answers')
+
+    # If no test found for the user, return a 404
+    if not student_tests.exists():
+        return render(request, 'admin_customization/exam/no_test_found.html', {'user_id': user_id})
+
+    if request.method == 'POST':
+        form = AnswerCorrectionForm(request.POST)
+        if form.is_valid():
+            answer_id = request.POST.get('answer_id')
+            answer = get_object_or_404(Answer, id=answer_id)
+            answer.is_correct = form.cleaned_data['is_correct']
+            answer.save()
+            return JsonResponse({'success': True})
+        
+    # For GET request, render the page normally
+    form = AnswerCorrectionForm()
+    context = {
+        'student_tests': student_tests,
+        'form': form,
+        'site_header': f"Tests Details for User: {student_tests[0].user.username}"
+    }
+    
+    return render(request, 'admin_customization/exam/view_student_test.html', context)
