@@ -25,8 +25,13 @@ def inbox(request):
         notifications = [] 
         unread_notifications_count = 0 
         
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None      
 
     return render(request, 'chat/messages.html', {
         'received_messages': received_messages,
@@ -68,8 +73,14 @@ def chat_session(request, chat_session_id):
     messages = chat_session.messages.all().order_by('timestamp')
     other_participant = chat_session.participants.exclude(id=user.id).first()
     received_messages = Message.objects.filter(receiver=user).order_by('-timestamp')
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
     
     if request.method == 'POST':
         content = request.POST.get('content')

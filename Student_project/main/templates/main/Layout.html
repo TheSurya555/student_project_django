@@ -58,7 +58,7 @@
                                             <a class="nav-link" href="{% url 'studentpost' %}">Posts</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{% url 'consulting' %}">Contact Us</a>
+                                            <a class="nav-link" href="{% url 'contactus' %}">Contact Us</a>
                                         </li>
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -92,7 +92,7 @@
                                         </li>
                                         
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{% url 'consulting' %}">Contact Us</a>
+                                            <a class="nav-link" href="{% url 'contactus' %}">Contact Us</a>
                                         </li>
                                         <li class="nav-item dropdown">
                                             <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -154,7 +154,7 @@
                                         <a class="nav-link" href="{% url 'services' %}">Services</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="consulting">Contact Us</a>
+                                        <a class="nav-link" href="{% url 'contactus' %}">Contact Us</a>
                                     </li>
                                     <li class="nav-item nav-btn mx-2">
                                         <a href="{% url 'login' %}"><button class="px-3"><span>Log In</span></button></a>
@@ -302,7 +302,7 @@
                             {% if request.session.user_role == "Recruiter" or request.session.user_role == "Admin"%}
                             <li class="footer-list"><a href="{% url "subscription_list" %}">Payment</a></li>
                             {% endif %}
-                            <li class="footer-list"><a href="{% url 'consulting' %}">Contact Us</a></li>
+                            <li class="footer-list"><a href="{% url 'contactus' %}">Contact Us</a></li>
 
                         </ul>
                     </div>

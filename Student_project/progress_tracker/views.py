@@ -14,8 +14,14 @@ User = get_user_model()
 @login_required
 def project_progress_view(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
 
     
     # Create initial progress records only if they don't exist for the project
@@ -44,8 +50,14 @@ def project_progress_view(request, project_id):
 
 @login_required
 def update_progress_view(request, progress_id):
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+            
     progress = get_object_or_404(Progress, id=progress_id)
     project = progress.project
     
@@ -109,8 +121,14 @@ def update_progress_view(request, progress_id):
 @login_required
 def update_project_status_view(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None    
     
     # Check if the user is a recruiter
     if request.user.role != 'recruiter':
@@ -159,8 +177,13 @@ def update_project_status_view(request, project_id):
 
 @login_required
 def confirm_progress_view(request, progress_id):
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
     
     progress = get_object_or_404(Progress, id=progress_id)
     project = progress.project

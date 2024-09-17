@@ -11,8 +11,13 @@ def aboutUs_view(request):
     team_members = TeamMember.objects.all()
     has_team_members = team_members.exists()
     
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
 
     return render(request, 'aboutUs/aboutUs.html', {
         'about_us_content': about_us_content,

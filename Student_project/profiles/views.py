@@ -140,8 +140,14 @@ def edit_profile_View(request):
 
 @login_required
 def add_project(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+    
     if request.method == 'POST':
         form = ProjectExperienceForm(request.POST)
         if form.is_valid():
@@ -159,8 +165,14 @@ def add_project(request):
 @login_required
 def delete_project_experience(request, project_experience_id):
     project_experience = get_object_or_404(ProjectExperience, id=project_experience_id)
-    user_profile = get_object_or_404(UserProfile, user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None   
+
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None  
 
     if request.method == 'POST':
         project_experience.delete()
@@ -170,7 +182,13 @@ def delete_project_experience(request, project_experience_id):
     return render(request, 'profiles/confirm_delete.html', {'project_experience': project_experience ,'profile_image_url':profile_image_url})
 
 def privacy_policy_view(request):
-    user_profile = get_object_or_404(UserProfile, user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+     
     privacy_policy = get_object_or_404(PrivacyPolicy)
     return render(request, 'profiles/privacy_policy.html', {'privacy_policy': privacy_policy ,'profile_image_url':profile_image_url})

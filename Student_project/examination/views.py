@@ -6,15 +6,25 @@ from datetime import timedelta
 from profiles.models import UserProfile
 
 def choose_skill(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
     skills = Skill.objects.all()
 
     return render(request, 'examination/choose_skill.html', {'skills': skills, 'profile_image_url':profile_image_url})
 
 def rules_and_regulations(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
         
     return render(request, 'examination/rules_and_regulations.html', {'profile_image_url':profile_image_url})
 
@@ -22,8 +32,14 @@ def rules_and_regulations(request):
 def start_test(request, skill_id):
     skill = get_object_or_404(Skill, id=skill_id)
     # Check if the user has completed a test for this skill in the last 10 days
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None    
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+   
     recent_test = Test.objects.filter(user=request.user, skill=skill, completed=True).order_by('-completed_date').first()
     if recent_test and recent_test.completed_date and (timezone.now() - recent_test.completed_date).days < 10:
         return render(request, 'examination/cannot_retake_test.html', {'next_attempt_date': recent_test.completed_date + timedelta(days=10) ,'profile_image_url':profile_image_url})
@@ -33,8 +49,14 @@ def start_test(request, skill_id):
 
 @login_required
 def take_test(request, test_id):
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None    
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None 
+            
     test = get_object_or_404(Test, id=test_id, user=request.user)
     questions = test.skill.questions.all()
     

@@ -13,8 +13,14 @@ def talent_view(request):
     related_user_profiles = UserProfile.objects.filter(skills__icontains=random_skill.skill)
     rest_of_skills = Skills.objects.exclude(id=random_skill.id)
     random_contracts = f"{random.randint(10, 50)}+"
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
 
     context = {
         'random_skill': random_skill.skill,

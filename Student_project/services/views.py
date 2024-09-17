@@ -42,8 +42,13 @@ def service_candidates(request, service_id):
             if any(skill in candidate_skills for skill in service_skills):
                 matching_candidates.append(candidate)
                 
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None                        
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None                        
 
     return render(request, 'services/candidates.html', {
         'service': service,

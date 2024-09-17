@@ -10,8 +10,15 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def studentPost(request):
     posts = BlogPost.objects.filter(user=request.user)
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+            
     print('profile_image_url' ,profile_image_url)
     return render(request, 'studentPost/studentPost.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
 
@@ -66,8 +73,13 @@ def create_blog_post(request):
         blog_post_form = BlogPostForm()
         candidate_preference_form = CandidatePreferenceForm()
 
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            pass    
 
     return render(request, 'studentPost/post_creation_form.html', {
         'blog_post_form': blog_post_form,

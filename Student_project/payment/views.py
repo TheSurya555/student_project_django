@@ -27,8 +27,14 @@ def payment_page(request, subscription_id):
     service_fee = subscription_price * Decimal('0.00')
     gst = subscription_price * Decimal('0.0')          
     total_amount = subscription_price + service_fee + gst
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
 
     razorpay_order = razorpay_client.order.create({
         'amount': int(total_amount * 100),  # Convert to paise
@@ -189,8 +195,14 @@ def edit_billing_info(request, subscription_id):
     return render(request, 'payment/edit_billing_info.html', {'profile': profile})
 
 def subscription_list(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+
     subscriptions = Subscription.objects.all()
     for subscription in subscriptions:
         subscription.features_list = subscription.features.split(",")
@@ -204,8 +216,14 @@ def subscription_list(request):
 def payment_failed(request):
     error_code = request.GET.get('error_code')
     error_description = request.GET.get('error_description')
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+
     return render(request, 'payment/payment_failed.html', {
         'error_code': error_code,
         'error_description': error_description,
@@ -251,8 +269,13 @@ def payment_successful(request):
             'error_description': f'No payment found with ID: {payment_id}'
         })
 
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
     
     # Prepare notification context
     context = {

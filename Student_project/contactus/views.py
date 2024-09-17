@@ -13,7 +13,12 @@ def consulting_View(request):
             return redirect('consulting')
     else:
         form = ConsultingForm()
-        
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
     return render(request, 'contactus/consulting.html', {'form': form , 'profile_image_url':profile_image_url })
