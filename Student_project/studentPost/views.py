@@ -66,7 +66,11 @@ def create_blog_post(request):
         blog_post_form = BlogPostForm()
         candidate_preference_form = CandidatePreferenceForm()
 
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
+
     return render(request, 'studentPost/post_creation_form.html', {
         'blog_post_form': blog_post_form,
         'candidate_preference_form': candidate_preference_form,
+        'profile_image_url':profile_image_url,
     })

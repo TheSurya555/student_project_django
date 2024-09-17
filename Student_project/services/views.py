@@ -41,10 +41,14 @@ def service_candidates(request, service_id):
             candidate_skills = [skill.strip().lower() for skill in candidate.skills.split(',')]
             if any(skill in candidate_skills for skill in service_skills):
                 matching_candidates.append(candidate)
+                
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None                        
 
     return render(request, 'services/candidates.html', {
         'service': service,
-        'candidates': matching_candidates
+        'candidates': matching_candidates,
+        'profile_image_url':profile_image_url,
     })
 
 

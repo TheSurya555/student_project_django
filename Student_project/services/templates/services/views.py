@@ -18,22 +18,25 @@ def inbox(request):
     sent_messages = Message.objects.filter(sender=user).order_by('-timestamp')
     
     try:
+        # Fetch notifications and determine unread status
         notifications = Notification.objects.filter(recipient=user)
         unread_notifications_count = notifications.unread().count()
+        print("notifications:" , notifications)
+        print("unread_notifications_count:" , unread_notifications_count)
         
+        if not notifications.exists():
+            print("No notifications found for the user.")
+            
     except Exception as e:
-        notifications = [] 
-        unread_notifications_count = 0 
-        
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
+        print(f"Error retrieving notifications: {e}")
+        notifications = []  # Fallback to an empty list in case of error
+        unread_notifications_count = 0  # Fallback to 0 in case of error
 
     return render(request, 'chat/messages.html', {
         'received_messages': received_messages,
         'sent_messages': sent_messages,
         'notifications': notifications,
         'unread_notifications_count': unread_notifications_count,
-        'profile_image_url':profile_image_url
     })
     
 @login_required
@@ -68,8 +71,6 @@ def chat_session(request, chat_session_id):
     messages = chat_session.messages.all().order_by('timestamp')
     other_participant = chat_session.participants.exclude(id=user.id).first()
     received_messages = Message.objects.filter(receiver=user).order_by('-timestamp')
-    user_profile = UserProfile.objects.get(user=request.user)
-    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     
     if request.method == 'POST':
         content = request.POST.get('content')
@@ -88,7 +89,6 @@ def chat_session(request, chat_session_id):
         'candidate': other_participant,
         'received_messages': received_messages,
         'user': user,
-        'profile_image_url':profile_image_url,
     })
 
 @login_required

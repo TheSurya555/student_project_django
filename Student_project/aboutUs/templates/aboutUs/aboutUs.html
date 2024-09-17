@@ -4,33 +4,95 @@
 {% block title %}About Us - Talent Sprout{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/about.css' %}">
   <style>
+    .ezy__about h1 {
+      font-size: 36px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .ezy__about p {
+      font-size: 18px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .ezy__about-features .card {
+      transition: all 0.3s ease;
+    }
+    
+    .ezy__about-features .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }  
     .custom-size {
       max-width: 250px;
       width: 100%;
       height: auto;
-      aspect-ratio: 1/1;
       object-fit: cover;
       transition: transform 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
     }
-    
+
     .custom-size:hover {
       transform: scale(1.1);
       border: 2px solid #999;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-  
     .shadow-effect {
       box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* New CSS for Team Member Cards */
+    .team-card img {
+      width: 200px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 10px; /* Changed to squarish form */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .team-card img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .team-card h3 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+      margin-top: 10px;
+      transition: color 0.3s ease;
+    }
+
+    .team-card h3:hover {
+      color: #007bff; /* Highlighted color for the name */
+    }
+
+    .team-card p {
+      font-size: 1.2rem;
+      color: #555;
+      font-style: italic; /* Highlighted position */
+      transition: color 0.3s ease;
+    }
+
+    .team-card p:hover {
+      color: #007bff; /* Highlight color for position */
+    }
+
+    /* Center content in the card */
+    .team-card {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   </style>
 {% endblock %}
 
 
 {% block content %}
-
+  {% comment %} about us description {% endcomment %}
   <section class="ezy__about py-5">
     <div class="container">
       <div class="row align-items-center">
@@ -39,22 +101,23 @@
           {% if about_us_content %}
             <p>{{ about_us_content.description }}</p>
           {% else %}
-            <p>Talent Sprout is a tech company that specializes in providing innovative solutions to bridge the gap between students and the industry. Our mission is to empower students with the skills and knowledge required to succeed in the ever-evolving tech landscape.</p>
-            <p>We believe that every student has the potential to grow and flourish, and we're committed to providing them with the necessary resources and support to achieve their goals. Our team of experienced professionals is dedicated to creating a platform that fosters growth, learning, and innovation.</p>
+            <p>Hello Surya</p>
           {% endif %}
         </div>
         <div class="col-md-6 text-center">
-          {% if about_us_content and about_us_content.image %}
+          <a href="https://thetalentsprout.com/">
+            {% if about_us_content and about_us_content.image %}
             <img src="{{ about_us_content.image.url }}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect shadow-effect">
-          {% else %}
-            <img src="{% static 'assets/talentsprout.jpeg' %}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect shadow-effect">
-          {% endif %}
+            {% else %}
+              <img src="{% static 'assets/talentsprout.jpeg' %}" alt="About Us Image" class="img-fluid rounded-circle custom-size hover-effect shadow-effect">
+            {% endif %}
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-
+  {% comment %} about us features {% endcomment %}
   <section class="ezy__about-features py-5 bg-light" style="text-align: -webkit-center;">
     <div class="container">
       <div class="row">
@@ -75,6 +138,7 @@
     </div>
   </section>
 
+  {% comment %} about us team members {% endcomment %}
   <section class="ezy__about-team py-5" style="text-align: -webkit-center;">
     <div class="container">
       <div class="row">
@@ -87,19 +151,24 @@
         {% if has_team_members %}
           {% for member in team_members %}
           <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card border-0 text-center">
-              <img src="{{ member.photo.url }}" alt="Photo of {{ member.name }}" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
+            <div class="card border-0 team-card">
+              <img src="{{ member.photo.url }}" alt="Photo of {{ member.name }}" class="card-img-top shadow-effect">
               <div class="card-body">
                 <h3 class="card-title">{{ member.name }}</h3>
-                <p class="card-text">{{ member.title }}</p>
+                <p class="card-text pb-0">{{ member.title }}</p>
+                {% if member.linkedin_url %}
+                  <a href="{{ member.linkedin_url }}" target="_blank" class="btn btn-outline-primary">
+                    <i class="fab fa-linkedin"></i> LinkedIn Profile
+                  </a>
+                {% endif %}
               </div>
             </div>
           </div>
           {% endfor %}
         {% else %}
           <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card border-0 text-center">
-              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
+            <div class="card border-0 team-card">
+              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top shadow-effect">
               <div class="card-body">
                 <h3 class="card-title">Demo Team Member</h3>
                 <p class="card-text">Founder & CEO</p>
@@ -107,8 +176,8 @@
             </div>
           </div>
           <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card border-0 text-center">
-              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
+            <div class="card border-0 team-card">
+              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top shadow-effect">
               <div class="card-body">
                 <h3 class="card-title">Demo Team Member</h3>
                 <p class="card-text">CTO</p>
@@ -116,8 +185,8 @@
             </div>
           </div>
           <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card border-0 text-center">
-              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top rounded-circle mx-auto mt-3 shadow-effect" style="width: 150px; height: 150px; object-fit: cover;">
+            <div class="card border-0 team-card">
+              <img src="{% static 'assets/requiter2.jpg' %}" alt="Demo Team Member" class="card-img-top shadow-effect">
               <div class="card-body">
                 <h3 class="card-title">Demo Team Member</h3>
                 <p class="card-text">Head of Training</p>
@@ -128,5 +197,4 @@
       </div>
     </div>
   </section>
-  
 {% endblock %}

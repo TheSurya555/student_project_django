@@ -7,12 +7,16 @@ from django.contrib.auth import get_user_model
 from notifications.signals import notify
 from notifications.models import Notification
 from django.db.models import Q
+from profiles.models import UserProfile
 
 User = get_user_model()
 
 @login_required
 def project_progress_view(request, project_id):
     project = get_object_or_404(Project, id=project_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+
     
     # Create initial progress records only if they don't exist for the project
     if not Progress.objects.filter(project=project).exists():
@@ -34,11 +38,14 @@ def project_progress_view(request, project_id):
     return render(request, 'progress_tracker/project_progress.html', {
         'project': project,
         'progress_data': progress_data,
-        'cost_per_stage': cost_per_stage
+        'cost_per_stage': cost_per_stage,
+        'profile_image_url': profile_image_url,
     })
 
 @login_required
 def update_progress_view(request, progress_id):
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     progress = get_object_or_404(Progress, id=progress_id)
     project = progress.project
     
@@ -59,7 +66,7 @@ def update_progress_view(request, progress_id):
             'form': ProgressForm(instance=progress),
             'progress': progress,
             'error': 'You must complete previous stages before updating this one.',
-            'project': project
+            'project': project,
         })
     
     if request.method == 'POST':
@@ -95,12 +102,15 @@ def update_progress_view(request, progress_id):
     return render(request, 'progress_tracker/update_progress.html', {
         'form': form,
         'progress': progress,
-        'project': project
+        'project': project,
+        'profile_image_url':profile_image_url
     })
 
 @login_required
 def update_project_status_view(request, project_id):
     project = get_object_or_404(Project, id=project_id)
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     
     # Check if the user is a recruiter
     if request.user.role != 'recruiter':
@@ -143,11 +153,15 @@ def update_project_status_view(request, project_id):
     
     return render(request, 'progress_tracker/update_project_status.html', {
         'form': form,
-        'project': project
+        'project': project,
+        'profile_image_url':profile_image_url,
     })
 
 @login_required
 def confirm_progress_view(request, progress_id):
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    
     progress = get_object_or_404(Progress, id=progress_id)
     project = progress.project
     
@@ -188,5 +202,6 @@ def confirm_progress_view(request, progress_id):
     
     return render(request, 'progress_tracker/confirm_progress.html', {
         'progress': progress,
-        'project': project
+        'project': project,
+        'profile_image_url':profile_image_url
     })

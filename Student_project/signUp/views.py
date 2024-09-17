@@ -178,6 +178,7 @@ def RecruiterLoginView(request):
     else:
         return HttpResponseRedirect('/')
 
+
 def admin_LoginView(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
@@ -187,16 +188,13 @@ def admin_LoginView(request):
                 upass = form.cleaned_data['password']
                 user = authenticate(username=uname, password=upass)
                 if user is not None:
-                    if user.email_verified:
-                        login(request, user)
-                        if user.role == CustomUser.ADMIN:
-                            request.session['user_role'] = 'Admin'
-                            messages.success(request, 'Logged in successfully as Admin!!')
-                            return HttpResponseRedirect('/')
-                        else:
-                            messages.error(request, 'Unknown user role!!')
+                    login(request, user)
+                    if user.role == CustomUser.ADMIN:
+                        request.session['user_role'] = 'Admin'
+                        messages.success(request, 'Logged in successfully as Admin!!')
+                        return HttpResponseRedirect('/')
                     else:
-                        messages.error(request, 'Email is not verified. Please verify your email to log in.')
+                        messages.error(request, 'Unknown user role!!')
                 else:
                     messages.error(request, 'Invalid username or password!')
             else:
@@ -207,6 +205,7 @@ def admin_LoginView(request):
         return render(request, 'signUp/adminLogin.html', {'form': form})
     else:
         return HttpResponseRedirect('/')
+
 
 def logout_view(request):
     logout(request)

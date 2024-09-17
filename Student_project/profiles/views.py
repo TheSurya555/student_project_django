@@ -68,6 +68,8 @@ def settings_View(request):
 
     form = EditUserForm(instance=request.user)
     change_passform = CustomPasswordChangeForm(request.user)
+    
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
 
     if request.method == 'POST':
         if 'save_changes' in request.POST:
@@ -93,6 +95,7 @@ def settings_View(request):
         'profile': profile,
         'form': form,
         'change_passform': change_passform,
+        'profile_image_url':profile_image_url
     }
     return render(request, 'profiles/settings.html', context)
 
@@ -102,6 +105,8 @@ def edit_profile_View(request):
         user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
         user_profile = UserProfile(user=request.user)
+
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
@@ -131,11 +136,12 @@ def edit_profile_View(request):
             return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages})
     else:
         form = UserProfileForm(instance=user_profile)
-    return render(request, 'profiles/edit_profile.html', {'form': form})
+    return render(request, 'profiles/edit_profile.html', {'form': form , 'profile_image_url':profile_image_url})
 
 @login_required
 def add_project(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
     if request.method == 'POST':
         form = ProjectExperienceForm(request.POST)
         if form.is_valid():
@@ -148,19 +154,23 @@ def add_project(request):
             messages.error(request, 'Error adding project/experience. Please check the form and try again.', extra_tags='add_project')
     else:
         form = ProjectExperienceForm()
-    return render(request, 'profiles/project_experience.html', {'form': form})
+    return render(request, 'profiles/project_experience.html', {'form': form ,'profile_image_url':profile_image_url})
 
 @login_required
 def delete_project_experience(request, project_experience_id):
     project_experience = get_object_or_404(ProjectExperience, id=project_experience_id)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None   
 
     if request.method == 'POST':
         project_experience.delete()
         messages.success(request, 'Project experience deleted successfully.', extra_tags='delete_project')
         return redirect('profiles')
 
-    return render(request, 'profiles/confirm_delete.html', {'project_experience': project_experience})
+    return render(request, 'profiles/confirm_delete.html', {'project_experience': project_experience ,'profile_image_url':profile_image_url})
 
 def privacy_policy_view(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
     privacy_policy = get_object_or_404(PrivacyPolicy)
-    return render(request, 'profiles/privacy_policy.html', {'privacy_policy': privacy_policy})
+    return render(request, 'profiles/privacy_policy.html', {'privacy_policy': privacy_policy ,'profile_image_url':profile_image_url})

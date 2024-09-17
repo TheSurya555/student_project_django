@@ -5,7 +5,6 @@ from . import views
 
 urlpatterns = [
     path('', views.home_View, name='home'),
-    # Add other paths as needed
 ]
 
 # Serve media files during development

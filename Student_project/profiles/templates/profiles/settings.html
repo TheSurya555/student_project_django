@@ -8,9 +8,8 @@ Settings
 {% block head_css %}
 <link rel="stylesheet" href="{% static 'css/button.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<link rel="stylesheet" href="{% static 'css/social_icon.css' %}">
-<link rel="stylesheet" href="{% static 'css/modal.css' %}">
+<link rel="stylesheet" href="{% static 'css/Layout.css' %}">
+<link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -65,7 +64,7 @@ Settings
 <div class="modal fade" id="editPersonalInfoModal" tabindex="-1" aria-labelledby="editPersonalInfoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header d-flex justify-content-between">
         <h5 class="modal-title" id="editPersonalInfoModalLabel">Edit Personal Information</h5>
         <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
           <span><i class="fa-solid fa-xmark"></i></span>
@@ -111,7 +110,7 @@ Settings
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header d-flex justify-content-between">
         <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
         <button type="button" class="close px-3" data-dismiss="modal" aria-label="Close">
           <span><i class="fa-solid fa-xmark"></i></span>

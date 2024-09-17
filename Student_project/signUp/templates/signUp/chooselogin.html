@@ -45,21 +45,6 @@ Login
         flex-direction: column;
         gap: 1rem;
     }
-
-    .login-options button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        font-size: 1rem;
-    }
-
-    .login-options button:hover {
-        background-color: #0056b3;
-    }
 </style>
 {% endblock %}
 
@@ -76,6 +61,7 @@ Login
                         <a href="{% url 'candidatelogin' %}" class="login-option"><button><span>Log in as a Candidate</span></button></a>                        
                         <a href="{% url 'recruiterlogin' %}" class="login-option"><button><span>Log in as a Client</span></button></a>
                     </div>
+                    <p class="mt-3">Dont have an Account ? <a href="{% url 'signup' %}">Signup</a></p>
                 </div>
             </div>
         </div>
@@ -89,6 +75,5 @@ Login
     <circle cx="150" cy="150" r="40" fill="#d4edda"/>
     <circle cx="150" cy="50" r="40" fill="#cce5cc"/>
     <circle cx="50" cy="150" r="40" fill="#d4edda"/>
-
 </svg>
 {% endblock %}

@@ -50,7 +50,7 @@ class CustomUser(AbstractUser):
         if not self.last_activity:
             return False
         now = timezone.now()
-        return now - self.last_activity < datetime.timedelta(minutes=5)  # User is considered online if active in the last 5 minutes
+        return now - self.last_activity < datetime.timedelta(minutes=5) 
 
     
 

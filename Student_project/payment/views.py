@@ -12,6 +12,7 @@ import logging
 from decimal import Decimal
 import razorpay
 from notifications.signals import notify
+from profiles.models import UserProfile
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -26,6 +27,8 @@ def payment_page(request, subscription_id):
     service_fee = subscription_price * Decimal('0.00')
     gst = subscription_price * Decimal('0.0')          
     total_amount = subscription_price + service_fee + gst
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
 
     razorpay_order = razorpay_client.order.create({
         'amount': int(total_amount * 100),  # Convert to paise
@@ -44,7 +47,8 @@ def payment_page(request, subscription_id):
         'total_amount': total_amount,
         'razorpay_order_id': razorpay_order_id,
         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
-        'callback_url': callback_url  # Pass the callback URL to the template
+        'callback_url': callback_url ,
+        'profile_image_url':profile_image_url,
     })
 
 
@@ -185,20 +189,28 @@ def edit_billing_info(request, subscription_id):
     return render(request, 'payment/edit_billing_info.html', {'profile': profile})
 
 def subscription_list(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     subscriptions = Subscription.objects.all()
     for subscription in subscriptions:
         subscription.features_list = subscription.features.split(",")
-    return render(request, 'payment/subscription_list.html', {'subscriptions': subscriptions})
+    return render(request, 'payment/subscription_list.html', {
+        'subscriptions': subscriptions,
+        'profile_image_url': profile_image_url,
+        
+        })
 
 
 def payment_failed(request):
     error_code = request.GET.get('error_code')
     error_description = request.GET.get('error_description')
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
     return render(request, 'payment/payment_failed.html', {
         'error_code': error_code,
         'error_description': error_description,
+        'profile_image_url': profile_image_url,
     })
-
 
 
 @login_required
@@ -239,13 +251,18 @@ def payment_successful(request):
             'error_description': f'No payment found with ID: {payment_id}'
         })
 
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+    
     # Prepare notification context
     context = {
         'recruiter': request.user,
         'candidate_name': preferred_candidate_username,
         'amount': payment.amount,
         'payment_method': 'Razorpay',
-        'date': payment.payment_date
+        'date': payment.payment_date,
+        'payment_id': payment_id,
+        'profile_image_url': profile_image_url,
     }
 
     # Send notifications
@@ -276,4 +293,4 @@ def payment_successful(request):
             description=f'A payment of INR {payment.amount} was made by {request.user.username}.'
         )
 
-    return render(request, 'payment/payment_successful.html', {'payment_id': payment_id})
+    return render(request, 'payment/payment_successful.html', context)

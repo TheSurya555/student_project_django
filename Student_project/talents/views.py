@@ -13,6 +13,8 @@ def talent_view(request):
     related_user_profiles = UserProfile.objects.filter(skills__icontains=random_skill.skill)
     rest_of_skills = Skills.objects.exclude(id=random_skill.id)
     random_contracts = f"{random.randint(10, 50)}+"
+    user_profile = UserProfile.objects.get(user=request.user)
+    profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
 
     context = {
         'random_skill': random_skill.skill,
@@ -21,6 +23,7 @@ def talent_view(request):
         'rest_of_skills': rest_of_skills,
         'total_skills': total_skills,
         'random_contracts': random_contracts,
+        'profile_image_url':profile_image_url
     }
 
     return render(request, 'talents/talents.html', context)

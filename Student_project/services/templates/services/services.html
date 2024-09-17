@@ -6,140 +6,144 @@ Services
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
-<style>
-    .pagination {
-        margin: 0 auto;
-    }
+    <link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
+    <style>
+        .ezy__service23-heading{
+            font-size: 40px;
+            font-weight: bold;
+        }
+        .pagination {
+            margin: 0 auto;
+        }
 
-    .pagination .dot {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background-color: #098761;
-        margin: 0 5px;
-        cursor: pointer;
-    }
+        .pagination .dot {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #098761;
+            margin: 0 5px;
+            cursor: pointer;
+        }
 
-    .pagination .dot.active {
-        background-color: #000;
-    }
+        .pagination .dot.active {
+            background-color: #000;
+        }
 
-    .pagination .arrow {
-        border-radius: 0;
-        background: none;
-        font-size: 60px;
-        line-height: 40px;
-        text-align: center;
-        vertical-align: middle;
-        margin: 0 20px;
-        cursor: pointer;
-    }
+        .pagination .arrow {
+            border-radius: 0;
+            background: none;
+            font-size: 60px;
+            line-height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 20px;
+            cursor: pointer;
+        }
 
-    .uniform-img {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-    }
+        .uniform-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
 
-    /* Hover effects */
-    .ezy__service23-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        /* Hover effects */
+        .ezy__service23-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .ezy__blog3-post:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        .ezy__blog3-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .ezy__service23-card-icon img {
-        transition: transform 0.3s ease;
-    }
+        .ezy__service23-card-icon img {
+            transition: transform 0.3s ease;
+        }
 
-    .ezy__service23-card:hover .ezy__service23-card-icon img {
-        transform: scale(1.1);
-    }
+        .ezy__service23-card:hover .ezy__service23-card-icon img {
+            transform: scale(1.1);
+        }
 
-    /* Fixed card size and alignment */
-    .ezy__service23-card{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
+        /* Fixed card size and alignment */
+        .ezy__service23-card{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
 
-    .ezy__service23-card .card-body{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
+        .ezy__service23-card .card-body{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-    .ezy__service23-card-title{
-        height: 50px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+        .ezy__service23-card-title{
+            height: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-    .ezy__service23-card-sub-title{
-        height: 72px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        .ezy__service23-card-sub-title{
+            height: 72px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    .ezy__service23-card{
-        max-height: 450px; /* Adjust the max height as needed */
-    }
+        .ezy__service23-card{
+            max-height: 450px; /* Adjust the max height as needed */
+        }
 
-    .ezy__service23-card-body{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    
-    .post_avatar {
-        border-radius: 50%;
-        width: 50px; /* Set a fixed size for the user image */
-        height: 50px;
-    }
-    
-    .ezy__blog3-title {
-        height: 50px; /* Set a fixed height for the title */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    .ezy__blog3-description {
-        font-size: 0.9rem;
-        line-height: 1.2em; /* Adjust line height */
-        height: calc(1.2em * 4); /* Limit to 3-4 lines */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 4; /* Clamp to 4 lines */
-    }
-    
-    .ezy__blog3-post {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%; /* Ensure all cards have the same height */
-    }
-    
-    .ezy__blog3-post .p-3.p-md-4 {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    
-</style>
+        .ezy__service23-card-body{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .post_avatar {
+            border-radius: 50%;
+            width: 50px; /* Set a fixed size for the user image */
+            height: 50px;
+        }
+        
+        .ezy__blog3-title {
+            height: 50px; /* Set a fixed height for the title */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .ezy__blog3-description {
+            font-size: 0.9rem;
+            line-height: 1.2em; /* Adjust line height */
+            height: calc(1.2em * 4); /* Limit to 3-4 lines */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4; /* Clamp to 4 lines */
+        }
+        
+        .ezy__blog3-post {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%; /* Ensure all cards have the same height */
+        }
+        
+        .ezy__blog3-post .p-3.p-md-4 {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+    </style>
 {% endblock %}
 
 {% block content %}

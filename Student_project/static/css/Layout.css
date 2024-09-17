@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+body {
+  font-family: 'Urbanist', sans-serif;
+}
+
+h1 {
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 700; /* Bold */
+}
+
+p {
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 400; /* Regular */
+}
+
+/* Header */
+.container-fluid{
+    max-width: 1440px;
+}
+.logo {
+    height: 56px;
+}
+.nav-item {
+    font-size: 16px;
+    font-weight: 500;
+}
+.menu-icon {
+    font-size: 26px;
+    display: none;
+    cursor: pointer;
+}
+
+.online-dot, .offline-dot {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    bottom: 40px;
+    left: 5px;
+    border: 3px solid #fff;
+}
+@media (max-width: 991px){
+    .online-dot, .offline-dot{
+        bottom: 50px;
+        left: -5px;
+    }
+}
+
+.online-dot {
+    background-color: #098761;
+}
+
+.offline-dot {
+    background-color:#A9A9A9;
+}
+/* Hide the default nav content on smaller screens */
+@media (max-width: 991px) {
+    .logo {
+        height: 48px;
+    }
+    .menu-icon {
+        display: block;
+        margin-right: 16px;
+    }
+    .menu-list {
+        display: none;
+        background-color: #fff;
+        position: absolute;
+        top: 80px; /* Adjust the height here to ensure it aligns below the header */
+        right: 1px;
+        width: 100%; /* Makes the menu occupy almost full width with padding */
+        padding: 10px;
+        z-index: 999;
+        box-shadow:  1px 6px 8px rgba(0, 0, 0, 0.1);
+    }
+    .menu-list.menu-active {
+        display: block;
+    }
+    .nav-item a {
+        color: #333;
+        display: block;
+        margin-bottom: 10px;
+    }
+    .nav-btn {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+    .button {
+        width: 100%;
+    }
+}
+
+/* Adjust the navbar for better appearance on all screens */
+@media (min-width: 992px) {
+    .menu-list {
+        display: flex !important;
+    }
+}
+
+/* Header End*/
+
+/* -------------footer------------- */
+.footer {
+    display: flex;
+    padding: 80px;
+    background-color: #0f0d0d;
+    color: white;
+    justify-content: space-evenly;
+    margin-top: 80px;
+}
+
+.footer .footer-link {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-para {
+    font-size: 14px;
+    max-width: 350px;
+    margin-bottom: 20px;
+}
+
+.footer-list a {
+    text-decoration: none;
+    color: white;
+    letter-spacing: 0.3px;
+    margin-left: 6px;
+}
+
+.quiek-link h3, .contact-Us h3, .Portfolio h3 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.quiek-link ul {
+    list-style: none;
+    padding: 0;
+}
+
+.quiek-link ul li {
+    margin-bottom: 10px;
+}
+
+.p-img {
+    width: 80px;
+    height: 80px;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.Portfolio .d-flex {
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logoss {
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.contact-Us p {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .footer .footer-link {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-para, .contact-Us, .Portfolio, .quiek-link {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .p-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .quiek-link h3, .contact-Us h3, .Portfolio h3 {
+        font-size: 24px;
+    }
+
+    .footer-para {
+        font-size: 16px;
+    }
+
+    .footer-list a {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    .p-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .footer-para {
+        font-size: 14px;
+    }
+
+    .footer-list a {
+        font-size: 14px;
+    }
+
+    .quiek-link h3, .contact-Us h3, .Portfolio h3 {
+        font-size: 22px;
+    }
+}        

@@ -20,4 +20,4 @@ class FeatureAdmin(admin.ModelAdmin):
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = ('name', 'title', 'about_us')
+    list_display = ('name', 'title', 'about_us','linkedin_url')
