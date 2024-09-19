@@ -1,0 +1,25 @@
+<!-- edit_aboutus.html -->
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+    Edit About Us Content
+{% endblock %}
+
+{% block admin_content %}
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">{{ site_header }}</h2>
+        <div class="card">
+            <div class="card-header">
+                <h3>Edit About Us Content</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Update About Us Content</button>
+                    <a href="{% url 'admin_aboutus' %}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

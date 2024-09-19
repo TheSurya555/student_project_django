@@ -99,7 +99,7 @@
         <div class="col-md-6 mb-4 mb-md-0">
           <h1>About Us</h1>
           {% if about_us_content %}
-            <p>{{ about_us_content.description }}</p>
+            <p>{{ about_us_content.description|safe }}</p>
           {% else %}
             <p>Hello Surya</p>
           {% endif %}

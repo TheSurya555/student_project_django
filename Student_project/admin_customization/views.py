@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from services.models import Service
 from talents.models import Skills
 from examination.models import *
+from aboutUs.models import *
+from contactus.models import *
 from django.http import HttpResponseForbidden
 from .forms import *
 from django.http import JsonResponse
@@ -125,15 +127,6 @@ def delete_skill(request, skill_id):
     messages.success(request, "Skill deleted successfully!")
     return redirect(reverse('service'))
 
-# Admin logout view start
-
-def admin_logout_view(request):
-    logout(request)
-    messages.success(request, _("You have successfully logged out."))
-    return redirect(reverse('admin_login'))
-
-
-# Admin logout view end
 
 
 # Admin Examination view start
@@ -297,3 +290,14 @@ def view_student_test(request, user_id):
     }
     
     return render(request, 'admin_customization/exam/view_student_test.html', context)
+
+
+# Admin examination view end
+
+
+# Admin logout view start
+def admin_logout_view(request):
+    logout(request)
+    messages.success(request, _("You have successfully logged out."))
+    return redirect(reverse('admin_login'))
+# Admin logout view end

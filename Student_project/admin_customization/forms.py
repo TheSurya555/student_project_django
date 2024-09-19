@@ -2,6 +2,7 @@ from django import forms
 from services.models import Service
 from talents.models import Skills
 from examination.models import *
+from aboutUs.models import *
 from tinymce.widgets import TinyMCE 
 
 
