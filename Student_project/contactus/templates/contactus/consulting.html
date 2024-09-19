@@ -5,65 +5,309 @@
 Contact Us
 {% endblock %}
 
-{% block head_css %}
-<link rel="stylesheet" href="{% static 'css/button.css' %}">
-<link rel="stylesheet" href="{% static 'css/inputfield.css' %}">
-<link rel="stylesheet" href="{% static 'css/Layout.css' %}">
-<link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
-{% endblock %}
-
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+{% comment %} <link rel="stylesheet" href="{% static 'css/contact.css' %}"> {% endcomment %}
+<Style>
+    .contact-section {
+        padding: 50px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-container {
+        background-color: #f9f9f9;
+        box-shadow: 0px 0px 5px #d1caca;
+        border-radius: 15px;
+        padding-block: 30px;
+        display: flex;
+        width: 800px;
+        gap: 4em;
+        margin-right: 102px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-control {
+        background-color: #d9f1e5;
+        border: none;
+        margin-bottom: 20px;
+    }
+
+    .btn-submit {
+        background-color: black;
+        color: white;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 20px;
+    }
+
+    .btn-submit:hover {
+        background-color: #333;
+    }
+
+    .support-info img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .support-info h5 {
+        font-weight: bold;
+    }
+
+    .support-info p {
+        font-size: 1.3rem;
+    }
+
+    .detail {
+        margin-bottom: 30px;
+    }
+
+    .image img {
+        border-radius: 15px;
+        width: 350px;
+        height: 450px;
+    }
+
+    .name-form {
+        display: flex;
+        gap: 1em;
+    }
+
+    .form-content {
+        margin-left: 60px;
+    }
+
+    .form-content input {
+        padding: 10px;
+    }
+
+    .image-contact {
+        display: flex;
+        justify-content: center;
+        gap: 4em;
+    }
+
+    .image-contact img {
+        width: 352px;
+        height: 440px;
+        border-radius: 20px;
+        object-fit: cover;
+    }
+
+    @media (max-width:992px) {
+        .form-container {
+            width: 600px;
+            gap: 3em;
+            margin-right: 42px;
+        }
+
+        .form-content {
+            margin-left: 35px;
+        }
+
+        .image img {
+            width: 270px;
+        }
+
+        .image-contact img {
+            width: 300px;
+        }
+
+        .image-contact {
+            gap: 3em;
+        }
+
+        .support-info h2 {
+            font-size: 25px;
+        }
+
+        .support-info p {
+            font-size: 1rem;
+        }
+    }
+
+    @media(max-width:768px) {
+        .image {
+            display: none;
+        }
+
+        .form-container {
+            width: 500px;
+            margin-right: 0;
+        }
+
+        .name-form {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .form-content {
+            width: 85%;
+            /* margin-inline: 55px; */
+            margin-block: 25px;
+
+        }
+    }
+
+    @media(max-width:576px) {
+        .form-container {
+            width: 350px;
+        }
+
+        .form-content {
+            margin-inline: 32px;
+        }
+
+        .image-contact img {
+            display: none;
+        }
+
+        .image-contact {
+            gap: 0;
+        }
+
+        .detail {
+            margin-bottom: 0;
+        }
+
+    }
+
+    /*-- map -- */
+    .map-section {
+        text-align: center;
+        padding: 50px 0;
+    }
+
+    .map-section img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .map-description {
+        width: 700px;
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    h2 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .iframe {
+
+        border-radius: 15px;
+    }
+
+</Style>
+
 {% endblock %}
 
+<!-- contactus section    -->
 {% block content %}
-    <section class="ezy__contact4 light">
-        <div class="container">
-            <div class="row py-4">
-                <div class="col-lg-7 mb-3 mb-lg-0">
-                    <div class="ezy__contact4-bg-holder h-100" style="background-image: url(https://cdn.easyfrontend.com/pictures/contact/contact_4.png);">
+<div class="container mt-4">
+    <div>
+        <div class=" mb-4">
+            <h1>Contact Us</h1>
+        </div>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita itaque nisi vel praesentium est
+            laudantium saepe, eum rerum, voluptas eos et voluptates voluptatum, ab natus doloribus tenetur veritatis
+            quae id?</p>
+    </div>
+    <div class="container contact-section">
+        <div class="row">
+            <!-- Form and Image Section -->
+            <div class="col-md-12">
+                <div class="form-container">
+                    <!-- Form Section -->
+                    <div class="form-content col-md-6">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="name-form">
+                                <!-- <input type="email" class="form-control" placeholder="Email">
+                                <input type="tel" class="form-control" placeholder="Phone"> -->
+                                {{form.email}}
+                                {{form.phone}}
+                            </div>
+                            <div class="mb-3">
+                                <!-- <input type="text" class="form-control" placeholder="Name"> -->
+                                 {{form.name}}
+                            </div>
+                            <div class="mb-3">
+                                <!-- <textarea class="form-control" rows="5" placeholder="Content"></textarea> -->
+                                 {{form.message}}
+                            </div>
+                            <div class="text-center">
+                                <button class="px-3" type="submit"><span>Submit</span></button>
+                            </div>
+                        </form>
                     </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="card ezy__contact4-form-card">
-                        <div class="card-body p-md-5">
-                            <h2 class="ezy__contact4-heading mb-3">Consult With Us</h2>
-                            <p class="ezy__contact4-sub-heading mb-5">We list your menu online, help you process orders.</p>
 
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="form-group mb-3 mt-2">
-                                    {{ form.name }}
-                                </div>
-                                <div class="form-group mb-3 mt-2">
-                                    {{ form.email }}
-                                </div>
-                                <div class="form-group mb-3 mt-2">
-                                    {{ form.phone }}
-                                </div>
-                                <div class="form-group mb-3">
-                                    {{ form.message }}
-                                </div>
-                                <div>
-                                    <button type="submit" class="px-3"><span>Submit</span></button>
-                                </div>
-                            </form>
-                        </div>
+                    <!-- Image Section -->
+                    <div class="col-md-6 image">
+                        {% for support in support_info %}
+                            {% if support.contatus_image %}
+                            <img src="{{ support.contatus_image.url }}" alt="Contact Us Image" class="img-fluid mb-3">
+                            {% else %}
+                            <img src="{% static 'assets/pexels-cottonbro-4065624.jpg'%}" alt="Contact Support" class="img-fluid mb-3">
+                            {% endif %}
+                        {% endfor %}                            
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    {% if messages %}
-        <div id="popup-message" class="popup-message">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
+        <!-- Support Info Section -->
+        <div class="row mt-5">
+            <div class="image-contact">
+                {% for support in support_info %}
+                    <div class="col-md-6">
+                        {% if support.support_image %}
+                        <img src="{{ support.support_image.url }}" alt="Support Image" class="img-fluid mb-3">
+                        {% else %}
+                        <img src="{% static 'assets/pexels-cottonbro-4065624.jpg'%}" alt="Phone Image" class="img-fluid mb-3">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 support-info mt-5">
+                            <div class="detail">
+                                <h2>{{ support.title }}</h2>
+                                <p>{{ support.description }}</p>
+                            </div>
+                            <p>{{ support.phone }}</p>
+                            <p>{{ support.email }}</p>
+                            <p>{{ support.address }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
         </div>
-    {% endif %}
+    </div>
+    <!--     map      -->
+    <div class=" map-section">
+        <h2>Find Us on Google Maps</h2>
+        <div class="d-flex justify-content-center mb-4">
+            <p class="map-description">
+                Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores,
+                illum at, aliquid blanditiis eligendi qui nihil repellendus dicta sapiente.
+            </p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.5074413514835!2d85.80679031461799!3d20.296059717241155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909f0bb467d13%3A0x26b1f0c691598eff!2sBhubaneswar%2C%20Odisha%2C%20India!5e0!3m2!1sen!2sus!4v1634568365535!5m2!1sen!2sus"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    class="iframe"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
-
+<!--  contactus section  end  -->
 {% block extra_js %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {

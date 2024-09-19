@@ -1,138 +1,196 @@
-.ezy__contact4 {
-	/* Bootstrap variables */
-	--bs-body-color: #28303b;
-	--bs-body-bg: rgb(255, 255, 255);
+    .contact-section {
+        padding: 50px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
-	/* Easy Frontend variables */
-	--ezy-theme-color: rgb(13, 110, 253);
-	--ezy-theme-color-rgb: 13, 110, 253;
-	--ezy-form-card-bg: #ffffff;
-	--ezy-form-card-shadow: 0 16px 24px rgba(197, 206, 222, 0.25);
+    .form-container {
+        background-color: #f9f9f9;
+        box-shadow: 0px 0px 5px #d1caca;
+        border-radius: 15px;
+        padding-block: 30px;
+        display: flex;
+        width: 800px;
+        gap: 4em;
+        margin-right: 102px;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-	background-color: var(--bs-body-bg);
+    .form-control {
+        background-color: #d9f1e5;
+        border: none;
+        margin-bottom: 20px;
+    }
 
-	padding: 70px 0;
-}
+    .btn-submit {
+        background-color: black;
+        color: white;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 20px;
+    }
 
+    .btn-submit:hover {
+        background-color: #333;
+    }
 
-/* Gray Block Style */
-.gray .ezy__contact4,
-.ezy__contact4.gray {
-	/* Bootstrap variables */
-	--bs-body-bg: rgb(246, 246, 246);
-	--ezy-form-card-bg: #f6f6f6;
-	--ezy-form-card-shadow: 0 16px 24px rgba(197, 206, 222, 0.25);
-}
+    .support-info img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
 
-/* Dark Gray Block Style */
-.dark-gray .ezy__contact4,
-.ezy__contact4.dark-gray {
-	/* Bootstrap variables */
-	--bs-body-color: #ffffff;
-	--bs-body-bg: rgb(30, 39, 53);
+    .support-info h5 {
+        font-weight: bold;
+    }
 
+    .support-info p {
+        font-size: 1.3rem;
+    }
 
-	/* Easy Frontend variables */
-	--ezy-form-card-bg: #1f2c3c;
-	--ezy-form-card-shadow: none;
-}
+    .detail {
+        margin-bottom: 30px;
+    }
 
-/* Dark Block Style */
-.dark .ezy__contact4,
-.ezy__contact4.dark {
-	/* Bootstrap variables */
-	--bs-body-color: #ffffff;
-	--bs-body-color: #ffffff;
-	--bs-body-bg: rgb(11, 23, 39);
+    .image img {
+        border-radius: 15px;
+        width: 350px;
+        height: 450px;
+    }
 
-	/* Easy Frontend variables */
-	--ezy-form-card-bg: #162231;
-	--ezy-form-card-shadow: none;
-}
+    .name-form {
+        display: flex;
+        gap: 1em;
+    }
 
-@media (min-width: 768px) {
-	.ezy__contact4 {
-		padding: 100px 0;
-	}
-}
+    .form-content {
+        margin-left: 60px;
+    }
 
-.ezy__contact4-bg-holder {
-	background-repeat: no-repeat;
-	background-size: cover;
-	min-height: 150px;
-}
+    .form-content input {
+        padding: 10px;
+    }
 
-.ezy__contact4-heading {
-	font-weight: bold;
-	font-size: 25px;
-	line-height: 25px;
-	color: var(--bs-body-color);
-}
+    .image-contact {
+        display: flex;
+        justify-content: center;
+        gap: 4em;
+    }
 
-@media (min-width: 768px) {
-	.ezy__contact4-heading {
-		font-size: 45px;
-		line-height: 45px;
-	}
-}
+    .image-contact img {
+        width: 352px;
+        height: 440px;
+        border-radius: 20px;
+        object-fit: cover;
+    }
 
-.ezy__contact4-sub-heading {
-	font-size: 18px;
-	line-height: 25px;
-	color: var(--bs-body-color);
-}
+    @media (max-width:992px) {
+        .form-container {
+            width: 600px;
+            gap: 3em;
+            margin-right: 42px;
+        }
 
-.ezy__contact4-form-card {
-	background-color: var(--ezy-form-card-bg);
-	border: none;
-	box-shadow: var(--ezy-form-card-shadow);
-	border-radius: 15px;
-}
+        .form-content {
+            margin-left: 35px;
+        }
 
-.ezy__contact4-bg-holder {
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	border-radius: 15px;
-}
+        .image img {
+            width: 270px;
+        }
 
-.ezy__contact4 .form-control {
-	min-height: 48px;
-	line-height: 40px;
-	border-color: transparent;
-	background: rgba(163, 190, 241, .14);
-	border-radius: 10px;
-	color: var(--bs-body-color);
-}
+        .image-contact img {
+            width: 300px;
+        }
 
-.ezy__contact4 .form-control:focus {
-	border-color: #86b7fe;
-	box-shadow: none;
-}
+        .image-contact {
+            gap: 3em;
+        }
 
-.ezy__contact4-btn {
-	padding: 12px 30px;
-	color: #ffffff;
-	background-color: var(--ezy-theme-color);
-	border-color: var(--ezy-theme-color);
-}
+        .support-info h2 {
+            font-size: 25px;
+        }
 
-.ezy__contact4-btn:hover {
-	background-color: rgba(var(--ezy-theme-color-rgb), .9);
-	border-color: rgba(var(--ezy-theme-color-rgb), .9);
-	color: #ffffff;
-}
+        .support-info p {
+            font-size: 1rem;
+        }
+    }
 
-/* CSS for the pop-up message */
-.popup-message {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 5px;
-    z-index: 1000;
-}
+    @media(max-width:768px) {
+        .image {
+            display: none;
+        }
+
+        .form-container {
+            width: 500px;
+            margin-right: 0;
+        }
+
+        .name-form {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .form-content {
+            width: 85%;
+            /* margin-inline: 55px; */
+            margin-block: 25px;
+
+        }
+    }
+
+    @media(max-width:576px) {
+        .form-container {
+            width: 350px;
+        }
+
+        .form-content {
+            margin-inline: 32px;
+        }
+
+        .image-contact img {
+            display: none;
+        }
+
+        .image-contact {
+            gap: 0;
+        }
+
+        .detail {
+            margin-bottom: 0;
+        }
+
+    }
+
+    /*-- map -- */
+    .map-section {
+        text-align: center;
+        padding: 50px 0;
+    }
+
+    .map-section img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .map-description {
+        width: 700px;
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    h2 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .iframe {
+
+        border-radius: 15px;
+    }
