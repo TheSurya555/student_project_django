@@ -1,12 +1,13 @@
 from django.urls import path
 from .views import *
 from .views_aboutus import *
+from .views_billing import *
+from .views_profile import *
 
 urlpatterns = [
     path('', admin_login, name='admin_login'),
     path('dashboard/', dashboard, name='dashboard'),
     path('profile/', profile, name='profile'),
-    path('billing/', billing, name='billing'),
     
     path('service/', service, name='service'),
     path('service/edit/<int:service_id>/', edit_service, name='edit_service'),
@@ -42,6 +43,18 @@ urlpatterns = [
     path('support-info/add/', add_support_info, name='add_support_info'),
     path('support-info/edit/<int:info_id>/', edit_support_info, name='edit_support_info'),
     path('support-info/delete/<int:info_id>/', delete_support_info, name='delete_support_info'),    
+    
+    #Privacy Policy CURD URLs
+    path('privacy-policy/add/', add_privacy_policy_content, name='add_privacy_policy_content'),
+    path('privacy-policy/edit/<int:pk>/', edit_privacy_policy_content, name='edit_privacy_policy_content'),
+    path('privacy-policy/delete/<int:pk>/', delete_privacy_policy_content, name='delete_privacy_policy_content'),
+    
+    path('billing/', billing, name='billing'),
+    path('subscriptions/add/', add_subscription_view, name='add_subscription'),
+    path('subscriptions/edit/<int:subscription_id>/', edit_subscription_view, name='edit_subscription'),
+    path('subscriptions/delete/<int:subscription_id>/', delete_subscription_view, name='delete_subscription'),
+    path('profile-pdf/<int:profile_id>/', profile_pdf, name='profile_pdf'),
+    path('payment/<int:payment_id>/pdf/', payment_pdf, name='payment_pdf'),
     
     path('admin_logout/', admin_logout_view, name='admin_logout'),
     

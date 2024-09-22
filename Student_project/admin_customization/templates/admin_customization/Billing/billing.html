@@ -1,0 +1,226 @@
+{% extends "admin_customization/Index.html" %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+Billing
+{% endblock %}
+
+{% block admin_extra_css %}
+
+<style>
+  .sticky-pagination {
+      position: -webkit-sticky;
+      position: sticky;
+      bottom: 0;
+      background-color: #fff; /* Ensures the pagination has a background */
+      padding: 10px;
+      text-align: center;
+      z-index: 1000; /* Keeps it on top */
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Optional: Adds a shadow for visibility */
+  }
+  .pagination {
+      margin-bottom: 0;
+  }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="row">
+          <div class="col-lg-6 w-100">
+              <div class="row">
+                  <div class="col-lg-6 w-100">
+                      <div class="card">
+                          <div class="card-header mx-4 p-3 text-center d-flex justify-content-center">
+                              <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                  <i class="fa-regular fa-money-bill-1"></i>
+                              </div>
+                          </div>
+                          <div class="card-body pt-0 p-3 text-center">
+                              <h4 class="text-center mb-0">Total Payment Recived</h4>
+                              <span class="text-xs">Made by the recuiterr</span>
+                              <hr class="horizontal dark my-3">
+                              <h5 class="mb-0">+${{ total_amount }}</h5>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-12 mb-lg-0 mb-4">
+            <div class="card mt-4">
+              <div class="card-header pb-0 p-3">
+                <div class="row">
+                  <div class="col-6 d-flex align-items-center">
+                    <h6 class="mb-0">Payment Method</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-3">
+                <div class="row">
+                  <div class="col-md-6 mb-md-0 mb-4">
+                    <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                      <img class="w-10 me-3 mb-0" src="{% static 'admin_customization/img/logos/mastercard.png' %}" alt="logo">
+                      <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852</h6>
+                      <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Card"></i>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                      <img class="w-10 me-3 mb-0" src="{% static 'admin_customization/img/logos/visa.png' %}" alt="logo">
+                      <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;5248</h6>
+                      <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Card"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card h-100">
+          <div class="card-header pb-0 p-3">
+            <div class="row">
+              <div class="col-6 d-flex align-items-center">
+                <h6 class="mb-0">Resistered Profiles</h6>
+              </div>
+              <div class="col-6 text-end">
+                {% if page_obj.has_other_pages %}
+                <a href="?page=1" class="btn btn-outline-primary btn-sm mb-0">View All</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-3 pb-0">
+            {% for profile in page_obj %}
+            <ul class="list-group">
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Fullname: {{profile.full_name}}</h6>
+                  <span class="text-xs">{{ profile.company_name }}</span>
+                  <span class="text-xs">Country: {{ profile.country }}</span>
+                  <span class="text-xs">Prefered Candidate Username: {{ profile.preferred_candidate_username  }}</span>
+                </div>
+                <div class="d-flex align-items-center text-sm">
+                  <a href="{% url 'profile_pdf' profile.id %}" class="btn btn-link text-dark text-sm mb-0 px-0 ms-4">
+                    <i class="fas fa-file-pdf text-lg me-1"></i> PDF
+                  </a>
+                </div>
+              </li>
+            {% empty %}
+              <li class="list-group-item border-0 text-center">No profiles found.</li>
+            </ul>
+            {% endfor %}
+
+            <!-- Sticky Pagination Controls -->
+            <div class="sticky-pagination">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>         
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7 mt-4">
+        <div class="card">
+          <div class="card-header pb-0 px-3 d-flex justify-content-between">
+            <h6 class="mb-0">Subscription Information</h6>
+            {% if subscriptions|length < 3 %}
+                <a href="{% url 'add_subscription' %}" class="btn btn-danger">Add Subscription</a>
+            {% endif %}
+          </div>
+          <div class="card-body pt-4 p-3">
+            {% for subscription in subscriptions %}
+              <ul class="list-group">
+                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-3 text-sm">{{ subscription.name }}</h6>
+                    <span class="mb-2 text-xs">{{ subscription.price }}</span>
+                    <span class="mb-2 text-xs">{{ subscription.description|truncatewords:15 }}</span>
+                    <span class="text-xs">{{ subscription.features|truncatewords:15 }}</span>
+                  </div>
+                  <div class="ms-auto text-end">
+                    <a href="{% url "edit_subscription" subscription.id %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'delete_subscription' subscription.id %}" class="btn btn-danger">Delete</a>
+                  </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item border-0 text-center">No subscriptions found.</li>
+              </ul>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5 mt-4">
+        <div class="card h-100 mb-4">
+          <div class="card-header pb-0 px-3">
+            <div class="row">
+              <div class="col-md-6">
+                  <h6 class="mb-0">Transaction List</h6>
+              </div>
+              <div class="col-md-6 d-flex justify-content-end align-items-center">
+                  <form method="get" class="d-flex">
+                      <label for="start-date" class="form-label me-2">{{ date_filter_form.start_date.label_tag }}</label>
+                      {{ date_filter_form.start_date|add_class:"form-control form-control-sm date-input" }}
+                      
+                      <label for="end-date" class="form-label me-2">{{ date_filter_form.end_date.label_tag }}</label>
+                      {{ date_filter_form.end_date|add_class:"form-control form-control-sm date-input"}}      
+                      <button type="submit" class="btn btn-primary btn-sm ms-2">Filter</button>
+                  </form>
+              </div>
+            </div>
+          </div>
+          <div class="card-body pt-4 p-3">
+            <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">Newest</h6>
+            <ul class="list-group">
+                {% for payment in payments %}
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex align-items-center">
+                    <a href="{% url 'payment_pdf' payment.id %}"><button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-arrow-down"></i></button></a>
+                    <div class="d-flex flex-column">
+                      <h6 class="mb-1 text-dark text-sm">{{ payment.recruiter }}</h6>
+                      <span class="text-xs">Date: <span class="text-dark ms-sm-2 font-weight-bold">{{ payment.payment_date|date:"Y-m-d" }}</span></span>
+                      <span class="text-xs">Payment Id: <span class="text-dark ms-sm-2 font-weight-bold">{{ payment.razorpay_payment_id }}</span></span>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
+                    ${{ payment.amount }}
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -3,6 +3,7 @@ from services.models import Service
 from talents.models import Skills
 from examination.models import *
 from aboutUs.models import *
+from payment.models import Subscription
 from tinymce.widgets import TinyMCE 
 
 
@@ -76,6 +77,20 @@ class AnswerCorrectionForm(forms.ModelForm):
         fields = ['is_correct']
         widgets = {
             'is_correct': forms.RadioSelect(choices=[(True, 'Yes'), (False, 'No')])
+        }        
+        
+        
+#Payment Subscription form        # 
+class SubscriptionForm(forms.ModelForm):
+    class Meta:
+        model = Subscription
+        fields = ['name', 'price', 'description', 'short_content', 'features']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter subscription name'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter price'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter description', 'rows': 3}),
+            'short_content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Short Description', 'rows': 3}),
+            'features': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter features', 'rows': 3}),
         }        
 
 class ScoreForm(forms.ModelForm):

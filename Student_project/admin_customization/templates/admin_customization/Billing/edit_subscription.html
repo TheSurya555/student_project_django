@@ -1,0 +1,19 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+    Add Subscriptions
+{% endblock %}
+
+{% block admin_content %}
+    <div class="container mt-5">
+        <div class="container mt-5">
+            <h2>{{ action }} Subscription</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">{{ action }} Subscription</button>
+                <a href="{% url 'billing' %}" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -3,13 +3,11 @@ from django.core.paginator import Paginator
 from studentPost.models import BlogPost
 from .models import Service
 from profiles.models import UserProfile
-from signUp.models import CandidateProfile
-
 
 def services_View(request):
     posts = BlogPost.objects.all()
     services = Service.objects.all()
-    paginator = Paginator(posts, 8)  # Show 6 posts per page
+    paginator = Paginator(posts, 8) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     profile_image_url = None

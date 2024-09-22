@@ -47,6 +47,7 @@ class Subscription(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=0)
     description = models.TextField()
+    short_content = models.TextField(blank=True, null=True)
     features = models.TextField()
 
     def __str__(self):

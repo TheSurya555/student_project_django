@@ -7,6 +7,7 @@ from .specific_forms.forms_aboutus import *
 from .views import admin_required
 from aboutUs.models import *
 from contactus.models import *
+from profiles.models import *
 
 
 # Admin aboutus view start@login_required
@@ -18,6 +19,7 @@ def admin_aboutus_view(request):
     team_members = TeamMember.objects.all()
     messages_list = ConsultingMessage.objects.all()
     support_info_list = SupportInfo.objects.all()
+    Privacy_Policy = PrivacyPolicy.objects.all()
 
     context = {
         'about_us_content': about_us_content,
@@ -25,6 +27,7 @@ def admin_aboutus_view(request):
         'team_members': team_members,
         'messages_list': messages_list,
         'support_info_list': support_info_list,
+        'Privacy_Policy':Privacy_Policy,
         'site_header': "Manage About Us, Features, and Team Members",
     }
     return render(request, 'admin_customization/aboutus/aboutus.html', context)
@@ -157,8 +160,6 @@ def delete_team_member(request, member_id):
     messages.success(request, "Team member deleted successfully!")
     return redirect('admin_aboutus')
 
-
-
 # Consulting Message CRUD Views
 
 @login_required
@@ -211,4 +212,42 @@ def delete_support_info(request, info_id):
     support_info = get_object_or_404(SupportInfo, id=info_id)
     support_info.delete()
     messages.success(request, "Support information deleted successfully!")
+    return redirect('admin_aboutus')
+
+
+# privacy policy 
+@login_required
+@admin_required
+def add_privacy_policy_content(request):
+    if request.method == 'POST':
+        form = PrivacyPolicyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('admin_aboutus'))  # Replace with the name of your listing URL
+    else:
+        form = PrivacyPolicyForm()
+    
+    return render(request, 'admin_customization/aboutus/add_privacy_policy_content.html', {'form': form ,'site_header': "Add Privacy Policy"})
+
+@login_required
+@admin_required
+def edit_privacy_policy_content(request, pk):
+    content = get_object_or_404(PrivacyPolicy, pk=pk)
+    
+    if request.method == 'POST':
+        form = PrivacyPolicyForm(request.POST, instance=content)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('admin_aboutus'))  # Replace with the correct URL name
+    else:
+        form = PrivacyPolicyForm(instance=content)
+    
+    return render(request, 'admin_customization/aboutus/edit_privacy_policy_content.html', {'form': form ,'site_header': "Edit Privacy Policy"})
+
+@login_required
+@admin_required
+def delete_privacy_policy_content(request, pk):
+    content = get_object_or_404(PrivacyPolicy, id=pk)
+    content.delete()
+    messages.success(request, "Privacy policy deleted successfully!")
     return redirect('admin_aboutus')

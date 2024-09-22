@@ -1,0 +1,17 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+    Add Privacy Policy
+{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-5">
+    <h2 class="mb-4">{{ site_header }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Privacy Policy</button>
+        <a href="{% url 'admin_aboutus' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

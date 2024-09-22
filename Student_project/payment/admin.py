@@ -27,7 +27,7 @@ class PaymentAdmin(admin.ModelAdmin):
 admin.site.register(Payment, PaymentAdmin)
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'description')
+    list_display = ('name', 'price', 'description','short_content')
     search_fields = ('name', 'description')
 
 admin.site.register(Subscription, SubscriptionAdmin)

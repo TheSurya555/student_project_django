@@ -178,7 +178,9 @@ Services
                         <div class="card-body pb-4 text-center ezy__service23-card-body">
                             <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
                             <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
-                            <a href="{% url 'service_candidates' service.id %}"><button class="px-3 mt-3"><span>View Candidates</span></button></a>
+                            <a href="{% url 'service_candidates' service.id %}">
+                                <button class="px-3 mt-3"><span>View Candidates</span></button>
+                            </a>
                         </div>
                     </div>
                 </div>

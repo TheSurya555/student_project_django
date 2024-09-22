@@ -53,15 +53,6 @@ def admin_login(request):
 def dashboard(request):
     return render(request, 'admin_customization/dashboard.html')
 
-@login_required
-@admin_required
-def profile(request):
-    return render(request, 'admin_customization/profile.html')
-
-@login_required
-@admin_required
-def billing(request):
-    return render(request, 'admin_customization/billing.html')
 
 @login_required
 @admin_required

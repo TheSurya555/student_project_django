@@ -7,61 +7,84 @@ subscription_list
 
 {% block extra_css %}
 <style>
-    .container {
+    .pricing-header {
         text-align: center;
-        padding: 20px;
+        margin-top: 40px;
+        margin-bottom: 40px;
     }
-    .subscription-card {
-        display: inline-block;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        width: 30%;
-        margin: 10px;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .subscription-card h2,h3{
-        margin: 0 0 20px;
-        font-weight: 700;
-    }
-    .subscription-card p {
-        margin: 20px 0;
-    }
-
-    .subscribe-button {
-        display: inline-block;
-        padding: 10px 20px;
-        margin-top: 10px;
+    .card {
         border: none;
-        border-radius: 5px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
+        transition: all 0.3s ease; /* Smooth transition for hover effect */
     }
-
+    .card.highlight {
+        border: 2px solid #2b675f;
+    }
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .price {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    .card-body ul {
+        padding: 0;
+        list-style: none;
+    }
+    .card-body ul li {
+        margin-bottom: 10px;
+    }
+    .card-b {
+        border: 2px solid #ccd4d3;
+        height: 410px;
+        transition: background-color 0.3s ease; /* Smooth background color transition */
+    }
+    .team {
+        font-weight: 600;
+        font-size: 18px;
+    }
+    .card-b:hover {
+        background-color: #309F7E; /* Light green background on hover */
+        color: white;
+    }
+    @media(max-width:992px){
+        .card-b {
+            margin-bottom: 20px;
+        }
+    }
 </style>
 {% endblock %}
 
 
 {% block content %}
 <div class="container">
-    <h1>Price List</h1>
-    {% for subscription in subscriptions %}
-        <div class="subscription-card">
-            <h3>{{ subscription.name }}</h3>
-            <h1>${{ subscription.price }}</h1>
-            <p>{{ subscription.description }}</p>
-
-            <ul style="text-align: left; list-style: initial;">
-                {% for feature in subscription.features_list %}
-                    <li>{{ feature }}</li>
-                {% endfor %}
-            </ul>
-
-            <a href="{% url 'payment_page' subscription.id %}"><button class="px-3"><span>Reserve</span></button></a>
+    <div class="pricing-header">
+        <h1>From Startup to Enterprise.</h1>
+        <p>
+            Perfectly tailored for every stage of your growth.<br />Get started today, no credit card needed.
+        </p>
+    </div>
+    <div class="row justify-content-center">
+        {% for subscription in subscriptions %}
+        <div class="col-lg-3 col-md-6 col-sm-12 d-flex justify-content-center">
+            <div class="card text-center card-b">
+              <div class="card-body card-bd d-flex flex-column">
+                <h5 class="card-title">{{ subscription.name }}</h5>
+                <p class="price">${{ subscription.price }}</p>
+                <p>{{ subscription.description }}</p>
+                <p class="team">{{ subscription.short_content }}</p>
+                <ul style="text-align: center;">
+                    {% for feature in subscription.features_list %}
+                        <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'payment_page' subscription.id %}" class="position-absolute" style="bottom: 8px;">
+                    <button class="px-3"><span>Get started</span></button>
+                </a>
+              </div>
+            </div>
         </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
-
-

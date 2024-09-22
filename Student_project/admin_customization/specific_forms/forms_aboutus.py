@@ -2,6 +2,7 @@ from django import forms
 from aboutUs.models import AboutUsContent, Feature, TeamMember
 from contactus.models import ConsultingMessage, SupportInfo
 from tinymce.widgets import TinyMCE 
+from profiles.models import PrivacyPolicy
 
 # About Us Forms
 
@@ -77,4 +78,14 @@ class SupportInfoForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter address'}),
             'support_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
             'contatus_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+        }
+        
+# PrivacyPolicy form        
+class PrivacyPolicyForm(forms.ModelForm):
+    class Meta:
+        model = PrivacyPolicy
+        fields = ['title', 'content']        
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title'}),
+            'content': TinyMCE(attrs={'class': 'form-control', 'rows': 3}),
         }
