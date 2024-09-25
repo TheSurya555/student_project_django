@@ -1,0 +1,109 @@
+<!-- blog/all_posts.html -->
+
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+    All Blog Posts
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/service.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">All Blog Posts</h2>
+
+    <div id="posts-container" class="row">
+        {% for post in posts %}
+        <div class="col-lg-4 col-md-6 col-sm-12 my-5 py-2 d-flex justify-content-center align-items-center">
+            <div class="card cards">
+                {% if post.blog_image %}
+                    <img src="{{ post.blog_image.url }}" alt="Blog image" class="card-img-top img-fluid" />
+                {% else %}
+                    <img src="{% static 'assets/nature2.jpeg' %}" alt="Sample Image" class="card-img-top img-fluid" />
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <div class="detailed">
+                        <div class="detail">
+                            {% if post.user.userprofile.profile_image %}
+                                <img class="post_avatar" src="{{ post.user.userprofile.profile_image.url }}" alt="avatar">
+                            {% else %}
+                                <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+                            {% endif %}
+                            <p class="card-text">{{ post.user.first_name }} {{ post.user.last_name }}</p>
+                        </div>
+                        <div class="images-img">
+                            <div><span>12</span> <i class="fa-solid fa-share-nodes"></i></div>
+                            <div><span>12</span> <i class="fa-regular fa-message"></i></div>
+                        </div>
+                    </div>
+                    <p class="card-text mt-2">{{ post.content|safe|truncatewords:15 }}</p>
+                </div>
+                <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+        <button id="load-more-btn" class="px-3"><span>Load More</span></button>
+    </div>
+    
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var offset = 12;  // Track the number of loaded posts
+
+    document.getElementById('load-more-btn').addEventListener('click', function() {
+        fetch(`/studentpost/load-more-posts/?offset=` + offset, {
+            method: 'GET',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            var postsContainer = document.getElementById('posts-container');
+            data.posts.forEach(post => {
+                postsContainer.innerHTML += `
+                    <div class="col-lg-4 col-md-6 col-sm-12 my-5 py-2 d-flex justify-content-center align-items-center">
+                        <div class="card cards">
+                            ${post.image_url ? `<img src="${post.image_url}" alt="Blog image" class="card-img-top img-fluid" />` 
+                            : `<img src="/static/assets/nature2.jpeg" alt="Sample Image" class="card-img-top img-fluid" />`}
+                            <div class="card-body">
+                                <h5 class="card-title">${post.title}</h5>
+                                <div class="detailed">
+                                    <div class="detail">
+                                        ${post.user_profile_image ? `<img class="post_avatar" src="${post.user_profile_image}" alt="avatar">`
+                                        : `<img class="post_avatar" src="/static/assets/candidate2.jpg" alt="avatar">`}
+                                        <p class="card-text">${post.user_first_name} ${post.user_last_name}</p>
+                                    </div>
+                                    <div class="images-img">
+                                        <div><span>12</span> <i class="fa-solid fa-share-nodes"></i></div>
+                                        <div><span>12</span> <i class="fa-regular fa-message"></i></div>
+                                    </div>
+                                </div>
+                                <p class="card-text mt-2">${post.content}</p>
+                            </div>
+                            <a href="/studentpost/postdetail/${post.id}"><button class="px-3"><span>Read More</span></button></a>
+                        </div>
+                    </div>`;
+            });
+            offset += 12;  // Update the offset for the next batch of posts
+        })
+        .catch(error => {
+            console.error('There was an error with the fetch operation:', error);
+        });
+    });
+    
+</script>
+{% endblock %}
