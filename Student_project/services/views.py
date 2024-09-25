@@ -1,17 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from studentPost.models import BlogPost
-from .models import Service
+from .models import Service ,Service_page
 from profiles.models import UserProfile
 
 def services_View(request):
     posts = BlogPost.objects.all()
     services = Service.objects.all()
+    service_pages = Service_page.objects.all()
     paginator = Paginator(posts, 8) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    profile_image_url = None
     
+    profile_image_url = None
     if request.user.is_authenticated:
         try:
             user_profile = UserProfile.objects.get(user=request.user)
@@ -22,7 +23,8 @@ def services_View(request):
     return render(request, 'services/services.html', {
         'page_obj': page_obj,
         'profile_image_url': profile_image_url,
-        'services': services
+        'services': services,
+        'service_pages':service_pages
     })
 
 
@@ -76,8 +78,8 @@ def candidate_profile(request, candidate_id):
 
 def all_services(request):
     services = Service.objects.all()
+    service_pages = Service_page.objects.all()
     profile_image_url = None
-    
     if request.user.is_authenticated:
         try:
             user_profile = UserProfile.objects.get(user=request.user)
@@ -87,5 +89,6 @@ def all_services(request):
     
     return render(request, 'services/all_services.html', {
         'services': services,
-        'profile_image_url': profile_image_url
+        'profile_image_url': profile_image_url,
+        'service_pages':service_pages
     })

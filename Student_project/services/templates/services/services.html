@@ -6,322 +6,179 @@ Services
 {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
-    <style>
-        .ezy__service23-heading{
-            font-size: 40px;
-            font-weight: bold;
-        }
-        .pagination {
-            margin: 0 auto;
-        }
+<link rel="stylesheet" href="{% static 'css/service.css' %}">
 
-        .pagination .dot {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: #098761;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-
-        .pagination .dot.active {
-            background-color: #000;
-        }
-
-        .pagination .arrow {
-            border-radius: 0;
-            background: none;
-            font-size: 60px;
-            line-height: 40px;
+<style>
+    @media (max-width: 768px) {
+        .service-title, .service-description {
             text-align: center;
-            vertical-align: middle;
-            margin: 0 20px;
-            cursor: pointer;
+            margin-left: 0;
+        }
+        .l-img, .r-img {
+            margin-bottom: 2rem;
+        }
+        .l-img img, .r-img img {
+            height: 250px;
         }
 
-        .uniform-img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
+    }
+    @media (max-width: 576px) {
+        .l-img img, .r-img img {
+            height: 250px;
         }
-
-        /* Hover effects */
-        .ezy__service23-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .card-img-top {
+            height: 150px;
         }
-
-        .ezy__blog3-post:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .ezy__service23-card-icon img {
-            transition: transform 0.3s ease;
-        }
-
-        .ezy__service23-card:hover .ezy__service23-card-icon img {
-            transform: scale(1.1);
-        }
-
-        /* Fixed card size and alignment */
-        .ezy__service23-card{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-
-        .ezy__service23-card .card-body{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .ezy__service23-card-title{
-            height: 50px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .ezy__service23-card-sub-title{
-            height: 72px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .ezy__service23-card{
-            max-height: 450px; /* Adjust the max height as needed */
-        }
-
-        .ezy__service23-card-body{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .post_avatar {
-            border-radius: 50%;
-            width: 50px; /* Set a fixed size for the user image */
-            height: 50px;
-        }
-        
-        .ezy__blog3-title {
-            height: 50px; /* Set a fixed height for the title */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .ezy__blog3-description {
-            font-size: 0.9rem;
-            line-height: 1.2em; /* Adjust line height */
-            height: calc(1.2em * 4); /* Limit to 3-4 lines */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 4; /* Clamp to 4 lines */
-        }
-        
-        .ezy__blog3-post {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%; /* Ensure all cards have the same height */
-        }
-        
-        .ezy__blog3-post .p-3.p-md-4 {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-    </style>
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-
-<!-- Service section start -->
-<section class="ezy__service23 light service" id="ezy__service23">
-    <div class="container">
-        <div class="row ezy__service23-separator">
-            <!-- Start: Section Heading -->
-            <div class="col-12 mb-5 text-center">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-5">
-                        <h3 class="ezy__service23-heading">Services List</h3>
-                        <p class="ezy__service23-sub-heading mt-4 px-md-4">
-                            Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid
-                            blanditiis eligendi qui.
-                        </p>
-                    </div>
-                </div>
+    <!-- Services Section -->
+    <section class="container mt-5">
+        <div class="text-center">
+            {% for service_page in service_pages %}
+            <h2 class="service-title">{{service_page.titel}}</h2>
+            <div class="container image-container">
+                {% if  service_page.service_banner_image %}
+                <img src="{{ service_page.service_banner_image.url }}" alt="banner image" class="img-fluid mb-3 rounded">
+                {% else %}
+                <img src="{% static 'assets/service.jpeg' %}" alt="banner image" class="img-fluid mb-3 rounded">
+                {% endif %}
             </div>
-            <!-- End: Section Heading -->
-
-            <!-- Loop through services and display them -->
-            {% for service in services %}
-            <div class="col-md-6 col-xl-4 mt-4 d-flex align-items-stretch">
-                <div class="card ezy__service23-card border-0 rounded-0 w-100">
-                    <div class="card-body pt-4 text-center d-flex flex-column align-items-center">
-                        <div class="ezy__service23-card-icon mb-3">
-                            <!-- Use the icon field from the Service model -->
-                            <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
-                        </div>
-                        <div class="card-body pb-4 text-center ezy__service23-card-body">
-                            <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
-                            <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
-                            <a href="{% url 'service_candidates' service.id %}">
-                                <button class="px-3 mt-3"><span>View Candidates</span></button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p class="service-description">{{service_page.page_description}}</p>
             {% endfor %}
-            <!-- End loop -->
-
         </div>
-        <!-- End: .row -->
-    </div>
-    <!-- End: .container -->
-</section>
-<!-- Service section end -->
 
-<!-- Blog section start -->
-<section class="ezy__blog3 light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <h2 class="ezy__blog3-heading mb-3 mt-0">The Body Type Of Models Is Far From Reality.</h2>
-                <p class="ezy__blog3-sub-heading px-lg-5 mb-4">
-                    Sed ut in perspiciatis unde omnis iste natus error sit on i tatem accusantium doloremque laudantium, totam
-                    rem aperiam, eaque ipsa quae.
-                </p>
+        <!-- Services Grid1 -->
+        <div class="row justify-content-center mt-5">
+            <!-- Left Image -->
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-4 order-lg-1 order-1 l-img">
+                {% for service_page in service_pages %}
+                    {% if  service_page.service_banner_image %}
+                    <img src="{{ service_page.service_left_image.url }}" alt="Service left image" class="img-fluid mb-3 rounded">
+                    {% else %}
+                    <img src="{% static 'assets/nature1.jpeg' %}" alt="Service left Image" class="img-fluid rounded">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <!-- Service Descriptions -->
+            <div class="col-lg-6 col-md-6 col-sm-12 service order-lg-2 order-1">
+                <div class="row">
+                    {% for service in services|slice:":4" %}
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-4 card-i">
+                        <div class="card card-div h-100">
+                            <div class="card-body">
+                                <div class="front">
+                                    {% if  service.icon %}
+                                    <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" class="img-fluid mb-3 rounded">
+                                    {% else %}
+                                    <img src="{% static 'assets/nature1.jpeg' %}" alt="{{ service.name }}" class="img-fluid mb-3 rounded">
+                                    {% endif %}
+                                    <h5 class="card-title text-center">{{ service.name }}</h5>
+                                    <p class="card-text">{{ service.description|safe|truncatewords:10 }}</p>
+                                </div>
+                                <div class="back-card">
+                                    <a href="{% url 'service_candidates' service.id %}">
+                                        <button class="px-3"><span>Learn More</span></button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
-        <div class="row mt-5" id="postContainer">
+        <!-- Services Grid2 -->
+        <div class="row justify-content-center mt-5">
+            <!-- Service Descriptions -->
+            <div class="col-lg-6 col-md-6 col-sm-12 service order-lg-1 order-md-1 order-2">
+                <div class="row">
+                    {% for service in services|slice:"5:" %}
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-5 card-i">
+                        <div class="card card-div h-100">
+                            <div class="card-body">
+                                <div class="front">
+                                    {% if  service.icon %}
+                                    <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" class="img-fluid mb-3 rounded">
+                                    {% else %}
+                                    <img src="{% static 'assets/nature1.jpeg' %}" alt="{{ service.name }}" class="img-fluid mb-3 rounded">
+                                    {% endif %}
+                                    <h5 class="card-title text-center">{{ service.name }}</h5>
+                                    <p class="card-text">{{ service.description|safe|truncatewords:10 }}</p>
+                                </div>
+                                <div class="back-card">
+                                    <a href="{% url 'service_candidates' service.id %}">
+                                        <button class="px-3"><span>Learn More</span></button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Right Image -->
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-4 order-lg-2 order-md-2 order-1 r-img">
+                {% for service_page in service_pages %}
+                    {% if  service_page.service_banner_image %}
+                    <img src="{{ service_page.service_right_image.url }}" alt="Service right image" class="img-fluid mb-3 rounded">
+                    {% else %}
+                    <img src="{% static 'assets/nature2.jpeg' %}" alt="Service right Image" class="img-fluid rounded">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- View All button -->
+        <div class="col-12 mt-4 text-center">
+            <a href="{% url 'all_services' %}">
+                <button class="px-3"><span>View All Services</span></button>
+            </a>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog-section container mt-5">
+        <h2 class="blog-title text-center mb-5">Recent Blog Posts</h2>
+        <div class="row">
             {% for post in page_obj %}
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <article class="ezy__blog3-post h-100 blog-post">
-                    <div class="position-relative">
-                        {% if post.blog_image %}
-                        <img src="{{ post.blog_image.url }}" alt="Blog image" class="img-fluid uniform-img ezy-blog7-banner"/>
-                        {% else %}
-                        <img src="{% static 'assets/sample-image.jpg' %}" alt="Sample Image" class="img-fluid uniform-img ezy-blog7-banner"/>
-                        {% endif %}
-                        <div class="px-4 py-3 ezy__blog7-calendar">{{ post.publication_date|date:"d M Y" }}</div>
+            <div class="col-lg-4 col-md-6 col-sm-12 my-5 d-flex justify-content-center align-items-center">
+                <div class="card cards">
+                    {% if post.blog_image %}
+                        <img src="{{ post.blog_image.url }}" alt="Blog image" class="card-img-top img-fluid" />
+                    {% else %}
+                        <img src="{% static 'assets/nature2.jpeg' %}" alt="Sample Image" class="card-img-top img-fluid" />
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <div class="detailed">
+                            <div class="detail">
+                                {% if post.user.userprofile.profile_image %}
+                                    <img class="post_avatar" src="{{ post.user.userprofile.profile_image.url }}" alt="avatar">
+                                {% else %}
+                                    <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+                                {% endif %}
+                                <p class="card-text">{{ post.user.first_name }} {{ post.user.last_name }}</p>
+                            </div>
+                            <div class="images-img">
+                                <div><span>12</span> <i class="fa-solid fa-share-nodes"></i></div>
+                                <div><span>12</span> <i class="fa-regular fa-message"></i></div>
+                            </div>
+                        </div>
+                        <p class="card-text mt-2">{{ post.content|safe|truncatewords:15 }}</p>
                     </div>
-                    <div class="p-3 p-md-4">
-                        <div class="avatar mb-2">
-                            {% if post.user.userprofile.profile_image %}
-                            <img class="post_avatar" src="{{ post.user.userprofile.profile_image.url }}" alt="avatar">
-                            {% else %}
-                            <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
-                            {% endif %}
-                            <span class="fw-bold m-2">{{ post.user.first_name }} {{ post.user.last_name }}</span>
-                        </div>                    
-                        <h4 class="mt-3 ezy__blog3-title fs-4">{{ post.title }}</h4>
-                        {% comment %} <p class="ezy__blog3-description mt-3 mb-4">{{ post.content|safe }}</p> {% endcomment %}
-                        <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
-                    </div>
-                </article>
+                    <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
+                </div>
             </div>
             {% endfor %}
         </div>
-        
-
-        <!-- Pagination controls -->
-        <div class="row mt-5">
-            <div class="col-lg-8 text-center mx-auto">
-                <ul class="pagination justify-content-center d-flex align-items-center" id="blogPaginator">
-                    <!-- Pagination dots/arrows will be dynamically added here -->
-                </ul>
-            </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'all_posts' %}">
+                <button class="px-3"><span>View All Posts</span></button>
+            </a>
         </div>
-        <!-- End: Pagination controls -->
-
-        {% if page_obj.has_next %}
-        <div class="row mt-3">
-            <div class="col-lg-8 text-center mx-auto">
-                <a href="?page={{ page_obj.next_page_number }}"><button class="px-3"><span>Load More Posts</span></button></a>
-            </div>
-        </div>
-        {% endif %}
-
-    </div>
-</section>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const blogPaginator = document.getElementById("blogPaginator");
-        const totalPages = {{ page_obj.paginator.num_pages }};
-        let currentPage = {{ page_obj.number }};
-
-        function loadBlogPage(page) {
-            fetch(`?page=${page}`)
-                .then(response => response.text())
-                .then(data => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, 'text/html');
-                    const newContent = doc.getElementById('postContainer').innerHTML;
-                    document.getElementById('postContainer').innerHTML = newContent;
-
-                    currentPage = page;
-                    updateBlogPaginator();
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function updateBlogPaginator() {
-            blogPaginator.innerHTML = "";
-
-            const prevArrow = document.createElement("li");
-            prevArrow.classList.add("arrow");
-            prevArrow.innerHTML = "&laquo;";
-            prevArrow.addEventListener("click", function() {
-                if (currentPage > 1) {
-                    loadBlogPage(currentPage - 1);
-                }
-            });
-            blogPaginator.appendChild(prevArrow);
-
-            for (let i = 1; i <= totalPages; i++) {
-                const dot = document.createElement("li");
-                dot.classList.add("dot");
-                if (i === currentPage) {
-                    dot.classList.add("active");
-                }
-                dot.setAttribute("data-page", i);
-                dot.addEventListener("click", function() {
-                    const page = parseInt(this.getAttribute("data-page"));
-                    loadBlogPage(page);
-                });
-                blogPaginator.appendChild(dot);
-            }
-
-            const nextArrow = document.createElement("li");
-            nextArrow.classList.add("arrow");
-            nextArrow.innerHTML = "&raquo;";
-            nextArrow.addEventListener("click", function() {
-                if (currentPage < totalPages) {
-                    loadBlogPage(currentPage + 1);
-                }
-            });
-            blogPaginator.appendChild(nextArrow);
-        }
-
-        updateBlogPaginator();
-    });
-</script>
+    </section>
 {% endblock %}

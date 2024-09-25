@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service
+from .models import Service ,Service_page
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
@@ -9,3 +9,9 @@ class ServiceAdmin(admin.ModelAdmin):
     list_editable = ('icon', 'name', 'description', 'skills')  # Include icon in editable fields
     fields = ('icon', 'name', 'description', 'skills', 'created_at')
     readonly_fields = ('created_at',)
+
+
+@admin.register(Service_page)
+class ServicePageAdmin(admin.ModelAdmin):
+    list_display = ('titel', 'page_description', 'service_banner_image')
+    search_fields = ('titel',)

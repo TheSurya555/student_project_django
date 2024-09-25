@@ -5,47 +5,56 @@
 All Services
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/service.css' %}">
+{% endblock %}
+
 
 {% block content %}
 <!-- Service section start -->
-<section class="ezy__service23 light service mt-5" id="ezy__service23">
+<section class="service mt-5">
     <div class="container">
         <div class="row ezy__service23-separator">
             <!-- Start: Section Heading -->
-            <div class="col-12 mb-5 text-center">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-5">
-                        <h3 class="ezy__service23-heading">All Services</h3>
-                    </div>
+            <div class="text-center">
+                {% for service_page in service_pages %}
+                <h2 class="service-title">All Services</h2>
+                <div class="container image-container">
+                    {% if  service_page.service_banner_image %}
+                    <img src="{{ service_page.service_banner_image.url }}" alt="banner image" class="img-fluid mb-3 rounded">
+                    {% else %}
+                    <img src="{% static 'assets/service.jpeg' %}" alt="banner image" class="img-fluid mb-3 rounded">
+                    {% endif %}
                 </div>
-                <p class="ezy__service23-sub-heading mt-4 px-md-4">
-                    Discover our wide range of services designed to meet your needs. 
-                    From professional consulting to cutting-edge technology solutions, 
-                    our offerings are tailored to help you achieve your goals efficiently and effectively.
-                </p>
+                <p class="service-description">{{service_page.page_description}}</p>
+                {% endfor %}
             </div>
             <!-- End: Section Heading -->
 
             <!-- Loop through services and display them -->
             {% for service in services %}
-            <div class="col-md-6 col-xl-4 mt-4 d-flex align-items-stretch">
-                <div class="card ezy__service23-card border-0 rounded-0 w-100">
-                    <div class="card-body pt-4 text-center d-flex flex-column align-items-center">
-                        <div class="ezy__service23-card-icon mb-3">
-                            <!-- Use the icon field from the Service model -->
-                            <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
-                        </div>
-                        <div class="card-body pb-4 text-center">
-                          <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
-                          <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
-                          <a href="{% url 'service_candidates' service.id %}"><button class="px-3 mt-3"><span>View Candidates</span></button></a>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4 card-i">
+                    <div class="card card-div h-100">
+                        <div class="card-body">
+                            <div class="front">
+                                {% if  service.icon %}
+                                <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" class="img-fluid mb-3 rounded">
+                                {% else %}
+                                <img src="{% static 'assets/nature1.jpeg' %}" alt="{{ service.name }}" class="img-fluid mb-3 rounded">
+                                {% endif %}
+                                <h5 class="card-title text-center">{{ service.name }}</h5>
+                                <p class="card-text">{{ service.description|safe|truncatewords:10 }}</p>
+                            </div>
+                            <div class="back-card">
+                                <a href="{% url 'service_candidates' service.id %}">
+                                    <button class="px-3"><span>Learn More</span></button>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
             <!-- End loop -->
-             
             
         </div>
         <!-- End: .row -->

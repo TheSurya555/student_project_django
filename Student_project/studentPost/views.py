@@ -1,10 +1,12 @@
 from django.forms import ValidationError
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import BlogPostForm , CandidatePreferenceForm
 from .models import BlogPost, CandidatePreference
 from profiles.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 # Create your views here.
 @login_required
@@ -51,6 +53,41 @@ def postDetail(request, post_id):
         'candidate_preference': candidate_preference  # Pass candidate preference to the template
     })
 
+def all_posts(request):
+    # posts = BlogPost.objects.all().order_by('-publication_date')  # Get all blog posts ordered by the newest
+    # paginator = Paginator(posts, 6)  # Show 6 posts per page
+
+    # page_number = request.GET.get('page')
+    # page_obj = paginator.get_page(page_number)
+
+    # return render(request, 'studentPost/all_posts.html', {'page_obj': page_obj})
+    # posts = BlogPost.objects.all().order_by('-publication_date')[:12]
+    # return render(request, 'studentPost/all_posts.html', {'posts': posts})
+
+    posts = BlogPost.objects.all().order_by('-publication_date')[:12]  # Load the first 12 posts
+    context = {
+        'posts': posts,
+    }
+    return render(request, 'studentPost/all_posts.html', context)
+
+def load_more_posts(request):
+    offset = int(request.GET.get('offset', 0))  # Get the offset from the query parameters
+    limit = 12  # Number of posts to load at a time
+    posts = BlogPost.objects.all()[offset:offset + limit]  # Fetch posts with offset
+
+    posts_data = []
+    for post in posts:
+        posts_data.append({
+            'id': post.id,
+            'title': post.title,
+            'image_url': post.blog_image.url if post.blog_image else None,
+            'content': post.content[:100],  # Shortened content for the card
+            'user_first_name': post.user.first_name,
+            'user_last_name': post.user.last_name,
+            'user_profile_image': post.user.userprofile.profile_image.url if post.user.userprofile.profile_image else None,
+        })
+
+    return JsonResponse({'posts': posts_data})
 
 @login_required
 def create_blog_post(request):
