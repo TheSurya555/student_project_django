@@ -10,7 +10,7 @@ def consulting_View(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your message has been sent successfully! We will contact us soon')
-            return redirect('consulting')
+            return redirect('contactus')
     else:
         form = ConsultingForm()
 

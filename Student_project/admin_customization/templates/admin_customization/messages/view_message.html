@@ -1,0 +1,38 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+View Message
+{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h3 class="mb-4">Message Details</h3>
+        
+        <!-- Message Details -->
+        <div class="mb-3">
+            <strong>Name:</strong>
+            <p>{{ message_obj.name }}</p>
+        </div>
+
+        <div class="mb-3">
+            <strong>Email:</strong>
+            <p>{{ message_obj.email }}</p>
+        </div>
+
+        <div class="mb-3">
+            <strong>Message:</strong>
+            <p>{{ message_obj.message }}</p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-start">
+            <a href="{% url 'admin_messages' %}" class="btn btn-secondary me-2">Back to Messages</a>
+            <a href="mailto:{{ message_obj.email }}?subject=Reply to your inquiry&body=Dear {{ message_obj.name }},%0D%0A%0D%0A[Your message here]%0D%0A%0D%0ABest regards," 
+               class="btn btn-primary me-2">Reply</a>
+            <a href="{% url 'delete_consulting_message' message_obj.id %}" class="btn btn-danger" 
+               onclick="return confirm('Are you sure you want to delete this message?');">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from progress_tracker.models import Project
-from payment.models import Payment  # Import the Payment model
+from payment.models import Payment 
 from django.db.models import Sum
 
 @login_required

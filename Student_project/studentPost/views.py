@@ -53,41 +53,42 @@ def postDetail(request, post_id):
         'candidate_preference': candidate_preference  # Pass candidate preference to the template
     })
 
+# View to show all posts with pagination
 def all_posts(request):
-    # posts = BlogPost.objects.all().order_by('-publication_date')  # Get all blog posts ordered by the newest
-    # paginator = Paginator(posts, 6)  # Show 6 posts per page
+    posts_list = BlogPost.objects.all()  # Fetch all posts
+    paginator = Paginator(posts_list, 12)  # Show 12 posts per page
+    page_number = request.GET.get('page', 1)  # Get the current page number from the URL
+    page_obj = paginator.get_page(page_number)
 
-    # page_number = request.GET.get('page')
-    # page_obj = paginator.get_page(page_number)
-
-    # return render(request, 'studentPost/all_posts.html', {'page_obj': page_obj})
-    # posts = BlogPost.objects.all().order_by('-publication_date')[:12]
-    # return render(request, 'studentPost/all_posts.html', {'posts': posts})
-
-    posts = BlogPost.objects.all().order_by('-publication_date')[:12]  # Load the first 12 posts
     context = {
-        'posts': posts,
+        'posts': page_obj,  # This includes posts and pagination data
     }
     return render(request, 'studentPost/all_posts.html', context)
 
+# API view to load more posts dynamically
 def load_more_posts(request):
-    offset = int(request.GET.get('offset', 0))  # Get the offset from the query parameters
-    limit = 12  # Number of posts to load at a time
-    posts = BlogPost.objects.all()[offset:offset + limit]  # Fetch posts with offset
+    posts = BlogPost.objects.all()
+    paginator = Paginator(posts, 12)  # Show 12 posts per page
+    page_number = request.GET.get('page', 1)  # Get the requested page number
+    page_obj = paginator.get_page(page_number)
 
     posts_data = []
-    for post in posts:
+    for post in page_obj.object_list:
         posts_data.append({
             'id': post.id,
             'title': post.title,
             'image_url': post.blog_image.url if post.blog_image else None,
-            'content': post.content[:100],  # Shortened content for the card
+            'content': post.content[:100],  # Truncated content
             'user_first_name': post.user.first_name,
             'user_last_name': post.user.last_name,
             'user_profile_image': post.user.userprofile.profile_image.url if post.user.userprofile.profile_image else None,
         })
 
-    return JsonResponse({'posts': posts_data})
+    return JsonResponse({
+        'posts': posts_data,
+        'has_next': page_obj.has_next(),  # To indicate if there are more posts
+    })
+
 
 @login_required
 def create_blog_post(request):

@@ -53,42 +53,6 @@ def admin_login(request):
 def dashboard(request):
     return render(request, 'admin_customization/dashboard.html')
 
-
-@login_required
-@admin_required
-def service(request):
-    service_obj = Service.objects.all()
-    skills_obj = Skills.objects.all()
-    
-    context ={
-        'service_obj':service_obj,
-        'skills_obj':skills_obj
-    }
-    return render(request, 'admin_customization/service.html' ,context)
-
-@login_required
-@admin_required
-def edit_service(request, service_id):
-    service = get_object_or_404(Service, id=service_id)
-
-    if request.method == 'POST':
-        form = ServiceForm(request.POST, request.FILES, instance=service)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Service updated successfully!")
-            return redirect(reverse('service'))  # Redirect to the service list or another page
-        else:
-            messages.error(request, "Please correct the errors below.")
-    else:
-        form = ServiceForm(instance=service)
-
-    context = {
-        'form': form,
-        'service': service,
-        'site_header': "Edit Service"
-    }
-    return render(request, 'admin_customization/edit_service.html', context)
-
 @login_required
 @admin_required
 def add_skill(request):
@@ -117,7 +81,6 @@ def delete_skill(request, skill_id):
     skill.delete()
     messages.success(request, "Skill deleted successfully!")
     return redirect(reverse('service'))
-
 
 
 # Admin Examination view start
@@ -219,7 +182,6 @@ def add_question(request):
         'site_header': "Add New Question"
     }
     return render(request, 'admin_customization/exam/add_question.html', context)
-
 
 @login_required
 @admin_required

@@ -17,7 +17,6 @@ def admin_aboutus_view(request):
     about_us_content = AboutUsContent.objects.all()
     features = Feature.objects.all()
     team_members = TeamMember.objects.all()
-    messages_list = ConsultingMessage.objects.all()
     support_info_list = SupportInfo.objects.all()
     Privacy_Policy = PrivacyPolicy.objects.all()
 
@@ -25,7 +24,6 @@ def admin_aboutus_view(request):
         'about_us_content': about_us_content,
         'features': features,
         'team_members': team_members,
-        'messages_list': messages_list,
         'support_info_list': support_info_list,
         'Privacy_Policy':Privacy_Policy,
         'site_header': "Manage About Us, Features, and Team Members",
@@ -160,15 +158,6 @@ def delete_team_member(request, member_id):
     messages.success(request, "Team member deleted successfully!")
     return redirect('admin_aboutus')
 
-# Consulting Message CRUD Views
-
-@login_required
-@admin_required
-def delete_consulting_message(request, message_id):
-    message = get_object_or_404(ConsultingMessage, id=message_id)
-    message.delete()
-    messages.success(request, "Message deleted successfully!")
-    return redirect('admin_aboutus')
 
 # Support Info CRUD Views
 

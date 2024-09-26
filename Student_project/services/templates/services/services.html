@@ -143,16 +143,16 @@ Services
     <!-- Blog Section -->
     <section class="blog-section container mt-5">
         <h2 class="blog-title text-center mb-5">Recent Blog Posts</h2>
-        <div class="row">
+        <div id="posts-container" class="row mb-5">
             {% for post in page_obj %}
-            <div class="col-lg-4 col-md-6 col-sm-12 my-5 d-flex justify-content-center align-items-center">
-                <div class="card cards">
+            <div class="col-lg-4 col-md-6 col-sm-12 my-5 py-2 d-flex justify-content-center align-items-center">
+                <div class="card cards" style="height: 300px; height: 464px;">
                     {% if post.blog_image %}
                         <img src="{{ post.blog_image.url }}" alt="Blog image" class="card-img-top img-fluid" />
                     {% else %}
                         <img src="{% static 'assets/nature2.jpeg' %}" alt="Sample Image" class="card-img-top img-fluid" />
                     {% endif %}
-                    <div class="card-body">
+                    <div class="card-body pb-0">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <div class="detailed">
                             <div class="detail">
@@ -168,7 +168,7 @@ Services
                                 <div><span>12</span> <i class="fa-regular fa-message"></i></div>
                             </div>
                         </div>
-                        <p class="card-text mt-2">{{ post.content|safe|truncatewords:15 }}</p>
+                        <p class="card-text mt-2">{{ post.content|safe|truncatewords:10 }}</p>
                     </div>
                     <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
                 </div>
