@@ -8,7 +8,7 @@ from .views import admin_required
 from aboutUs.models import *
 from contactus.models import *
 from profiles.models import *
-
+from notifications.models import Notification
 
 # Admin aboutus view start@login_required
 @admin_required
@@ -19,6 +19,8 @@ def admin_aboutus_view(request):
     team_members = TeamMember.objects.all()
     support_info_list = SupportInfo.objects.all()
     Privacy_Policy = PrivacyPolicy.objects.all()
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
+    
 
     context = {
         'about_us_content': about_us_content,
@@ -27,6 +29,7 @@ def admin_aboutus_view(request):
         'support_info_list': support_info_list,
         'Privacy_Policy':Privacy_Policy,
         'site_header': "Manage About Us, Features, and Team Members",
+        'notifications': notifications,
     }
     return render(request, 'admin_customization/aboutus/aboutus.html', context)
 

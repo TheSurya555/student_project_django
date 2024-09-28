@@ -43,8 +43,21 @@ def fetch_skill_data(request, skill_id):
     data = {
         'random_skill': skill.skill,
         'random_contracts': random_contracts,
-        'related_services': [{'id': service.id, 'name': service.name, 'rating': '⭐ 4.8 average rating'} for service in related_services],
-        'related_user_profiles': [{'profile_image': user.profile_image.url, 'username': user.user.username} for user in related_user_profiles],
+        'related_services': [
+            {
+                'id': service.id,
+                'name': service.name,
+                'icon': service.icon.url if service.icon else None  # Add the icon URL or None if not available
+            } 
+            for service in related_services
+        ],
+        'related_user_profiles': [
+            {
+                'profile_image': user.profile_image.url,
+                'username': user.user.username
+            } 
+            for user in related_user_profiles
+        ],
     }
 
     return JsonResponse(data)

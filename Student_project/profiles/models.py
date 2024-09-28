@@ -3,12 +3,17 @@ from django.conf import settings
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from tinymce.models import HTMLField
+from django_countries.fields import CountryField
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     dob = models.DateField(verbose_name='Date of Birth', null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    country = CountryField(blank_label='(select country)', null=True, blank=True)
+    postal_code = models.CharField(max_length=20, null=True, blank=True)
     role = models.CharField(max_length=100, null=True, blank=True)
     position = models.CharField(max_length=100, null=True, blank=True)
     experience = models.CharField(max_length=100, null=True, blank=True)

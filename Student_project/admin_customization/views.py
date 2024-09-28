@@ -13,6 +13,7 @@ from contactus.models import *
 from django.http import HttpResponseForbidden
 from .forms import *
 from django.http import JsonResponse
+from notifications.models import Notification
 
 def admin_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -48,10 +49,15 @@ def admin_login(request):
     }
     return render(request, 'admin_customization/login.html', context)
 
+
 @login_required    
 @admin_required
 def dashboard(request):
-    return render(request, 'admin_customization/dashboard.html')
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
+    context = {
+        'notifications':notifications,
+    }
+    return render(request, 'admin_customization/dashboard.html',context)
 
 @login_required
 @admin_required
@@ -92,6 +98,7 @@ def examination(request):
     selected_skill = None
     questions = []
     student_tests = Test.objects.all()
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
 
     # Check if a skill has been selected by the admin
     if 'skill_id' in request.GET:
@@ -103,6 +110,7 @@ def examination(request):
         'selected_skill': selected_skill,
         'questions': questions,
         'student_tests': student_tests,
+        'notifications':notifications,
         'site_header': "Manage Examination Skills and Questions"
     }
 
@@ -243,7 +251,6 @@ def view_student_test(request, user_id):
     }
     
     return render(request, 'admin_customization/exam/view_student_test.html', context)
-
 
 # Admin examination view end
 

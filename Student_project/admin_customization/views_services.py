@@ -9,6 +9,7 @@ from services.models import Service ,Service_page
 from .views import admin_required
 from .specific_forms.forms_services import *
 from .forms import *
+from notifications.models import Notification
 
 @login_required
 @admin_required
@@ -16,11 +17,14 @@ def service(request):
     service_obj = Service.objects.all()
     skills_obj = Skills.objects.all()
     service_pages = Service_page.objects.all() 
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
+    
     
     context ={
         'service_obj':service_obj,
         'skills_obj':skills_obj,
         'service_pages': service_pages,
+        'notifications':notifications,
     }
     return render(request, 'admin_customization/services/service.html' ,context)
 
@@ -46,8 +50,6 @@ def edit_service(request, service_id):
         'site_header': "Edit Service"
     }
     return render(request, 'admin_customization/services/edit_service.html', context)
-
-
 
 @login_required
 @admin_required

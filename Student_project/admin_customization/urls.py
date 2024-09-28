@@ -5,21 +5,28 @@ from .views_billing import *
 from .views_profile import *
 from .views_services import *
 from .views_message import *
+from .views_notification import *
 
 urlpatterns = [
     path('', admin_login, name='admin_login'),
     path('dashboard/', dashboard, name='dashboard'),
-    path('profile/', profile, name='profile'),
     
+    # profile urls
+    path('profile/', profile, name='profile'),
+    path('profile/edit/', edit_profile, name='edit_profile'),
+    
+    # Servie urls
     path('service/', service, name='service'),
     path('service/edit/<int:service_id>/', edit_service, name='edit_service'),
     path('service_pages/add/', add_service_page, name='add_service_page'),
     path('service_pages/edit/<int:page_id>/', edit_service_page, name='edit_service_page'),
     path('service_pages/delete/<int:page_id>/', delete_service_page, name='delete_service_page'),
     
+    # talent urls
     path('talentadmin/skill/add/', add_skill, name='add_skill'),
     path('talentadmin/skill/delete/<int:skill_id>/', delete_skill, name='delete_skill'),
     
+    # examination urls
     path('examination/', examination, name='examination'),
     path('exam-add-skill/', exam_add_skill, name='exam_add_skill'),
     path('add-question/', add_question, name='add_question'),
@@ -29,6 +36,7 @@ urlpatterns = [
     path('examination/delete_question/<int:question_id>/', delete_question, name='delete_question'),
     path('view-student-test/<int:user_id>/',view_student_test, name='view_student_test'),
     
+    # about us urls
     path('about-us/', admin_aboutus_view, name='admin_aboutus'),
     path('about-us/add/', add_aboutus_content, name='add_aboutus_content'),
     path('about-us/edit/<int:content_id>/', edit_aboutus_content, name='edit_aboutus_content'),
@@ -66,6 +74,10 @@ urlpatterns = [
     path('admin-messages/', messages_view, name='admin_messages'),
     path('admin-messages/view/<int:message_id>/', view_message, name='view_message'),
     path('admin-messages/delete/<int:message_id>/', delete_consulting_message, name='delete_consulting_message'),
+    
+    # notification view
+    path('notifications/', notification_view, name='notification_view'),
+    path('notifications/mark-as-read/', mark_notifications_as_read, name='mark_notifications_as_read'),
     
     path('admin_logout/', admin_logout_view, name='admin_logout'),
     

@@ -6,258 +6,59 @@ Contact Us
 {% endblock %}
 
 {% block extra_css %}
-{% comment %} <link rel="stylesheet" href="{% static 'css/contact.css' %}"> {% endcomment %}
-<Style>
-    .contact-section {
-        padding: 50px 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .form-container {
-        background-color: #f9f9f9;
-        box-shadow: 0px 0px 5px #d1caca;
-        border-radius: 15px;
-        padding-block: 30px;
-        display: flex;
-        width: 800px;
-        gap: 4em;
-        margin-right: 102px;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .form-control {
-        background-color: #d9f1e5;
-        border: none;
-        margin-bottom: 20px;
-    }
-
-    .btn-submit {
-        background-color: black;
-        color: white;
-        padding: 10px 30px;
-        border: none;
-        border-radius: 20px;
-    }
-
-    .btn-submit:hover {
-        background-color: #333;
-    }
-
-    .support-info img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 10px;
-    }
-
-    .support-info h5 {
-        font-weight: bold;
-    }
-
-    .support-info p {
-        font-size: 1.3rem;
-    }
-
-    .detail {
-        margin-bottom: 30px;
-    }
-
-    .image img {
-        border-radius: 15px;
-        width: 350px;
-        height: 450px;
-    }
-
-    .name-form {
-        display: flex;
-        gap: 1em;
-    }
-
-    .form-content {
-        margin-left: 60px;
-    }
-
-    .form-content input {
-        padding: 10px;
-    }
-
-    .image-contact {
-        display: flex;
-        justify-content: center;
-        gap: 4em;
-    }
-
-    .image-contact img {
-        width: 352px;
-        height: 440px;
-        border-radius: 20px;
-        object-fit: cover;
-    }
-
-    @media (max-width:992px) {
-        .form-container {
-            width: 600px;
-            gap: 3em;
-            margin-right: 42px;
-        }
-
-        .form-content {
-            margin-left: 35px;
-        }
-
-        .image img {
-            width: 270px;
-        }
-
-        .image-contact img {
-            width: 300px;
-        }
-
-        .image-contact {
-            gap: 3em;
-        }
-
-        .support-info h2 {
-            font-size: 25px;
-        }
-
-        .support-info p {
-            font-size: 1rem;
-        }
-    }
-
-    @media(max-width:768px) {
-        .image {
-            display: none;
-        }
-
-        .form-container {
-            width: 500px;
-            margin-right: 0;
-        }
-
-        .name-form {
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .form-content {
-            width: 85%;
-            /* margin-inline: 55px; */
-            margin-block: 25px;
-
-        }
-    }
-
-    @media(max-width:576px) {
-        .form-container {
-            width: 350px;
-        }
-
-        .form-content {
-            margin-inline: 32px;
-        }
-
-        .image-contact img {
-            display: none;
-        }
-
-        .image-contact {
-            gap: 0;
-        }
-
-        .detail {
-            margin-bottom: 0;
-        }
-
-    }
-
-    /*-- map -- */
-    .map-section {
-        text-align: center;
-        padding: 50px 0;
-    }
-
-    .map-section img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 10px;
-    }
-
-    .map-description {
-        width: 700px;
-        color: #6c757d;
-        font-size: 1.1rem;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-
-    h2 {
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .iframe {
-
-        border-radius: 15px;
-    }
-
-</Style>
-
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
 {% endblock %}
 
-<!-- contactus section    -->
 {% block content %}
 <div class="container mt-4">
     <div>
-        <div class=" mb-4">
+        <div class="mb-4">
             <h1>Contact Us</h1>
         </div>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita itaque nisi vel praesentium est
             laudantium saepe, eum rerum, voluptas eos et voluptates voluptatum, ab natus doloribus tenetur veritatis
             quae id?</p>
     </div>
+
+    <!-- Success Message Section -->
+    {% if messages %}
+        <div class="alert alert-success" id="popup-message">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
     <div class="container contact-section">
         <div class="row">
-            <!-- Form and Image Section -->
             <div class="col-md-12">
                 <div class="form-container">
-                    <!-- Form Section -->
                     <div class="form-content col-md-6">
                         <form method="post">
                             {% csrf_token %}
                             <div class="name-form">
-                                <!-- <input type="email" class="form-control" placeholder="Email">
-                                <input type="tel" class="form-control" placeholder="Phone"> -->
-                                {{form.email}}
-                                {{form.phone}}
+                                {{ form.email }}
+                                {{ form.phone }}
                             </div>
                             <div class="mb-3">
-                                <!-- <input type="text" class="form-control" placeholder="Name"> -->
-                                 {{form.name}}
+                                {{ form.name }}
                             </div>
                             <div class="mb-3">
-                                <!-- <textarea class="form-control" rows="5" placeholder="Content"></textarea> -->
-                                 {{form.message}}
+                                {{ form.message }}
                             </div>
                             <div class="text-center">
                                 <button class="px-3" type="submit"><span>Submit</span></button>
                             </div>
                         </form>
                     </div>
-
-                    <!-- Image Section -->
                     <div class="col-md-6 image">
                         {% for support in support_info %}
                             {% if support.contatus_image %}
                             <img src="{{ support.contatus_image.url }}" alt="Contact Us Image" class="img-fluid mb-3">
                             {% else %}
-                            <img src="{% static 'assets/pexels-cottonbro-4065624.jpg'%}" alt="Contact Support" class="img-fluid mb-3">
+                            <img src="{% static 'assets/pexels-cottonbro-4065624.jpg' %}" alt="Contact Support" class="img-fluid mb-3">
                             {% endif %}
-                        {% endfor %}                            
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -271,24 +72,25 @@ Contact Us
                         {% if support.support_image %}
                         <img src="{{ support.support_image.url }}" alt="Support Image" class="img-fluid mb-3">
                         {% else %}
-                        <img src="{% static 'assets/pexels-cottonbro-4065624.jpg'%}" alt="Phone Image" class="img-fluid mb-3">
+                        <img src="{% static 'assets/pexels-cottonbro-4065624.jpg' %}" alt="Phone Image" class="img-fluid mb-3">
                         {% endif %}
                     </div>
                     <div class="col-md-6 support-info mt-5">
-                            <div class="detail">
-                                <h2>{{ support.title }}</h2>
-                                <p>{{ support.description }}</p>
-                            </div>
-                            <p>{{ support.phone }}</p>
-                            <p>{{ support.email }}</p>
-                            <p>{{ support.address }}</p>
+                        <div class="detail">
+                            <h2>{{ support.title }}</h2>
+                            <p>{{ support.description }}</p>
                         </div>
+                        <p>{{ support.phone }}</p>
+                        <p>{{ support.email }}</p>
+                        <p>{{ support.address }}</p>
                     </div>
                 {% endfor %}
+            </div>
         </div>
     </div>
-    <!--     map      -->
-    <div class=" map-section">
+
+    <!-- Map Section -->
+    <div class="map-section">
         <h2>Find Us on Google Maps</h2>
         <div class="d-flex justify-content-center mb-4">
             <p class="map-description">
@@ -298,8 +100,7 @@ Contact Us
         </div>
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.5074413514835!2d85.80679031461799!3d20.296059717241155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909f0bb467d13%3A0x26b1f0c691598eff!2sBhubaneswar%2C%20Odisha%2C%20India!5e0!3m2!1sen!2sus!4v1634568365535!5m2!1sen!2sus"
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.5074413514835!2d85.80679031461799!3d20.296059717241155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909f0bb467d13%3A0x26b1f0c691598eff!2sBhubaneswar%2C%20Odisha%2C%20India!5e0!3m2!1sen!2sus!4v1634568365535!5m2!1sen!2sus"
                     width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                     class="iframe"></iframe>
             </div>
@@ -307,18 +108,18 @@ Contact Us
     </div>
 </div>
 {% endblock %}
-<!--  contactus section  end  -->
+
 {% block extra_js %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var popup = document.getElementById('popup-message');
-            if (popup) {
-                popup.style.display = 'block';
-                setTimeout(function() {
-                    popup.style.display = 'none';
-                    popup.parentNode.removeChild(popup);
-                }, 3000);
-            }
-        });
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var popup = document.getElementById('popup-message');
+        if (popup) {
+            popup.style.display = 'block';
+            setTimeout(function() {
+                popup.style.display = 'none';
+                popup.parentNode.removeChild(popup);
+            }, 3000);
+        }
+    });
+</script>
 {% endblock %}

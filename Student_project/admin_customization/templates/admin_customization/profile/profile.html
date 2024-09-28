@@ -33,117 +33,135 @@ Profile
 
     <div class="container-fluid py-4">
         <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-            <div class="card-header pb-0">
-                <div class="d-flex align-items-center">
-                <p class="mb-0">Edit Profile</p>
-                <button class="btn btn-primary btn-sm ms-auto">Settings</button>
-                </div>
-            </div>
-            <div class="card-body">
-                <p class="text-uppercase text-sm">User Information</p>
-                <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Username</label>
-                    <input class="form-control" type="text" value="lucky.jesse">
+            <div class="col-md-8">
+                <div class="card">
+                <div class="card-header pb-0">
+                    <div class="d-flex justify-content-between">
+                    <p class="mb-0">Edit Profile</p>
+                        <a href="{% url "edit_profile" %}"><button class="btn btn-primary btn-sm ms-auto">Edit profile</button></a>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Email address</label>
-                    <input class="form-control" type="email" value="jesse@example.com">
+                <div class="card-body">
+                    <p class="text-uppercase text-sm">User Information</p>
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div>
+                            <small>Full Name:</small><br>
+                            {{ user.first_name}} {{ user.last_name}}
+                        </div><br>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">First name</label>
-                    <input class="form-control" type="text" value="Jesse">
+                    <div class="col-md-6">
+                        <div>
+                            <small>Username:</small><br>
+                            {{ user.username }}
+                        </div><br>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Last name</label>
-                    <input class="form-control" type="text" value="Lucky">
+                    <div class="col-md-6">
+                        <div>
+                            <small>Phone:</small><br>
+                            {{ user.phone }}
+                        </div><br>
                     </div>
-                </div>
-                </div>
-                <hr class="horizontal dark">
-                <p class="text-uppercase text-sm">Contact Information</p>
-                <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Address</label>
-                    <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                    <div class="col-md-6">
+                        <div>
+                            <small>Email:</small><br>
+                            {{ user.email }}
+                        </div><br>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">City</label>
-                    <input class="form-control" type="text" value="New York">
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Country</label>
-                    <input class="form-control" type="text" value="United States">
+                    <hr class="horizontal dark">
+                    <p class="text-uppercase text-sm">Contact Information</p>
+                    <div class="row">
+                    <div class="col-md-12">
+                        <div>
+                            <small>Address:</small><br>
+                            {{ user_profile.address }}
+                        </div><br>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Postal code</label>
-                    <input class="form-control" type="text" value="437300">
+                    <div class="col-md-4">
+                        <div>
+                            <small>Country:</small><br>
+                            {{ user_profile.country.name }}
+                        </div><br>
                     </div>
-                </div>
-                </div>
-                <hr class="horizontal dark">
-                <p class="text-uppercase text-sm">About me</p>
-                <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">About me</label>
-                    <input class="form-control" type="text" value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source.">
+                    <div class="col-md-4">
+                        <div>
+                            <small>City:</small><br>
+                            {{ user_profile.city }}
+                        </div><br>
                     </div>
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
+                    <div class="col-md-4">
+                        <div>
+                            <small>Postal code:</small><br>
+                            {{ user_profile.postal_code }}
+                        </div><br>
+                    </div>
+                    </div>
+                    <hr class="horizontal dark">
+                    <p class="text-uppercase text-sm">About me</p>
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div>
+                            <small>Vat ID:</small><br>
+                            {{ user_profile.vat_id }}
+                        </div><br>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <small>Date of Birth:</small><br>
+                            {{ user_profile.dob }}
+                        </div><br>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <small>Position:</small><br>
+                            {{ user_profile.position }}
+                        </div><br>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <small>Role:</small><br>
+                            {{ user_profile.role }}
+                        </div><br>
+                    </div>
 
-        <div class="col-md-4">
-            <div class="card card-profile">
-            <img src="{% static 'admin_customization/img/bg-profile.jpg' %}" alt="Image placeholder" class="card-img-top">
-            <div class="row justify-content-center">
-                <div class="col-4 col-lg-4 order-lg-2">
-                <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-                    <a href="javascript:;">
-                    <img src="{% static 'admin_customization/img/team-2.jpg' %}" class="rounded-circle img-fluid border border-2 border-white">
-                    </a>
+                    </div>
                 </div>
                 </div>
             </div>
-            <div class="card-body pt-0">
-                <div class="row">
-                </div>
-                <div class="text-center mt-4">
-                <h5>
-                    Surya Prasad Sahoo
-                </h5>
-                <div class="h6 font-weight-300">
-                    <i class="ni location_pin mr-2"></i>Bucharest, Romania
-                </div>
-                <div class="h6 mt-4">
-                    <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
-                </div>
-                <div>
-                    <i class="ni education_hat mr-2"></i>University of Computer Science
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
 
+            <div class="col-md-4">
+                <div class="card card-profile">
+                <img src="{% static 'admin_customization/img/bg-profile.jpg' %}" alt="Image placeholder" class="card-img-top">
+                <div class="row justify-content-center">
+                    <div class="col-4 col-lg-4 order-lg-2">
+                        <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
+                        <a href="javascript:;">
+                            <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'admin_customization/img/team-2.jpg' %}{% endif %}" alt="profile_image" class="rounded-circle border border-2 border-white" style="width: 150px;height: 150px;object-fit: cover;">
+                        </a>
+                    </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row">
+                    </div>
+                    <div class="text-center mt-4">
+                    <h5>
+                        {{ user.first_name }} {{ user.last_name }}
+                    </h5>
+                    <div class="h6 font-weight-300">
+                        <i class="ni location_pin mr-2"></i>{{ user_profile.city }}, {{ user_profile.country.name }}
+                    </div>
+                    <div class="h6 mt-4">
+                        <i class="ni business_briefcase-24 mr-2"></i>{{ user_profile.position }} - {{ user_profile.role }}
+                    </div>
+                    <div>
+                        <i class="ni education_hat mr-2"></i>The Talent Sprout
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
     </div>
     

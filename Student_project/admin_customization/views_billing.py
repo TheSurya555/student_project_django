@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.core.paginator import Paginator
+from notifications.models import Notification
+
 
 
 class DateFilterForm(forms.Form):
@@ -23,6 +25,7 @@ def billing(request):
     page_obj = paginator.get_page(page_number)
     payments = Payment.objects.all()
     subscriptions = Subscription.objects.all()
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
     # Date filter form
     
     date_filter_form = DateFilterForm(request.GET or None)
@@ -42,6 +45,7 @@ def billing(request):
         'date_filter_form': date_filter_form,
         'page_obj': page_obj,
         'total_amount': total_amount,
+        'notifications': notifications,
     }
     
     return render(request, 'admin_customization/Billing/billing.html' , context)

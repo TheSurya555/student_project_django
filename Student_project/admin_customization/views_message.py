@@ -1,18 +1,28 @@
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from .views import admin_required
 from django.contrib.auth.decorators import login_required
-from contactus.models import *
-
+from contactus.models import ConsultingMessage
+from notifications.models import Notification
 
 @login_required    
 @admin_required
 def messages_view(request):
-    messages_list = ConsultingMessage.objects.all()
+    messages_list = ConsultingMessage.objects.all().order_by('-created_at')
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
+
+    # Pagination logic
+    paginator = Paginator(messages_list, 5)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'messages_list': messages_list,
+        'messages_list': page_obj,  # Pass the paginated object
+        'notifications': notifications,
     }
-    return render(request, 'admin_customization/messages/messages.html',context)
+    return render(request, 'admin_customization/messages/messages.html', context)
+
 
 
 @login_required

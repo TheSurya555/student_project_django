@@ -87,7 +87,7 @@ Profile
                         {% if request.session.user_role == "Candidate" %}
                           <p class="profile_detailes"><span>Date of Birth :</span><br>{{ user_profile.dob }}</p>
                           <p class="profile_detailes"><span>Phone :</span><br>{{ user.phone }}</p>
-                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}</p>
+                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}, {{ user_profile.city }}, {{ user_profile.state }}, {{ user_profile.country.name }}, {{ user_profile.postal_code }}</p>
                           <p class="profile_detailes"><span>Position:</span><br>{{ user_profile.position }}</p>
                           <p class="profile_detailes"><span>Experience :</span><br>{{ user_profile.experience }}</p>
                           <p class="profile_detailes"><span>Skills :</span><br>{{ user_profile.skills }}</p>
@@ -95,7 +95,7 @@ Profile
                           <p class="profile_detailes"><span>Education :</span><br>{{ user_profile.education }}</p>
                         {% elif request.session.user_role == "Recruiter" %}
                           <p class="profile_detailes"><span>Phone :</span><br>{{ user.phone }}</p>
-                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}</p>
+                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}, {{ user_profile.city }}, {{ user_profile.state }}, {{ user_profile.country.name }}, {{ user_profile.postal_code }}</p>
                           <p class="profile_detailes"><span>Position:</span><br>{{ user_profile.position }}</p>
                         {% endif %}
                     </div>

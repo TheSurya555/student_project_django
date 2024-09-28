@@ -12,13 +12,11 @@ Admin Message
     overflow: hidden; /* Ensures the rounded corners are visible */
 }
 </style>
-
 {% endblock %}
 
 {% block admin_content %}
 
 <div class="container mt-5 mx-0">
-    <!-- Consulting Messages Section -->
     <h3 class="mt-5">Consulting Messages</h3>
     <table class="table table-bordered table-white">
         <thead>
@@ -40,16 +38,34 @@ Admin Message
                     <td>{{ message.message|truncatewords:10 }}</td>
                     <td>{{ message.created_at }}</td>
                     <td>
-                        <!-- View Message Button -->
                         <a href="{% url 'view_message' message.id %}" class="btn btn-info">View</a>
                         <a href="{% url 'delete_consulting_message' message.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this message?');">Delete</a>
-                        <a href="mailto:{{ message.email }}?subject=Reply to your inquiry&body=Dear {{ message.name }},%0D%0A%0D%0A[Your message here]%0D%0A%0D%0ABest regards," class="btn btn-primary">Reply</a>
+                        <a href="mailto:{{ message.email }}?subject=Reply to your inquiry&body=Dear {{ message.name }},%0D%0A%0D%0A[Your message here]%0D%0ABest regards," class="btn btn-primary">Reply</a>
                     </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No messages available.</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-between mt-3">
+        <div>
+            {% if messages_list.has_previous %}
+                <a href="?page=1" class="btn btn-secondary">First</a>
+                <a href="?page={{ messages_list.previous_page_number }}" class="btn btn-secondary">Previous</a>
+            {% endif %}
+        </div>
+        <div>
+            {% if messages_list.has_next %}
+                <a href="?page={{ messages_list.next_page_number }}" class="btn btn-secondary">Next</a>
+                <a href="?page={{ messages_list.paginator.num_pages }}" class="btn btn-secondary">Last</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 {% endblock %}

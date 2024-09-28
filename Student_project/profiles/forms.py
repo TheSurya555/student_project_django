@@ -8,13 +8,17 @@ from tinymce.widgets import TinyMCE
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['dob', 'phone', 'address', 'role', 'position', 'experience', 'skills', 'languages', 'education', 'vat_id', 'profile_image','resume']
+        fields = ['dob', 'phone', 'country', 'state', 'city', 'address', 'postal_code', 'role', 'position', 'experience', 'skills', 'languages', 'education', 'vat_id', 'profile_image','resume']
         
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.fields['dob'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'input', 'autocomplete': 'off'})
         self.fields['phone'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
+        self.fields['country'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
+        self.fields['state'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
+        self.fields['city'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
         self.fields['address'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
+        self.fields['postal_code'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
         self.fields['role'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['position'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['experience'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})

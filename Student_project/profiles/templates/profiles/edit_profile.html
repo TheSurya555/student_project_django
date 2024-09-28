@@ -65,17 +65,29 @@ Edit Profile Form
                                     {% endif %}
                                     
                                     <div class="form-group position-relative mb-3">
+                                        {{ form.country }}
+                                        <label class="user-label" for="address">Country</label>
+                                    </div>
+                                    <div class="form-group position-relative mb-3">
+                                        {{ form.state }}
+                                        <label class="user-label" for="address">State</label>
+                                    </div>
+                                    <div class="form-group position-relative mb-3">
+                                        {{ form.city }}
+                                        <label class="user-label" for="address">City</label>
+                                    </div>
+                                    <div class="form-group position-relative mb-3">
                                         {{ form.address }}
                                         <label class="user-label" for="address">Address</label>
+                                    </div>
+                                    <div class="form-group position-relative mb-3">
+                                        {{ form.postal_code }}
+                                        <label class="user-label" for="address">Postal Code</label>
                                     </div>
                                     <div class="form-group position-relative mb-3">
                                         {{ form.position }}
                                         <label class="user-label" for="position">Position</label>
                                     </div>
-                                    {% comment %} <div class="form-group position-relative mb-3">
-                                        {{ form.vat_id }}
-                                        <label class="user-label" for="vat_id">VAT ID No</label>
-                                    </div> {% endcomment %}
                                     
                                     <button type="submit" class="px-3"><span>Save</span></button>
                                 </form>
