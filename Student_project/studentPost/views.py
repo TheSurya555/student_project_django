@@ -1,10 +1,8 @@
-from django.forms import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from .forms import BlogPostForm , CandidatePreferenceForm
-from .models import BlogPost, CandidatePreference
+from .forms import BlogPostForm , CandidatePreferenceForm ,BlogImageForm
+from .models import BlogPost, CandidatePreference ,BlogImage
 from profiles.models import UserProfile
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
@@ -88,39 +86,55 @@ def load_more_posts(request):
         'posts': posts_data,
         'has_next': page_obj.has_next(),  # To indicate if there are more posts
     })
-
+    
 
 @login_required
 def create_blog_post(request):
     if request.method == 'POST':
-        blog_post_form = BlogPostForm(request.POST, request.FILES)
+        # Bind the forms with POST data and uploaded files
+        blog_post_form = BlogPostForm(request.POST)
         candidate_preference_form = CandidatePreferenceForm(request.POST)
-        
-        if blog_post_form.is_valid() and candidate_preference_form.is_valid():
+        blog_image_form = BlogImageForm(request.POST, request.FILES)
+
+        if blog_post_form.is_valid() and candidate_preference_form.is_valid() and blog_image_form.is_valid():
+            # Save the blog post and attach the current user
             blog_post = blog_post_form.save(commit=False)
             blog_post.user = request.user
             blog_post.save()
 
-            # Create a CandidatePreference based on form data
+            # Save the candidate preference, associating it with the blog post
             candidate_preference = candidate_preference_form.save(commit=False)
             candidate_preference.blog_post = blog_post
             candidate_preference.save()
 
-            return redirect('studentpost')  # Redirect to the blog list page
+            # Save each image from the multiple image upload
+            images = request.FILES.getlist('image')
+            for image in images:
+                BlogImage.objects.create(blog_post=blog_post, image=image)
+
+            # Redirect to the desired page after successful post creation
+            return redirect('studentpost')
+
     else:
+        # Instantiate empty forms when GET request is made
         blog_post_form = BlogPostForm()
         candidate_preference_form = CandidatePreferenceForm()
+        blog_image_form = BlogImageForm()
 
+    # Fetch the profile image if the user has one, else set it to None
     profile_image_url = None
     if request.user.is_authenticated:
         try:
             user_profile = UserProfile.objects.get(user=request.user)
             profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
         except UserProfile.DoesNotExist:
-            pass    
+            profile_image_url = None
 
+    # Render the form page
     return render(request, 'studentPost/post_creation_form.html', {
         'blog_post_form': blog_post_form,
         'candidate_preference_form': candidate_preference_form,
-        'profile_image_url':profile_image_url,
+        'blog_image_form': blog_image_form,
+        'profile_image_url': profile_image_url,
     })
+

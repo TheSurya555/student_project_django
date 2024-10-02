@@ -5,13 +5,10 @@ from django.contrib import messages
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import login_required
-from services.models import Service
 from talents.models import Skills
-from examination.models import *
-from aboutUs.models import *
-from contactus.models import *
+from examination.models import Skill, Question, Test, Answer
 from django.http import HttpResponseForbidden
-from .forms import *
+from .forms import SkillForm ,Exam_SkillForm, QuestionForm, AnswerCorrectionForm
 from django.http import JsonResponse
 from notifications.models import Notification
 

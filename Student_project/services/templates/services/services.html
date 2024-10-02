@@ -147,10 +147,10 @@ Services
             {% for post in page_obj %}
             <div class="col-lg-4 col-md-6 col-sm-12 my-5 py-2 d-flex justify-content-center align-items-center">
                 <div class="card cards" style="width:300px; height: 464px;">
-                    {% if post.blog_image %}
-                        <img src="{{ post.blog_image.url }}" alt="Blog image" class="card-img-top img-fluid" />
+                    {% if post.images.all %}
+                        <img src="{{ post.images.all.0.image.url }}" alt="Blog image" class="card-img-top" />
                     {% else %}
-                        <img src="{% static 'assets/nature2.jpeg' %}" alt="Sample Image" class="card-img-top img-fluid" />
+                        <img src="{% static 'assets/nature2.jpeg' %}" alt="Sample Image" class="card-img-top" />
                     {% endif %}
                     <div class="card-body pb-0">
                         <h5 class="card-title">{{ post.title }}</h5>

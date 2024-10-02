@@ -3031,3 +3031,456 @@ ADMIN Dashboard
             </div>            
         </div>
     </section> {% endcomment %}
+
+# User = get_user_model()
+
+# class BlogPost(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+#     title = models.CharField(max_length=200)
+#     author = models.CharField(max_length=100)
+#     publication_date = models.DateField()
+#     content = models.TextField()
+#     blog_image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+
+#     def __str__(self):
+#         return self.title    
+
+
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+{{ post.title }}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .post-header {
+        margin-top: 20px;
+    }
+
+    .post-image {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .post-title {
+    
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .user-info img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+
+    .star-rating i {
+        color: #ffc107;
+    }
+
+    .preference-card,
+    .discuss-card {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .social-share i {
+        font-size: 24px;
+        margin-right: 15px;
+    }
+
+    .post-description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-top: 20px;
+    }
+
+    .preference-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .discuss-button {
+        background-color: #000;
+        color: #fff;
+        border-radius: 8px;
+    }
+    .side-image{
+        height: 120px;
+        border-radius: 8px;
+    }
+    @media(max-width:992px){
+    .side-image{
+        height: 150px;
+        width: 400px;
+        object-fit: cover;
+    }
+    }
+    .img-1{
+        justify-content: center;
+        display: flex;
+    }
+    .left-i{
+        justify-content: center;
+        display: flex;
+    }
+    .left-i img{
+        height: 400px;
+        border-radius: 8px;
+    }
+    .comment-box {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    }
+    .comment-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    }
+    .comment-content {
+    margin-left: 20px;
+    }
+    .comment-header {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    }
+    .reply-btn {
+    color: #53636b;
+    cursor: pointer;
+    }
+    .load-more-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    }
+    .icon{
+    background-color: grey;
+    /* padding: 8px 12px; */
+    height: 45px;
+    width: 45px;
+    display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    }
+    .icon a{
+        height: 21px;
+        width: 21px;
+    }
+    .icon i{
+    /* font-size: 25px; */
+    color: #FAFAFA;
+    }
+    .cards {
+    transition: 400ms;
+    border-color: beige;
+    }
+  
+    .cards:hover {
+        transform: scale(1.06);
+    }
+    
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+    .images-img {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    .buttn .button{
+        padding: .8em 2em;
+        letter-spacing: 1px;
+    } 
+    .blog-section {
+        margin-top: 4rem;
+    }
+    .detailed {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .detail {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+    }
+    
+    .detail img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .form-control {
+        background-color: #cde8e5;
+    }
+    .btn-custom {
+        background-color: black;
+        color: white;
+    }
+    .form-section {
+        max-width: 600px;
+        margin: 50px auto;
+    }
+    @media(max-width:768px){
+
+        .email-from{
+        margin-bottom: 25px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- content -->
+    <section class="container">
+      <div class="row mt-5">
+        <!-- Main Post Content -->
+        <div class="col-lg-8">
+          <!-- Post Image -->
+          <div class="container my-5">
+            <div class="row">
+              <h1 class="post-title">{{ post.title}}</h1>
+              <!-- Left Main Image -->
+              <div class="col-lg-8 col-md-12 mb-4 left-i">
+                {% if post.blog_image %}
+                    <img src="{{ post.blog_image.url }}" alt="Blog image" class="img-fluid w-100 post-image">
+                {% else %}
+                    <!-- Use a sample image -->
+                    <img src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}" alt="Sample Image" class="img-fluid main-image">
+                {%endif%}
+              </div>
+
+              <!-- Right Side Images (Stacked) -->
+              {% comment %} <div class="col-lg-4 col-md-12 right-i">
+                <div class="row">
+                  <div class="col-12 mb-3 img-1">
+
+                    <img src="assets/flowerimg.jpg" class="img-fluid side-image" alt="Side Image 1" />
+                  </div>
+                  <div class="col-12 mb-3 img-1">
+                    <img src="assets/flowerimg.jpg" class="img-fluid side-image" alt="Side Image 2" />
+                  </div>
+                  <div class="col-12 img-1">
+                    <img src="assets/flowerimg.jpg" class="img-fluid side-image" alt="Side Image 3" />
+                  </div>
+                </div>
+              </div> {% endcomment %}
+            </div>
+            <h3 class="post-title">{{ post.title}}</h3>
+          </div>
+
+          <!-- User Info -->
+          <div class="d-flex align-items-center user-info mb-4">
+            {% if user_profile.profile_image %}
+                <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+            {% else %}
+                <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+            {%endif%}
+            <div>
+              <h5 class="mb-0">{{ post.user.get_full_name}}</h5>
+              <small>{{ post.publication_date }}</small>
+            </div>
+          </div>
+
+          {% comment %} <!-- Post Rating and Social Icons -->
+          <div class="d-flex align-items-center mb-4">
+            <div class="star-rating me-3">
+              <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half"></i>
+            </div>
+            <span class="text-muted">4.5 of 36 reviews</span>
+            <span class="mx-3">|</span>
+            <i class="fa fa-heart me-2"></i>
+            <i class="fa fa-share-alt"></i>
+          </div> {% endcomment %}
+
+          <!-- Post Description -->
+          <div class="post-description">
+            <h5>Post Details</h5>
+            <p>{{ post.content|safe}}</p>
+
+            <div class="social-share mt-4 mb-4">
+              <h6>Social Share:</h6>
+              <div class="d-flex gap-2">
+                <div class="icon">
+                  <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <div class="icon">
+                  <a href="#"><i class="fab fa-facebook"></i></a>
+                </div>
+                <div class="icon">
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+                <div class="icon">
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+          <!-- Preference Section -->
+          <div class="preference-card">
+            <h5 class="preference-title">Preference</h5>
+            <img src="{%static 'assets/LOGO.png'%}" class="img-fluid rounded mb-3" alt="Preference Image" />
+            <p>{{ candidate_preference.service_title}}</p>
+            <p class="text-muted">{{ candidate_preference.description|safe|truncatewords:10 }}</p>
+            <ul>
+              <li>{{ candidate_preference.delivery_time}}</li>
+              <li>{{ candidate_preference.revisions}}</li>
+              <li>{{ candidate_preference.price }}</li>
+            </ul>
+            <div class="text-center">
+              <button class="px-3"><span>Continue</span></button>
+            </div>
+          </div>
+
+          <!-- Discuss Section -->
+          <div class="discuss-card">
+            <h5 class="mb-3">Let's Have a Discuss</h5>
+            <p>Have a project idea or searching for a better candidate? Let's get started with us to find a better candidate for your project.</p>
+            <div class="text-center">
+              <button class="px-3"><span>Continue</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      {% comment %} <div class="container mt-5">
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="mb-5">Comments</h3>
+
+            <!-- Comment 1 -->
+            <div class="comment-box d-flex">
+              <img src="assets/flowerimg.jpg" alt="Avatar" class="comment-avatar" />
+              <div class="comment-content">
+                <div class="d-flex justify-content-between">
+                  <div class="comment-header">
+                    Monalisa Samal <small class="text-muted">25 Aug 2024</small>
+                  </div>
+                  <div class="reply-btn">
+                    <i class="fa-solid fa-reply"></i> Reply
+                  </div>
+                </div>
+                <p class="mb-0 mt-3">Whether you're a busy professional, a student, or simply someone looking to reduce stress and improve your overall well-being, this post will provide you with the tools and inspiration you need to find serenity in the digital age.</p>
+              </div>
+            </div>
+
+            <!-- Comment 2 -->
+            <div class="comment-box d-flex">
+              <img src="assets/flowerimg.jpg" alt="Avatar" class="comment-avatar" />
+              <div class="comment-content">
+                <div class="d-flex justify-content-between">
+                  <div class="comment-header">
+                    Raya Rial <small class="text-muted">26 Aug 2024</small>
+                  </div>
+                  <div class="reply-btn">
+                    <i class="fa-solid fa-reply"></i> Reply
+                  </div>
+                </div>
+                <p class="mb-0 mt-3">Whether you're a busy professional, a student, or simply someone looking to reduce stress and improve your overall well-being, this post will provide you with the tools and inspiration you need to find serenity in the digital age.</p>
+              </div>
+            </div>
+
+            <!-- Load More Button -->
+            <button class="load-more-btn">Load All</button>
+          </div>
+        </div>
+      </div> {% endcomment %}
+      <!-- related blog section -->
+      <div class="container my-5">
+        <h2 class="service-title mb-5">Related Post</h2>
+        <div class="row">
+          {% for related_post in related_posts%}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card cards">
+                  {% if related_post.blog_image %}
+                    <img
+                          src="{{ related_post.blog_image.url }}"
+                          alt="Blog image"
+                          class="img-fluid w-100  uniform-img ezy-blog7-banner"
+                    />
+                  {% else %}
+                        <!-- Use a sample image -->
+                    <img
+                          src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
+                          alt="Sample Image"
+                          class="img-fluid w-100  uniform-img ezy-blog7-banner"
+                    />
+                  {%endif%}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ related_post.title}}</h5>
+                        <div class="detailed">
+
+                            <div class="detail">
+                              {% if user_profile.profile_image %}
+                                <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+                              {% else %}
+                                <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                              {%endif%}
+                                <p class="card-text">{{ related_post.user.first_name }} {{ related_post.user.last_name}} </p>
+                            </div>
+                            <div class="images-img">
+                                <div><span>12</span> <i class="fa-solid fa-share-nodes"></i> </div>
+                                <div><span>12</span> <i class="fa-regular fa-message"></i></div>
+                            </div>
+                        </div>
+                        <p class="card-text mt-2 descr">{{ related_post.content|safe|truncatewords:10}}</p>
+                            <div class="text-center buttn">
+                              <a href="{% url 'postdetail' related_post.id %}"><button class="px-3"><span>Read More</span></button></a>
+                            </div>
+                    </div>
+                </div>
+            </div>
+          {%endfor%}
+        </div>
+    </div>
+    {% comment %} <div class="container">
+      <h2 class="mb-5">Leave Comment</h2>
+      <form>
+        <div class="row">
+          <div class="form-group col-md-6 email-from">
+            <input type="email" class="form-control" id="email" placeholder="Email">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" id="phone" placeholder="Phone">
+          </div>
+        </div>
+        <div class="form-group mt-4">
+          <input type="text" class="form-control" id="name" placeholder="Name">
+        </div>
+        <div class="form-group mt-4">
+          <textarea class="form-control" id="description" rows="5" placeholder="Description"></textarea>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+
+          <button type="submit" class="button">Leave Comment</button>
+        </div>
+      </form>
+    </div> {% endcomment %}
+    </section>
+
+    <!-- content end -->
+{% endblock %}

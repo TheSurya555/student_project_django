@@ -6,69 +6,308 @@ Create Blog Post
 {% endblock %}
 
 {% block head_css %}
-<link rel="stylesheet" href="{% static 'css/button.css' %}">
-<link rel="stylesheet" href="{% static 'css/services.css' %}">
 <link rel="stylesheet" href="{% static 'css/Layout.css' %}">
 <link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
+<link rel="stylesheet" href="{% static 'css/post_creation_form.css' %}">
+{% comment %} <style>
+    .contain {
+        display: flex;
+        margin: 70px auto;
+    }
+
+    .sidebar {
+        width: 40%;
+        padding-top: 20px;
+        padding-bottom: 50px;
+        padding-inline: 20px;
+        background-color: #e9f7f6;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .stepsss {
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .progress {
+        position: absolute;
+        left: 27px;
+        transform: translateX(-50%);
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background-color: #ddd;
+        z-index: 0;
+    }
+
+    .indicator {
+        width: 100%;
+        background-color: #008000;
+        height: 0;
+        transition: height 0.8s ease;
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding-left: 50px;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .sidebar ul li {
+        position: relative;
+        color: #888;
+        font-size: 18px;
+    }
+
+    .sidebar ul li::before {
+        content: attr(data-step);
+        position: absolute;
+        left: -23px;
+        transform: translateX(-50%);
+        top: -3px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #ccc;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+    }
+
+    .sidebar ul li.completed::before {
+        background-color: #008000;
+    }
+
+    .sidebar ul li.active::before {
+        background-color: #1fac1d;
+    }
+
+    .form-content {
+        width: 70%;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .btn {
+        background-color: black;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 50px; /* Higher value for rounded corners */
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    .btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+
+    .button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .step {
+        display: none;
+    }
+
+    .step.active {
+        display: block;
+    }
+
+    .form-control {
+        background-color: #d3e8e4;
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 17px;
+        color: #495057;
+    }
+
+    .form-group textarea {
+        padding: 17px;
+    }
+
+    .button-custom {
+        background-color: black;
+        color: white;
+        border-radius: 50px;
+        padding: 10px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .button-custom:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .image-container {
+        display: flex;
+    }
+
+    .image-container img {
+        width: 100%;
+        border-radius: 15px;
+        height: 250px;
+        object-fit: cover;
+    }
+
+    .image-card {
+        width: 22%;
+        margin: 10px;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .upload-section {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .upload-section {
+        border: 2px dashed #ccc;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .upload-section i {
+        font-size: 50px;
+    }
+
+    @media (max-width: 768px) {
+        .image-card {
+            width: 45%;
+        }
+
+        .contain {
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 80%;
+        }
+
+        .form-content {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .image-card {
+            width: 100%;
+        }
+    }
+
+    .s-img {
+        width: 100%;
+        height: 250px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+</style> {% endcomment %}
 {% endblock %}
 
 {% block content %}
-<section class="container my-5">
-    <h2 class="mb-4 fw-bold">Post a Project Blog</h2>
-    <form id="postBlogForm" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ blog_post_form.non_field_errors }}
-        <div class="mb-3">
-            <label for="blogImage" class="form-label">Upload Image</label>
-            {{ blog_post_form.blog_image }}
-        </div>
-        <div class="mb-3">
-            <label for="blogTitle" class="form-label">Blog Title</label>
-            {{ blog_post_form.title }}
-        </div>
-        <div class="mb-3">
-            <label for="authorName" class="form-label">Author Name</label>
-            {{ blog_post_form.author }}
-        </div>
-        <div class="mb-3">
-            <label for="publicationDate" class="form-label">Publication Date</label>
-            {{ blog_post_form.publication_date }}
-        </div>
-        <div class="mb-3">
-            <label for="blogContent" class="form-label">Blog Content</label>
-            {{ blog_post_form.content }}
-        </div>
-        <hr>
-        {% comment %} candidate_preference_form {% endcomment %}
-        <h3 class="mt-5 fw-bold">Candidate Preference</h3>
-        <div class="mb-3">
-            <label for="serviceTitle" class="form-label">Service Title</label>
-            {{ candidate_preference_form.service_title }}
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            {{ candidate_preference_form.description }}
-        </div>
-        <div class="mb-3">
-            <label for="deliveryTime" class="form-label">Delivery Time</label>
-            {{ candidate_preference_form.delivery_time }}
-        </div>
-        <div class="mb-3">
-            <label for="revisions" class="form-label">Project Revisions</label>
-            {{ candidate_preference_form.revisions }}
-        </div>
-        <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            {{ candidate_preference_form.price }}
-        </div>
-        <button type="submit" class="px-3"><span>Create</span></button>
-    </form>
-</section>
+<div class="container contain">
+    <div class="sidebar">
+        <img src="{% static 'assets/LOGOGREEN.png' %}" alt="side image" class="s-img mb-2">
+        <h4 class="mb-4">Make your impression</h4>
+        <ul class="stepsss">
+            <li id="step1Sidebar" data-step="1" class="active">Blog Details</li>
+            <li id="step2Sidebar" data-step="2">Upload your images</li>
+            <li id="step3Sidebar" data-step="3">Edit your References</li>
+            <li id="step4Sidebar" data-step="4">Submit your blog</li>
+            <div class="progress">
+                <div class="indicator"></div>
+            </div>
+        </ul>
+    </div>
+
+    <div class="form-content">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Step 1: Blog Details -->
+            <div id="step1" class="step active">
+                <h1>Blog Details</h1>
+                <div class="form-group mb-4">{{ blog_post_form.title }}</div>
+                <div class="form-group mb-4">{{ blog_post_form.author }}</div>
+                <div class="form-group mb-4">{{ blog_post_form.publication_date }}</div>
+                <div class="form-group">{{ blog_post_form.content }}</div>
+            </div>
+
+            <!-- Step 2: Upload your images -->
+            <div id="step2" class="step">
+                <div class="upload-section">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Drag and drop your file here or click to select a file!</p>
+                    <input type="file" name="image" id="id_image" multiple class="form-control" />
+                </div>
+                <div class="image-container col-12">
+                    {% for image in blog_image_form.instance.blogimage_set.all %}
+                        <div class="image-card">
+                            <img src="{{ image.image.url }}" alt="Uploaded Image">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Step 3: Preference Details -->
+            <div id="step3" class="step">
+                <h1>Preference Details</h1>
+                <div class="form-group mb-3">{{ candidate_preference_form.service_title }}</div>
+                <div class="form-group mb-3">{{ candidate_preference_form.revisions }}</div>
+                <div class="form-group mb-3">{{ candidate_preference_form.delivery_time }}</div>
+                <div class="form-group mb-3">{{ candidate_preference_form.price }}</div>
+                <div class="form-group">{{ candidate_preference_form.description }}</div>
+            </div>
+
+            <!-- Step 4: Final Submit -->
+            <div id="step4" class="step">
+                <h2 class="text-center">You have successfully <span>created the blog post</span></h2>
+                <p class="text-center mt-4">Back to the post page</p>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <button type="button" class="btn " id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                <button type="button" class="btn " id="nextBtn" onclick="nextPrev(1)">Next</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 {% endblock %}
+
 
 {% block extra_js %}
 <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
@@ -79,5 +318,54 @@ Create Blog Post
         plugins: 'link code',
         toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code'
     });
+</script>
+<script>
+    var currentStep = 0;
+    showStep(currentStep);
+
+    function showStep(step) {
+        var steps = document.getElementsByClassName("step");
+        steps[step].style.display = "block";
+        updateProgress(step);
+
+        if (step === 0) {
+            document.getElementById("prevBtn").style.display = "none";
+        } else {
+            document.getElementById("prevBtn").style.display = "inline";
+        }
+
+        if (step === steps.length - 1) {
+            document.getElementById("nextBtn").innerHTML = "Submit";
+        } else {
+            document.getElementById("nextBtn").innerHTML = "Next";
+        }
+    }
+
+    function nextPrev(stepChange) {
+        var steps = document.getElementsByClassName("step");
+        steps[currentStep].style.display = "none";
+
+        currentStep += stepChange;
+
+        if (currentStep >= steps.length) {
+            document.forms[0].submit();
+            return false;
+        }
+
+        showStep(currentStep);
+    }
+
+    function updateProgress(step) {
+        var totalSteps = document.getElementsByClassName("step").length;
+        var progress = ((step + 1) / totalSteps) * 100;
+        document.querySelector(".indicator").style.height = progress + "%";
+
+        var sidebarSteps = document.querySelectorAll(".sidebar ul li");
+        sidebarSteps.forEach((li, index) => {
+            li.classList.remove("completed", "active");
+            if (index < step) li.classList.add("completed");
+            if (index === step) li.classList.add("active");
+        });
+    }
 </script>
 {% endblock %}

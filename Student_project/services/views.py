@@ -79,6 +79,7 @@ def candidate_profile(request, candidate_id):
 def all_services(request):
     services = Service.objects.all()
     service_pages = Service_page.objects.all()
+    
     profile_image_url = None
     if request.user.is_authenticated:
         try:

@@ -6,86 +6,92 @@
 Post Details
 {% endblock %}
 
-{% block head_css %}
-<link rel="stylesheet" href="{% static 'css/button.css' %}">
-<link rel="stylesheet" href="{% static 'css/services.css' %}">
-<link rel="stylesheet" href="{% static 'css/Layout.css' %}">
-<link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
-{% endblock %}
-
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/studentpost.css' %}">
+<link rel="stylesheet" href="{% static 'css/service.css' %}">
+
 <style>
-  .uniform-img {
+  .service-title {
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: left;
+    margin-left: 13px;
+  }
+  .image-container img {
+    border-radius: 10px;
+    height: 350px;
     width: 100%;
-    height: 400px; /* Adjust the height as needed */
     object-fit: cover;
   }
-  .post_avatar {
-    border-radius: 50%;
+  .banner {
+    background: url('banner-image.jpg') no-repeat center center;
+    background-size: cover;
+    height: 300px;
+  }
+  .banner h1 {
+    color: white;
+    padding: 100px 0;
+    text-align: center;
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="ezy__blog7 light mt-5">
-    <div class="container-fluid d-flex justify-content-center" style="max-height: 500px;">
-      <img src="https://images.pexels.com/photos/4065876/pexels-photo-4065876.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" class="w-100" style="object-fit: cover;" />
-    </div>
-
-    <div class="ezy__blog7-wrapper">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-lg-center">
-            <h2 class="ezy__blog7-heading mb-3 mt-0">Let's Now make an impression.</h2>
-            <p class="ezy__blog7-sub-heading mb-4">
-              "Create stunning blog posts effortlessly. Share your insights, engage with readers, and build your online presence globally."
-            </p>
-            <a href="{% url 'create_blog_post' %}"><button class="px-3"><span>Create Post</span></button></a>
-          </div>
-        </div>
-
-        <div class="row mt-5">
-          {% for post in posts %}
-          <div class="col-12 col-md-6 col-lg-4 mb-3">
-            <article class="ezy__blog7-post">
-              <div class="position-relative">
-                {% if post.blog_image %}
-                <img
-                  src="{{ post.blog_image.url }}"
-                  alt="Blog image"
-                  class="img-fluid uniform-img ezy-blog7-banner"
-                />
-                {% else %}
-                <!-- Use a sample image -->
-                <img
-                  src="{% static 'assets/el-logo-de-automatia-la-innovadora-startup-especia-gkjFy6O-S_2MhMyJ9i_btQ-61EwEfxyRYiLIEA3QthxDg.jpeg' %}"
-                  alt="Sample Image"
-                  class="img-fluid uniform-img ezy-blog7-banner"
-                />
-                {% endif %}
-                <div class="px-4 py-3 ezy__blog7-calendar">{{ post.publication_date|date:"d M Y" }}</div>
-              </div>
-              <div class="p-3 p-md-4">
-                <h4 class="mt-3 ezy__blog7-title fs-4 mb-4">{{ post.title }}</h4>
-                <div class="avatar">
-                  {% if user_profile.profile_image %}
-                  <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
-                  {% else %}
-                  <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
-                  {% endif %}
-                  <span class="fw-bold m-2">{{ post.user.first_name }} {{ post.user.last_name }}</span>
-                </div>
-                <p class="ezy__blog7-description mt-3 mb-4">
-                  {{ post.content|safe }}
-                </p>
-                <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
-              </div>
-            </article>
-          </div>
-          {% endfor %}
-        </div>
+<!-- content -->
+<section class="container mt-5">
+  <!-- Banner Section -->
+  <div class="text-center">
+      <h2 class="service-title">Create Post</h2>
+      <div class="container image-container">
+          <img src="{% static 'assets/service.jpeg' %}" alt="Laptop on a desk" class="img-fluid">
       </div>
-    </div>
+  </div>
+  <!-- Create Post Section -->
+  <div class="container text-center my-5">
+      <h2>Create stunning blog posts effortlessly.</h2>
+      <p>Share your insights, engage with readers, and build your online presence globally.</p>
+      <div>
+        <a href="{% url 'create_blog_post' %}"><button class="px-3"><span>Create Post</span></button></a>
+      </div>
+  </div>
+  <!-- Blog Posts Section -->
+  <div class="container my-5">
+      <h2 class="service-title">Your Posts</h2>
+      <div class="row mb-5" id="posts-container">
+          <!-- Blog Post 1 -->
+          {% for post in posts %}
+          <div class="col-lg-4 col-md-6 col-sm-12 my-5 py-2 d-flex justify-content-center align-items-center">
+              <div class="card cards" style="width: 300px; height: 464px;">
+                  <!-- Display the first image if available, otherwise a sample image -->
+                  {% if post.images.all %}
+                    <img src="{{ post.images.all.0.image.url }}" alt="Blog image" class="card-img-top" />
+                  {% else %}
+                    <img src="{% static 'assets/nature2.jpeg' %}" alt="Sample Image" class="card-img-top" />
+                  {% endif %}
+                  <div class="card-body">
+                      <h5 class="card-title">{{ post.title }}</h5>
+                      <div class="detailed">
+                          <div class="detail">
+                              {% if user_profile.profile_image %}
+                                <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+                              {% else %}
+                                <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
+                              {% endif %}
+                              <p class="card-text">{{ post.user.first_name }} {{ post.user.last_name }}</p>
+                          </div>
+                          <div class="images-img">
+                              <div><span>12</span> <i class="fa-solid fa-share-nodes"></i> </div>
+                              <div><span>12</span> <i class="fa-regular fa-message"></i></div>
+                          </div>
+                      </div>
+                      <p class="card-text mt-2 descr">{{ post.content|safe|truncatewords:10 }}</p>
+                      <div class="text-center buttn">
+                          <a href="{% url 'postdetail' post.id %}"><button class="px-3"><span>Read More</span></button></a>
+                      </div>
+                  </div>
+              </div>
+          </div> 
+          {% endfor %}
+      </div>
+  </div>
 </section>
 {% endblock %}

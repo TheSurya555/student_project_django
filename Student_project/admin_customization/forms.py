@@ -1,6 +1,6 @@
 from django import forms
 from talents.models import Skills
-from examination.models import *
+from examination.models import Skill ,Question ,Answer,Test
 from aboutUs.models import *
 from payment.models import Subscription
 from tinymce.widgets import TinyMCE 
