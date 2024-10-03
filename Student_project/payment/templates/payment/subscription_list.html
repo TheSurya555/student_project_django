@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-subscription_list
+Subscription Plans
 {% endblock %}
 
 {% block extra_css %}
@@ -20,41 +20,81 @@ subscription_list
         border: 2px solid #2b675f;
     }
     .card-title {
-        font-size: 1.5rem;
-        font-weight: bold;
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #2b675f;
     }
     .price {
         font-size: 2rem;
-        font-weight: bold;
+        font-weight: 700;
+        color: #2b675f;
     }
     .card-body ul {
         padding: 0;
         list-style: none;
+        font-size: 1rem;
     }
     .card-body ul li {
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     .card-b {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         border: 2px solid #ccd4d3;
-        height: 410px;
-        transition: background-color 0.3s ease; /* Smooth background color transition */
+        height: 100%;
+        transition: background-color 0.3s ease;
     }
     .team {
         font-weight: 600;
-        font-size: 18px;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
     }
     .card-b:hover {
-        background-color: #309F7E; /* Light green background on hover */
+        background-color: #309F7E;
         color: white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+        transform: translateY(-5px); /* Slight upward movement on hover */
     }
-    @media(max-width:992px){
+    .px-3 {
+        background-color: #2b675f;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+        border-radius: 5px;
+    }
+    .px-3:hover {
+        background-color: #1f5046;
+    }
+
+    @media(max-width: 992px) {
         .card-b {
             margin-bottom: 20px;
+        }
+
+
+    }
+    @media(max-width: 576px) {
+        .card-b {
+            padding: 20px;
+        }
+        .card-p{
+            width: 280px;
+        }
+        .pricing-header {
+            font-size: 1.2rem;
+        }
+        .price {
+            font-size: 1.5rem;
+        }
+        .card-title {
+            font-size: 1.2rem;
         }
     }
 </style>
 {% endblock %}
-
 
 {% block content %}
 <div class="container">
@@ -66,9 +106,9 @@ subscription_list
     </div>
     <div class="row justify-content-center">
         {% for subscription in subscriptions %}
-        <div class="col-lg-3 col-md-6 col-sm-12 d-flex justify-content-center">
-            <div class="card text-center card-b">
-              <div class="card-body card-bd d-flex flex-column">
+        <div class="col-lg-3 col-md-6 col-sm-12 card-p justify-content-center mt-3">
+            <div class="card text-center card-b h-100 d-flex flex-column">
+              <div class="card-body card-bd flex-grow-1 d-flex flex-column">
                 <h5 class="card-title">{{ subscription.name }}</h5>
                 <p class="price">${{ subscription.price }}</p>
                 <p>{{ subscription.description }}</p>
@@ -78,7 +118,7 @@ subscription_list
                         <li>{{ feature }}</li>
                     {% endfor %}
                 </ul>
-                <a href="{% url 'payment_page' subscription.id %}" class="position-absolute" style="bottom: 8px;">
+                <a href="{% url 'payment_page' subscription.id %}" class="mt-auto">
                     <button class="px-3"><span>Get started</span></button>
                 </a>
               </div>

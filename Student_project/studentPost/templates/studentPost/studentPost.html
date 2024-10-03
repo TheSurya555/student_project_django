@@ -71,8 +71,8 @@ Post Details
                       <h5 class="card-title">{{ post.title }}</h5>
                       <div class="detailed">
                           <div class="detail">
-                              {% if user_profile.profile_image %}
-                                <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+                              {% if user_profile and profile_image_url %}
+                                <img class="post_avatar" src="{{ profile_image_url }}" alt="avatar" width="80" height="80">
                               {% else %}
                                 <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
                               {% endif %}

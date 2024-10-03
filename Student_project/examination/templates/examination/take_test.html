@@ -68,6 +68,37 @@ Take Test
         const finalSubmitBtn = document.getElementById('final-submit-btn');
         let currentSectionIndex = 0;
 
+        const githubLinkInput = document.getElementById('github_link');
+
+        // Disable copy/cut functionality globally except for GitHub input field
+        document.addEventListener('copy', function(e) {
+            if (document.activeElement !== githubLinkInput) {
+                e.preventDefault();
+                alert('Copying is disabled on this page.');
+            }
+        });
+
+        document.addEventListener('cut', function(e) {
+            if (document.activeElement !== githubLinkInput) {
+                e.preventDefault();
+                alert('Cutting is disabled on this page.');
+            }
+        });
+
+        document.addEventListener('contextmenu', function(e) {
+            if (document.activeElement !== githubLinkInput) {
+                e.preventDefault();
+                alert('Right-clicking is disabled on this page.');
+            }
+        });
+
+        document.onkeydown = function(e) {
+            if (document.activeElement !== githubLinkInput && (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v'))) {
+                e.preventDefault();
+                alert('Copy/Cut/Paste is disabled on this page.');
+            }
+        };
+
         // Show the first question by default
         sections[currentSectionIndex].style.display = 'block';
         prevBtn.style.display = 'none'; // Hide previous button on the first question
@@ -97,23 +128,23 @@ Take Test
         }
 
         function validateCurrentAnswer() {
-          const currentSection = sections[currentSectionIndex];
-          const textarea = currentSection.querySelector('textarea');
-          const content = tinymce.get(textarea.id).getContent({ format: 'text' }).trim();
+            const currentSection = sections[currentSectionIndex];
+            const textarea = currentSection.querySelector('textarea');
+            const content = tinymce.get(textarea.id).getContent({ format: 'text' }).trim();
 
-          // If GitHub link is provided, no need to validate textarea
-          const githubLink = document.getElementById('github_link').value.trim();
-          if (githubLink !== '') {
-              return true;
-          }
+            // If GitHub link is provided, no need to validate textarea
+            const githubLink = document.getElementById('github_link').value.trim();
+            if (githubLink !== '') {
+                return true;
+            }
 
-          if (content === '') {
-              alert('Please write something in the textarea before proceeding.');
-              return false;
-          }
+            if (content === '') {
+                alert('Please write something in the textarea before proceeding.');
+                return false;
+            }
 
-          return true;
-      }
+            return true;
+        }
 
         // Handle Next button click event
         nextBtn.addEventListener('click', function() {
@@ -146,4 +177,4 @@ Take Test
         updateButtons();
     });
 </script>
-{% endblock %}
+{% endblock %} 

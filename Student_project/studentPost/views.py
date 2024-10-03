@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from .forms import BlogPostForm , CandidatePreferenceForm ,BlogImageForm
-from .models import BlogPost, CandidatePreference ,BlogImage
+from .forms import BlogPostForm, CandidatePreferenceForm, BlogImageForm
+from .models import BlogPost, CandidatePreference, BlogImage
 from profiles.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -9,18 +9,29 @@ from django.core.paginator import Paginator
 # Create your views here.
 @login_required
 def studentPost(request):
+    # Fetch posts related to the logged-in user
     posts = BlogPost.objects.filter(user=request.user)
     
+    # Initialize variables
+    user_profile = None
     profile_image_url = None
+    
     if request.user.is_authenticated:
         try:
+            # Get the user profile if it exists
             user_profile = UserProfile.objects.get(user=request.user)
             profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
         except UserProfile.DoesNotExist:
+            # Handle the case when the user profile does not exist
+            user_profile = None
             profile_image_url = None
-            
-    print('profile_image_url' ,profile_image_url)
-    return render(request, 'studentPost/studentPost.html', {'posts': posts ,'user_profile': user_profile ,'profile_image_url': profile_image_url })
+    
+    # Pass variables to the template
+    return render(request, 'studentPost/studentPost.html', {
+        'posts': posts,
+        'user_profile': user_profile,
+        'profile_image_url': profile_image_url
+    })
 
 def postDetail(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
@@ -53,13 +64,26 @@ def postDetail(request, post_id):
 
 # View to show all posts with pagination
 def all_posts(request):
-    posts_list = BlogPost.objects.all()  # Fetch all posts
+    posts_list = BlogPost.objects.all().order_by('-publication_date')  # Fetch all posts
     paginator = Paginator(posts_list, 12)  # Show 12 posts per page
     page_number = request.GET.get('page', 1)  # Get the current page number from the URL
     page_obj = paginator.get_page(page_number)
+    
+    profile_image_url = None
+    
+    if request.user.is_authenticated:
+        try:
+            # Get the user profile if it exists
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            # Handle the case when the user profile does not exist
+            user_profile = None
+            profile_image_url = None
 
     context = {
-        'posts': page_obj,  # This includes posts and pagination data
+        'posts': page_obj,
+        'profile_image_url': profile_image_url,
     }
     return render(request, 'studentPost/all_posts.html', context)
 
