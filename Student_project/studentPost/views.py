@@ -33,16 +33,55 @@ def studentPost(request):
         'profile_image_url': profile_image_url
     })
 
+# def postDetail(request, post_id):
+#     post = get_object_or_404(BlogPost, id=post_id)
+#     related_posts = BlogPost.objects.filter(user=post.user).exclude(id=post.id)[:3]
+
+#     user_profile = None
+#     profile_image_url = None
+
+#     if request.user.is_authenticated:
+#         try:
+#             user_profile = UserProfile.objects.get(user=post.user)
+#             profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+#         except UserProfile.DoesNotExist:
+#             user_profile = None
+#             profile_image_url = None
+
+#     # Fetch candidate preference related to the post
+#     try:
+#         candidate_preference = CandidatePreference.objects.get(blog_post=post)
+#     except CandidatePreference.DoesNotExist:
+#         candidate_preference = None      
+
+#     return render(request, 'studentPost/postdetailes.html', {
+#         'post': post,
+#         'user_profile': user_profile,
+#         'related_posts': related_posts,
+#         'profile_image_url': profile_image_url,
+#         'candidate_preference': candidate_preference  # Pass candidate preference to the template
+#     })
+
 def postDetail(request, post_id):
     post = get_object_or_404(BlogPost, id=post_id)
     related_posts = BlogPost.objects.filter(user=post.user).exclude(id=post.id)[:3]
 
-    user_profile = None
+    post_author_profile = None
+    post_author_image_url = None
     profile_image_url = None
+    
+    # Fetch the post author's profile image
+    try:
+        post_author_profile = UserProfile.objects.get(user=post.user)
+        post_author_image_url = post_author_profile.profile_image.url if post_author_profile.profile_image else None
+    except UserProfile.DoesNotExist:
+        post_author_profile = None
+        post_author_image_url = None
+
 
     if request.user.is_authenticated:
         try:
-            user_profile = UserProfile.objects.get(user=post.user)
+            user_profile = UserProfile.objects.get(user=request.user)
             profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
         except UserProfile.DoesNotExist:
             user_profile = None
@@ -52,15 +91,16 @@ def postDetail(request, post_id):
     try:
         candidate_preference = CandidatePreference.objects.get(blog_post=post)
     except CandidatePreference.DoesNotExist:
-        candidate_preference = None
+        candidate_preference = None      
 
     return render(request, 'studentPost/postdetailes.html', {
         'post': post,
-        'user_profile': user_profile,
-        'related_posts': related_posts,
+        'post_author_image_url': post_author_image_url,
         'profile_image_url': profile_image_url,
+        'related_posts': related_posts,
         'candidate_preference': candidate_preference  # Pass candidate preference to the template
     })
+
 
 # View to show all posts with pagination
 def all_posts(request):

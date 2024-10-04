@@ -28,6 +28,27 @@ def service(request):
 
 @login_required
 @admin_required
+def add_service(request):
+    if request.method == 'POST':
+        form = ServiceForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Service added successfully!")
+            return redirect(reverse('service'))  # Redirect to the service list or another page
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ServiceForm()
+
+    context = {
+        'form': form,
+        'site_header': "Add Service"
+    }
+    return render(request, 'admin_customization/services/add_service.html', context)
+
+
+@login_required
+@admin_required
 def edit_service(request, service_id):
     service = get_object_or_404(Service, id=service_id)
 
@@ -48,6 +69,14 @@ def edit_service(request, service_id):
         'site_header': "Edit Service"
     }
     return render(request, 'admin_customization/services/edit_service.html', context)
+
+@login_required
+@admin_required
+def delete_service(request, service_id):
+    service = get_object_or_404(Service, id=service_id)
+    service.delete()
+    messages.success(request, 'Service deleted successfully!')
+    return redirect('service')
 
 @login_required
 @admin_required

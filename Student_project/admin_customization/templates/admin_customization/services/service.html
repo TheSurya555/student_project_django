@@ -124,17 +124,23 @@ Service
                                         <p class="text-xs font-weight-bold mb-0">{{ obj.name }}</p>
                                     </td>
                                     <td class="text-wrap w-30">
-                                        <p class="text-xs font-weight-bold mb-0">{{ obj.description|truncatewords:10 }}</p>
+                                        <p class="text-xs font-weight-bold mb-0">{{ obj.description|truncatewords:5 }}</p>
                                     </td>
                                     <td class="text-wrap w-30">
-                                        <p class="text-secondary text-xs font-weight-bold">{{ obj.skills|truncatewords:10 }}</p>
+                                        <p class="text-secondary text-xs font-weight-bold">{{ obj.skills|truncatewords:5 }}</p>
                                     </td>
                                     <td class="text-center">
                                         <p class="text-secondary text-xs font-weight-bold">{{ obj.created_at }}</p>
                                     </td>
                                     <td class="align-middle">
+                                        <a href="{% url 'add_service'%}" class="badge badge-sm bg-gradient-primary" data-toggle="tooltip" data-original-title="Add Service">
+                                            Add
+                                        </a>
                                         <a href="{% url 'edit_service' obj.id %}" class="badge badge-sm bg-gradient-success" data-toggle="tooltip" data-original-title="Edit Service">
                                             Edit
+                                        </a>
+                                        <a href="{% url 'delete_service' obj.id %}" class="badge badge-sm bg-gradient-danger" data-toggle="tooltip" data-original-title="Delete Service">
+                                            Delete
                                         </a>
                                     </td>
                                 </tr>

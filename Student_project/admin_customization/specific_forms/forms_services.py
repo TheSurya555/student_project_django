@@ -27,12 +27,6 @@ class ServiceForm(forms.ModelForm):
         return skills
 
 
-# class ServicePageForm(forms.ModelForm):
-#     class Meta:
-#         model = Service_page
-#         fields = ['titel', 'page_description', 'service_banner_image', 'service_left_image', 'service_right_image']
-
-
 class ServicePageForm(forms.ModelForm):
     class Meta:
         model = Service_page
@@ -44,3 +38,5 @@ class ServicePageForm(forms.ModelForm):
             'service_left_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
             'service_right_image': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
         }
+        
+# suryaadmin65

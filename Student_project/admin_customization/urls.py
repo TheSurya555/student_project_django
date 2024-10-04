@@ -18,6 +18,8 @@ urlpatterns = [
     # Servie urls
     path('service/', service, name='service'),
     path('service/edit/<int:service_id>/', edit_service, name='edit_service'),
+    path('service/add/', add_service, name='add_service'),
+    path('service/<int:service_id>/delete/', delete_service, name='delete_service'),
     path('service_pages/add/', add_service_page, name='add_service_page'),
     path('service_pages/edit/<int:page_id>/', edit_service_page, name='edit_service_page'),
     path('service_pages/delete/<int:page_id>/', delete_service_page, name='delete_service_page'),

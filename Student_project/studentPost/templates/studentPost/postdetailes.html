@@ -244,11 +244,11 @@
 
           <!-- User Info -->
           <div class="d-flex align-items-center user-info mb-4">
-            {% if user_profile.profile_image %}
-                <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+            {% if post.user.userprofile.profile_image %}
+                <img class="post_avatar" src="{{ post.user.userprofile.profile_image.url }}" alt="avatar" width="80" height="80" style="object-fit: cover;">
             {% else %}
-                <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
-            {%endif%}
+                <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80" style="object-fit: cover;">
+            {% endif %}
             <div>
               <h5 class="mb-0">{{ post.user.get_full_name}}</h5>
               <small>{{ post.publication_date }}</small>
@@ -314,8 +314,8 @@
                         <div class="detailed">
 
                             <div class="detail">
-                              {% if user_profile.profile_image %}
-                                <img class="post_avatar" src="{{ user_profile.profile_image.url }}" alt="avatar" width="80" height="80">
+                              {% if post.user.userprofile.profile_image %}
+                                <img class="post_avatar" src="{{ post.user.userprofile.profile_image.url }}" alt="avatar" width="80" height="80">
                               {% else %}
                                 <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" width="80" height="80">
                               {%endif%}
