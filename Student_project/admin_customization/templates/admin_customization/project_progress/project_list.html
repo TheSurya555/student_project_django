@@ -1,0 +1,82 @@
+{% extends "admin_customization/Index.html" %}
+
+{% load static %}
+
+{% block title %}
+Project List
+{% endblock %}
+
+{% block admin_extra_css %}
+<style>
+    .table-white {
+        background-color: white;
+        border-radius: 10px; /* Adjust the value as needed */
+        overflow: hidden; /* Ensures the rounded corners are visible */
+    }
+    .search-container {
+        display: flex; /* Use flexbox for alignment */
+        justify-content: flex-end; /* Align to the right */
+        margin-bottom: 20px; /* Space below the search field */
+    }
+
+    .search-input {
+        width: 360px; /* Set width to 360px */
+        border: none;
+        border-radius: 10px;
+        margin-right: 20px;
+        padding:10px;
+    }
+    
+</style>
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="container mt-5">
+    <h3 class="mt-5">Project List</h3>
+    
+    <!-- Search Form -->
+    <div class="search-container">
+        <form method="GET" action="{% url 'project_list' %}" class="d-flex" style="align-items: flex-start;">
+            <input type="text" name="search" value="{{ search_query }}" class="search-input" placeholder="Search by Project Name">
+            <div class="">
+                <button class="btn btn-secondary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <a href="{% url 'assign_project'%}" class="btn btn-primary">Assign Project</a>
+    <table class="table table-bordered table-white">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Client</th>
+                <th>Candidate</th>
+                <th>Cost</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.project_name }}</td>
+                    <td>{% if project.client %}{{ project.client.username }}{% else %}N/A{% endif %}</td>
+                    <td>{% if project.user %}{{ project.user.username }}{% else %}N/A{% endif %}</td>
+                    <td>{{ project.project_costing }}</td>
+                    <td>{{ project.get_status_display }}</td>
+                    <td>
+                        <a href="{% url 'edit_project' project.id  %}" class="btn btn-warning">Edit</a>
+                        <a href="{% url 'admin_project_progress' project.id  %}" class="btn btn-info">View Progress</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                  <td colspan="5">No projects assigned yet.</td>
+                </tr>                
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

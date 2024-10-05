@@ -7,124 +7,140 @@
 
 {% block extra_css %}
 <style>
+    .profile-container {
+        max-width: 100%;
+        margin: auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
     .profile-header {
+        position: relative;
         text-align: center;
-        margin-bottom: 30px;
+        padding: 40px;
+        background-image: url("{% static 'assets/header-bg.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        border-radius: 15px 15px 0 0;
     }
     .profile-header img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
+        width: 180px;
+        height: 180px;
         object-fit: cover;
-        border: 2px solid #ddd;
+        border-radius: 50%;
+        border: 5px solid white;
+        margin-top: -90px;
     }
-    .profile-content {
-        max-width: 800px;
-        margin: 0 auto;
+    .profile-header h2 {
+        font-size: 35px;
+        font-weight: bold;
     }
-    .profile-content h2 {
-        font-size: 2rem;
-        margin-bottom: 20px;
+    .profile-header p {
+        font-size: 18px;
+        margin-top: 5px;
+        color: #6d6d6d;
     }
-    .profile-content p {
-        font-size: 1.1rem;
-        color: #555;
-        margin-bottom: 10px;
-    }
-    .back-button {
+    .profile-header .social-icons {
         margin-top: 20px;
-        text-align: center;
+    }
+    .profile-header .social-icons a {
+        margin: 0 8px;
+        color: #6d6d6d;
+        font-size: 24px;
     }
 
-    .message-modal {
-        display: none;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 350px;
-        background-color: white;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .info-cards {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+    .info-card {
+        flex: 1;
+        min-width: 250px;
+        padding: 20px;
+        margin: 15px;
         border-radius: 10px;
-        z-index: 1000;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .message-modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border-radius: 10px 10px 0 0;
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-    .message-modal-header h5 {
-        margin: 0;
-    }
-    .message-modal-body {
-        padding: 10px;
-    }
-    .message-modal-footer {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-    }
-    .message-modal-footer button {
-        padding: 5px 10px;
-    }
-
-    .message_profile-header img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #ddd;
-    }
-    .predefined-messages {
+    .info-card h4 {
+        font-size: 20px;
         margin-bottom: 10px;
+        color: #333;
+    }
+    .info-card p {
+        font-size: 16px;
+        color: #555;
     }
 
-    .predefined-messages button {
-        display: block;
-        width: 100%;
-        padding: 5px;
-        margin-bottom: 5px;
-        background: white;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
+    .action-buttons {
+        text-align: center;
+        margin-top: 30px;
     }
 
-    .predefined-messages button:hover {
-        background-color: #f1f1f1;
+
+    @media (max-width: 768px) {
+        .info-cards {
+            flex-direction: column;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container my-5 ">
-    <div class="profile-header mt-5">
-        {% if candidate.profile_image %}
+<div class="container mt-5">
+    <div class="profile-container">
+        <div class="profile-header">
             <img src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
-        {% else %}
-            <img src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
-        {% endif %}
-        <h2>{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h2>
-    </div>
-    <div class="profile-content">
-        <p><strong>Username:</strong> {{ candidate.user.username }}</p>
-        <p><strong>Address:</strong> {{ candidate.address }}</p>
-        <p><strong>Position:</strong> {{ candidate.position }}</p>
-        <p><strong>Experience:</strong> {{ candidate.experience }}</p>
-        <p><strong>Skills:</strong> {{ candidate.skills }}</p>
-        <p><strong>Languages:</strong> {{ candidate.languages }}</p>
-        <p><strong>Education:</strong> {{ candidate.education }}</p>
-    </div>
-    <div class="back-button">
-        <a href="{% url 'service_candidates' service_id %}" class="mx-3"><button class="px-3"><span>Back</span></button></a>
-        {% if request.user.role == 'recruiter' %}
-            <a href="{% url 'start_chat' candidate.user.id %}"><button class="px-3" id="message-button"><span>Message The Candidate</span></button></a>
-            <a href="{% url 'subscription_list' %}"><button class="px-3"><span>Pay For This Candidate</span></button></a>
-        {% endif %}
-    </div>
+            <h2>{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h2>
+            <p>User Name : {{ candidate.user.username }}</p>
+            <p>{{ candidate.position }}</p>
+            
+            <div class="social-icons">
+                <a href="{{ candidate.linkedin }}" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="{{ candidate.github }}" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="{{ candidate.instagram }}" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="{{ candidate.youtube }}" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
 
+        <div class="info-cards">
+            <div class="info-card">
+                <h4>Experience</h4>
+                <p>{{ candidate.experience }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Address</h4>
+                <p>{{ candidate.address }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Skills</h4>
+                <p>{{ candidate.skills }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Languages</h4>
+                <p>{{ candidate.languages }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Education</h4>
+                <p>{{ candidate.education }}</p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'service_candidates' service_id %}"><button class="px-3"><span>Back</span></button></a>
+            {% if request.user.role == 'recruiter' %}
+                <a href="{% url 'start_chat' candidate.user.id %}"><button class="px-3"><span>Message Candidate</span></button></a>
+                <a href="{% url 'subscription_list' %}"><button class="px-3"><span>Pay for Candidate</span></button></a>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

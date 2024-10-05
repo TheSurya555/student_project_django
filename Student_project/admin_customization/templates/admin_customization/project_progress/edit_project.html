@@ -1,0 +1,21 @@
+{% extends "admin_customization/Index.html" %}
+
+{% load static %}
+
+{% block title %}
+Edit Assigned Project
+{% endblock %}
+
+{% block admin_content %}
+    <div class="container mt-5">
+        <div class="container mt-5">
+            <h1>Edit Assigned Project for Candidate</h1>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Edit Project</button>
+                <a href="{% url 'project_list' %}" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

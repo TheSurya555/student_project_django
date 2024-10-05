@@ -6,6 +6,7 @@ from .views_profile import *
 from .views_services import *
 from .views_message import *
 from .views_notification import *
+from .views_progress import *
 
 urlpatterns = [
     path('', admin_login, name='admin_login'),
@@ -80,6 +81,14 @@ urlpatterns = [
     # notification view
     path('notifications/', notification_view, name='notification_view'),
     path('notifications/mark-as-read/', mark_notifications_as_read, name='mark_notifications_as_read'),
+    
+    
+    #project progress url
+    
+    path('projects/', project_list, name='project_list'),
+    path('assign-project/', assign_project, name='assign_project'),
+    path('edit-project/<int:project_id>/', edit_project, name='edit_project'),
+    path('project/<int:project_id>/progress/', project_progress, name='admin_project_progress'),
     
     path('admin_logout/', admin_logout_view, name='admin_logout'),
     
