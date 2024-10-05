@@ -68,11 +68,14 @@ def candidate_profile(request, candidate_id):
             profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
         except UserProfile.DoesNotExist:
             profile_image_url = None
+  
+    social_links = candidate.social_links.all()     
     
     return render(request, 'services/candidate_profile.html', {
         'candidate': candidate,
         'service_id': service_id,
-        'profile_image_url': profile_image_url
+        'profile_image_url': profile_image_url,
+        'social_links':social_links,
     })
 
 

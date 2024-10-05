@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from .forms import ProjectExperienceForm, EditUserForm, CustomPasswordChangeForm, UserProfileForm
-from .models import UserProfile, ProjectExperience, PrivacyPolicy
+from .forms import ProjectExperienceForm, EditUserForm, CustomPasswordChangeForm, UserProfileForm ,SocialLinkForm
+from .models import UserProfile, ProjectExperience, PrivacyPolicy,SocialLink
 from signUp.models import CustomUser, RecruiterProfile, CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
@@ -39,6 +39,9 @@ def profiles_View(request):
 
     # Calculate the current balance
     current_balance = total_payments_made
+    
+    # social Links
+    social_links = SocialLink.objects.filter(user_profile=user_profile)
 
     return render(request, 'profiles/profiles.html', {
         'user_profile': user_profile,
@@ -49,6 +52,7 @@ def profiles_View(request):
         'payments_made': payments_made,  # Pass payments made to the template
         'total_payments_received': total_payments_received,  # Pass the total payments received to the template
         'current_balance': current_balance,  # Pass the current balance to the template
+        'social_links': social_links,
     })
 
 
@@ -180,6 +184,33 @@ def delete_project_experience(request, project_experience_id):
         return redirect('profiles')
 
     return render(request, 'profiles/confirm_delete.html', {'project_experience': project_experience ,'profile_image_url':profile_image_url})
+
+def add_social_link(request):
+    if request.method == 'POST':
+        form = SocialLinkForm(request.POST)
+        if form.is_valid():
+            social_link = form.save(commit=False)
+            social_link.user_profile = request.user.userprofile  # Assuming the user has a UserProfile
+            social_link.save()
+            return redirect('profiles')  # Redirect to the user's profile or any other page
+    else:
+        form = SocialLinkForm()
+        
+    profile_image_url = None
+    
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None        
+    context={
+        'form': form,
+        'profile_image_url':profile_image_url,
+    }            
+
+    return render(request, 'profiles/add_social_link.html', context)
+
 
 def privacy_policy_view(request):
     profile_image_url = None

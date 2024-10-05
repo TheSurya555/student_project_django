@@ -104,10 +104,21 @@
             <p>{{ candidate.position }}</p>
             
             <div class="social-icons">
-                <a href="{{ candidate.linkedin }}" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="{{ candidate.github }}" target="_blank"><i class="fa-brands fa-github"></i></a>
-                <a href="{{ candidate.instagram }}" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                <a href="{{ candidate.youtube }}" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+              {% for links in social_links %}
+                {% if links.platform == 'linkedin' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                {% elif links.platform == 'github' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-github"></i></a>
+                {% elif links.platform == 'twitter' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                {% elif links.platform == 'facebook' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-facebook"></i></a>
+                {% elif links.platform == 'instagram' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                {% elif links.platform == 'website' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fa-solid fa-globe"></i></a>
+                {% endif %}
+              {% endfor %}                
             </div>
         </div>
 

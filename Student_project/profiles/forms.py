@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserProfile, ProjectExperience
+from .models import UserProfile, ProjectExperience ,SocialLink
 from django.contrib.auth import authenticate
 from signUp.models import CustomUser
 from datetime import date, timedelta
@@ -55,6 +55,28 @@ class ProjectExperienceForm(forms.ModelForm):
         self.fields['duration'].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})
         self.fields['description'].widget.attrs.update({'class': 'form-control', 'autocomplete': 'off'})   
     
+    
+class SocialLinkForm(forms.ModelForm):
+    PLATFORM_CHOICES = [
+        ('linkedin', 'LinkedIn'),
+        ('github', 'GitHub'),
+        ('twitter', 'Twitter'),
+        ('facebook', 'Facebook'),
+        ('instagram', 'Instagram'),
+        ('website', 'Website'),
+    ]
+
+    platform = forms.ChoiceField(
+        choices=PLATFORM_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = SocialLink
+        fields = ['platform', 'link']
+        widgets = {
+            'link': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Enter profile link'}),
+        }
     
 class CustomPasswordChangeForm(forms.Form):
     old_password = forms.CharField(

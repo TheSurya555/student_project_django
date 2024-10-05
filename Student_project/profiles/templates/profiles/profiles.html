@@ -36,6 +36,16 @@ Profile
     font-size: 16px;
 }
 
+.link_list{
+  margin-bottom: 20px;
+}
+
+.link_list a{
+  color: #000;
+  text-decoration: none;
+  font-size: 24px;
+}
+
 </style>
 {% endblock %}
 
@@ -49,11 +59,12 @@ Profile
             <a href="#" id="projectsLink">Projects / Experience</a>
             <a href="#" id="testLink">Take your Test</a>
             <a href="#" id="projectProgressLink">Project Progress</a>
+            <a href="#" id="socialLink">Social Link</a>
             {% elif request.session.user_role == "Recruiter" %}
             <a href="#" id="myInfoLink" class="active">My Info</a>
             <a href="#" id="projectProgressLink">Project Progress</a>
             <a href="#" id="billingLink">Billing & Payments</a>
-            {% comment %} <a href="#" id="billingLink">Billing & Payments</a> {% endcomment %}
+            <a href="#" id="socialLink">Social Link</a>
           {% endif %}
         </div>
 
@@ -322,8 +333,41 @@ Profile
                     </div>
                 </div>
             </div>
-        </div>
-        
+          </div>
+
+          <!-- Social Links Section -->
+          <div id="socialSection" class="content-section">
+            <h4 class="section-heading">Social Links</h4>
+
+            <!-- Display existing social links -->
+            <div class="card card-custom mb-4">
+              <div class="d-flex justify-content-between align-items-baseline mb-2">
+                <h5>My Social Links</h5>
+                <a href="{% url "add_social_link" %}" ><button><span>Add Social Link</span></button></a>
+              </div>
+              <ul class="list-group list-group-flush">
+                {% for links in social_links %}
+                  <li class="link_list">
+                      {% if links.platform == 'linkedin' %}
+                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                      {% elif links.platform == 'github' %}
+                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                      {% elif links.platform == 'twitter' %}
+                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+                      {% elif links.platform == 'facebook' %}
+                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                      {% elif links.platform == 'instagram' %}
+                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                      {% elif links.platform == 'website' %}
+                          <a href="{{ links.link }}" target="_blank"><i class="fa-solid fa-globe"></i> Website</a>
+                      {% endif %}
+                  </li>
+                {% empty %}
+                    <p>No social links added yet.</p>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
         
         </div>
       </div>

@@ -46,6 +46,17 @@ class ProjectExperience(models.Model):
             self.project_number = (max_project_number or 0) + 1
         super().save(*args, **kwargs)
 
+class SocialLink(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='social_links')
+    platform = models.CharField(max_length=100, verbose_name="Social Media Platform")
+    link = models.URLField(max_length=500, verbose_name="Profile Link")
+
+    def __str__(self):
+        return f"{self.platform} - {self.user_profile.user.username}"
+
+    class Meta:
+        unique_together = ('user_profile', 'platform')  # Ensures each platform link is unique per user.
+
 class PrivacyPolicy(models.Model):
     title = models.CharField(max_length=200)
     content = HTMLField()

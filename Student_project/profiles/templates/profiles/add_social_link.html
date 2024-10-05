@@ -1,0 +1,72 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Add Social Link
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        margin-top: 40px;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        font-weight: bold;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .form-group input[type="url"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+
+    .social-icons i {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+    .btn-cancel {
+        background-color: #f44336; /* Red color */
+        color: #fff;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="form-section">
+        <h3 class="form-title">Add Social Link</h3>
+
+        <form method="POST" action="{% url 'add_social_link' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="px-3"><span>Add Link</span></button>
+            <a href="{% url 'profiles' %}" class="btn btn-cancel"><span>Cancel</span></a>
+        </form>
+
+        <div class="social-icons mt-3">
+            <i class="fab fa-linkedin" title="LinkedIn"></i>
+            <i class="fab fa-github" title="GitHub"></i>
+            <i class="fab fa-twitter" title="Twitter"></i>
+            <i class="fab fa-facebook" title="Facebook"></i>
+            <i class="fab fa-instagram" title="Instagram"></i>
+        </div>
+    </div>
+</div>
+{% endblock %}
