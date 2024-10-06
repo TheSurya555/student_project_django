@@ -2,121 +2,154 @@
 {% load static %}
 
 {% block title %}
-Candidates for {{ service.name }}
+    Candidates for {{ service.name }}
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .ezy__service23-card {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
+    /* General Styling */
+    .container {
+        max-width: 1200px;
     }
-    .ezy__service23-card:hover {
-        transform: translateY(-5px);
+    h2 {
+        color: #333;
     }
-    .post_avatar_service {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
+    p {
+        color: #666;
+        font-size: 16px;
     }
     a {
         text-decoration: none;
-        color: black;
+        color: inherit;
+    }
+    
+    /* Candidate Card Styling */
+    .candidate-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fff;
     }
 
-    .ezy__service23-heading {
-        font-size: 32px;
+    .candidate-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
     }
 
-    @media (min-width: 768px) {
-        .ezy__service23-heading {
-            font-size: 45px;
+    .candidate-avatar {
+        width: 120px;
+        height: 120px;
+        margin-top: -60px;
+        border: 5px solid #fff;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .candidate-card:hover .candidate-avatar {
+        transform: scale(1.1);
+    }
+
+    .card-body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .candidate-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        margin: 10px 0;
+    }
+
+    .candidate-skills, .candidate-education {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 15px;
+    }
+
+    /* Section Heading Styling */
+    .section-heading {
+        margin-bottom: 60px;
+    }
+
+    .section-heading h2 {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .section-heading p {
+        font-size: 18px;
+        color: #555;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .candidate-card {
+            margin: 20px 0;
+        }
+
+        .section-heading h2 {
+            font-size: 28px;
+        }
+
+        .section-heading p {
+            font-size: 16px;
         }
     }
 </style>
 {% endblock %}
 
-{% block content %}   
-<!-- Candidates section start -->
+{% block content %}
 <section class="ezy__candidates light" id="ezy__candidates">
-    <div class="container">
-        <div class="row ezy__candidates-separator">
-            <!-- Start: Section Heading -->
-            <div class="col-12 mb-5 text-center">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-5 mt-5 mb-3">
-                        <h2 class="ezy__service23-heading">Candidates for {{ service.name }}</h2>
-                    </div>
-                </div>
-                <p>Below is the list of candidates that match the skills required for {{ service.name }}. Click on a candidate to view their full profile.</p>
+    <div class="container mt-5">
+        <div class="row justify-content-center section-heading text-center">
+            <div class="col-md-10 col-lg-8">
+                <h2 class="ezy__service23-heading">Candidates for {{ service.name }}</h2>
+                <p>Here are candidates that match the required skills. Click on a candidate to view their full profile.</p>
             </div>
-            <!-- End: Section Heading -->
-            <div class="row">
-                {% if candidates %}
-                    {% for candidate in candidates %}
-                        <div class="card ezy__service23-card col-md-6 col-lg-4 m-5 text-center">
-                            <div class="ezy__testimonial5-item border-1 rounded-2 py-lg-5 mt-4 text-center">
-                                <a class="candidate_list" href="{% url 'candidate_profile' candidate.id %}?service_id={{ service.id }}">
-                                    {% if candidate.profile_image %}
-                                        <img class="post_avatar_service" src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
-                                    {% else %}
-                                        <img class="post_avatar_service" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
-                                    {% endif %}
-                                    <div class="ezy__testimonial5-content mt-3">
-                                        <h4 class="mb-4">{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h4>
-                                        <p class="mb-4 ezy__testimonial5-rating">{{ candidate.skills }}</p>
-                                        <p class="mb-4 ezy__testimonial5-rating">{{ candidate.education }}</p>
-                                    </div>
-                                </a>
+        </div>
+
+        <div class="row justify-content-center">
+            {% if candidates %}
+                {% for candidate in candidates %}
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="card candidate-card">
+                            <div class="text-center">
+                                {% if candidate.profile_image %}
+                                    <img class="candidate-avatar" src="{{ candidate.profile_image.url }}" alt="{{ candidate.user.username }}">
+                                {% else %}
+                                    <img class="candidate-avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <h4 class="candidate-name">{{ candidate.user.first_name }} {{ candidate.user.last_name }}</h4>
+                                <p class="candidate-skills">{{ candidate.skills }}</p>
+                                <p class="candidate-education">{{ candidate.education }}</p>
+                                <a href="{% url 'candidate_profile' candidate.id %}?service_id={{ service.id }}" class="btn-view-profile"><button class="px-3"><span>View Profile</span></button></a>
                             </div>
                         </div>
-                    {% endfor %}
-                {% else %}
-                    <!-- Demo content when no candidates are available -->
-                    <div class="card ezy__service23-card col-md-6 col-lg-4 m-5 text-center">
-                        <div class="ezy__testimonial5-item border-1 rounded-2 py-lg-5 mt-4 text-center">
-                            <a class="candidate_list" href="#">
-                                <img class="post_avatar_service" src="{% static 'assets/candidate2.jpg' %}" alt="Demo Candidate">
-                                <div class="ezy__testimonial5-content mt-3">
-                                    <h4 class="mb-4">Demo Candidate</h4>
-                                    <p class="mb-4 ezy__testimonial5-rating">Skill 1, Skill 2, Skill 3</p>
-                                    <p class="mb-4 ezy__testimonial5-rating">Demo Education</p>
-                                </div>
-                            </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- Demo Candidates when no candidates are available -->
+                <div class="col-md-6 col-lg-4 mb-5">
+                    <div class="card candidate-card">
+                        <div class="text-center">
+                            <img class="candidate-avatar" src="{% static 'assets/candidate2.jpg' %}" alt="Demo Candidate">
+                        </div>
+                        <div class="card-body">
+                            <h4 class="candidate-name">Demo Candidate </h4>
+                            <p class="candidate-skills">Skill , Skill , Skill </p>
+                            <p class="candidate-education">Demo Education </p>
+                            <a href="#" class="btn-view-profile"><button class="px-3"><span>View Profile</span></button></a>
                         </div>
                     </div>
-                    <div class="card ezy__service23-card col-md-6 col-lg-4 m-5 text-center">
-                        <div class="ezy__testimonial5-item border-1 rounded-2 py-lg-5 mt-4 text-center">
-                            <a class="candidate_list" href="#">
-                                <img class="post_avatar_service" src="{% static 'assets/candidate2.jpg' %}" alt="Demo Candidate">
-                                <div class="ezy__testimonial5-content mt-3">
-                                    <h4 class="mb-4">Demo Candidate</h4>
-                                    <p class="mb-4 ezy__testimonial5-rating">Skill 4, Skill 5, Skill 6</p>
-                                    <p class="mb-4 ezy__testimonial5-rating">Demo Education</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card ezy__service23-card col-md-6 col-lg-4 m-5 text-center">
-                        <div class="ezy__testimonial5-item border-1 rounded-2 py-lg-5 mt-4 text-center">
-                            <a class="candidate_list" href="#">
-                                <img class="post_avatar_service" src="{% static 'assets/candidate2.jpg' %}" alt="Demo Candidate">
-                                <div class="ezy__testimonial5-content mt-3">
-                                    <h4 class="mb-4">Demo Candidate</h4>
-                                    <p class="mb-4 ezy__testimonial5-rating">Skill 7, Skill 8, Skill 9</p>
-                                    <p class="mb-4 ezy__testimonial5-rating">Demo Education</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>    
-            <!-- End: .row -->
+                </div>
+            {% endif %}
         </div>
-        <!-- End: .row -->
     </div>
-    <!-- End: .container -->
 </section>
-<!-- Candidates section end -->
 {% endblock %}

@@ -7,14 +7,62 @@
 Privacy Policy
 {% endblock %}
 
-{% block content %}
+{% block extra_css %}
+<style>
+    .privacy-policy-container {
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-10 offset-md-1">
-            <h2 class="my-5">{{ privacy_policy.title }}</h2>
-            <div class="privacy-policy-section">
-                {{ privacy_policy.content|safe }}
+    .privacy-policy-title {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .privacy-policy-content {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #333;
+        padding: 10px;
+        text-align: justify;
+    }
+
+    .privacy-policy-content h3 {
+        font-size: 24px;
+        margin-top: 20px;
+        color: #0056b3;
+    }
+
+    .privacy-policy-content p {
+        margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .privacy-policy-title {
+            font-size: 28px;
+        }
+
+        .privacy-policy-content {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="privacy-policy-container">
+                <h2 class="privacy-policy-title">{{ privacy_policy.title }}</h2>
+                <div class="privacy-policy-content">
+                    {{ privacy_policy.content|safe }}
+                </div>
             </div>
         </div>
     </div>
