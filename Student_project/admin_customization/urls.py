@@ -7,9 +7,11 @@ from .views_services import *
 from .views_message import *
 from .views_notification import *
 from .views_progress import *
+from .views_dashboard import *
 
 urlpatterns = [
     path('', admin_login, name='admin_login'),
+    
     path('dashboard/', dashboard, name='dashboard'),
     
     # profile urls

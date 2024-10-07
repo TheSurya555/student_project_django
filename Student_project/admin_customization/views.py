@@ -47,15 +47,6 @@ def admin_login(request):
     return render(request, 'admin_customization/login.html', context)
 
 
-@login_required    
-@admin_required
-def dashboard(request):
-    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
-    context = {
-        'notifications':notifications,
-    }
-    return render(request, 'admin_customization/dashboard.html',context)
-
 @login_required
 @admin_required
 def add_skill(request):

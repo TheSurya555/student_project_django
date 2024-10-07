@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'signUp.middleware.UpdateLastActivityMiddleware',
+    'admin_customization.middleware.TrafficLoggingMiddleware'
 ]
 
 ROOT_URLCONF = 'Student_project.urls'
