@@ -7,414 +7,551 @@ Profile
 
 {% block head_css %}
 <link rel="stylesheet" href="{% static 'css/button.css' %}">
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/profiles.css' %}">
 <link rel="stylesheet" href="{% static 'css/Layout.css' %}">
 <link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
 {% endblock %}
 
-{% block extra_css %}
-<style>
-  .card-title {
-    font-weight: bold;
-}
 
-.btn-link {
-    color: #007bff;
-    text-decoration: none;
-}
+{% block content%}
+  <div class="container">
+      <div class="main-container my-5">
+          <div class="row">
+              <!-- Sidebar -->
+              <div class="col-md-3 col-lg-2 sidebar">
+                  <div>
+                      <h4 class="text-center">Account Setting</h4>
+                  </div>
+                  {% if request.session.user_role == "Candidate"%}
+                  <a href="#" class="nav-link active my-4 px-4" onclick="showContent('myInfo')">My Info</a>
+                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('projects')">Projects</a>
+                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('ProjectProgress')">Project Progress</a>
+                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('Test')">Test</a>
+                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('connectWith')">Connect With</a>
+                  {% elif request.session.user_role == "Recruiter"%}
+                  <a href="#" class="nav-link active my-4 px-4" onclick="showContent('myInfo')">My Info</a>
+                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('billingInfo')">Billing Info</a>
+                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('ProjectProgress')">Project Progress</a>
+                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('connectWith')">Connect With</a>
+                  {% endif %}
+              </div>
 
-.btn-link:hover {
-    text-decoration: underline;
-}
+              <!-- Main Content Area -->
+              <div class="col-sm-10 col-md-8 col-lg-9 ms-5 content-area">
+                  <!-- My Info Section -->
+                  <div id="myInfo" class="content-section">
+                      <h3>MyInfo</h3>
+                      <p>{{user.role}} account</p>
+                      <div class="profile-section p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                          <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-img">
+                          <div class="profile-info">
+                              <h4>{{ user.first_name}} {{ user.last_name}}</h4>
+                              <p>{{user_profile.position}}</p>
+                              <p>{{ user.username }}</p>
 
-.accordion .card-header {
-    background-color: #f8f9fa;
-}
+                          </div>
+                      </div>
 
-.accordion .card-header .btn-link {
-    font-weight: bold;
-    font-size: 16px;
-}
+                      <!-- Personal Information Section -->
+                      <div class="mt-4 info-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <h4 class="mb-0">Personal Information</h4>
+                              <a href="{% url 'profile_edit' %}"><button class="px-3">
+                                <span>Edit</span><i class="bi bi-pencil"></i>
+                              </button>
+                              </a>
+                          </div>
+                          <div class="row">
+                              <!-- First Name and Last Name -->
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">First Name</p>
+                                  <p class="fw-bold">{{ user.first_name}}</p>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Last Name</p>
+                                  <p class="fw-bold">{{ user.last_name}}</p>
+                              </div>
 
-.link_list{
-  margin-bottom: 20px;
-}
+                              <!-- Email and Phone -->
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Email</p>
+                                  <p class="fw-bold">{{user.email}}</p>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Phone</p>
+                                  <p class="fw-bold">{{user.phone}}</p>
+                              </div>
+                              <!-- Bio -->
+                              {% if request.session.user_role == "Candidate"%}
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Bio</p>
+                                  <p class="fw-bold">{{user_profile.position}}</p>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Date Of Birth</p>
+                                  <p class="fw-bold">{{user.profile.dob}}</p>
+                              </div>
+                              {% elif request.session.user_role == "Recruiter"%}
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Bio</p>
+                                  <p class="fw-bold">{{user_profile.position}}</p>
+                              </div>
+                              {%endif%}
+                          </div>
+                      </div>
 
-.link_list a{
-  color: #000;
-  text-decoration: none;
-  font-size: 24px;
-}
+                      <!-- Address Section -->
+                      <div class="mt-4 info-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <h4 class="mb-0">Address</h4>
+                          </div>
+                          <div class="row">
+                              <!-- Country and State -->
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Country</p>
+                                  <p class="fw-bold">{{user_profile.country.name}}</p>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">State</p>
+                                  <p class="fw-bold">{{user_profile.state}}</p>
+                              </div>
 
-</style>
+                              <!-- City and Pin Code -->
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">City</p>
+                                  <p class="fw-bold">{{user_profile.city}}</p>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Pin Code</p>
+                                  <p class="fw-bold">{{user_profile.postal_code}}</p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <!-- Education Section -->
+                      <div class="mt-4 info-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <h4 class="mb-0">Education</h4>
+                          </div>
+                          <div class="row">
+                              <!-- Country and State -->
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">Last Exam Pass</p>
+                                  <p class="fw-bold">{{user_profile.education}}</p>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                  <p class="text-muted mb-1">State</p>
+                                  <p class="fw-bold">{{user_profile.university}}</p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="mt-4 p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                          <!-- Resume Section -->
+                          {% if request.session.user_role == "Candidate"%}
+                          <div class="resume-section">
+                              <h3>Resume</h3>
+                              <!-- View Resume Button -->                          
+                              {% if user_profile.resume %}
+                              <button type="button" class="px-3" onclick="viewResume('{{ user_profile.resume.url }}')">
+                                <span>View Resume</span>
+                              </button>
+                              {% else %}
+                              <p>No resume uploaded.</p>
+                              {%endif%}       
+                          </div>
+                          {%endif%}       
+                      </div>
+                  </div>
+
+                  <!-- Projects Section -->
+                  <div id="projects" class="content-section" style="display:none;">
+                      <h3>project</h3>
+                      <!-- Add Projects Card -->
+                      <div class="add-project-card p-4 mb-4 rounded shadow-sm d-flex justify-content-between align-items-center"
+                          style="border: 1px solid #e0e0e0;">
+                          <!-- Left side: Text content -->
+                          <div>
+                              <h5 class="fw-bold mb-2">Add Your Projects and Experience</h5>
+                              <p class="text-muted mb-0">Innovative solution drives impact, fueling passion for
+                                  continuous growth.</p>
+                          </div>
+
+                          <!-- Right side: Button -->
+                          <a href="{% url 'add_project' %}"><button class="btn btn-light px-3 py-1"
+                                  style="border-radius: 25px;">Add Projects</button></a>
+                      </div>
+
+                      <!-- Project Card 1 -->
+                      {% if project_experiences %}
+                          {% for project in project_experiences %}
+                          <div class="project-card mb-4">
+                              <div class="project-info">
+                                  <div class="left-section">
+                                      <h5>Project 1: {{ project.title }}</h5>
+                                      <p><strong>Contributions:</strong>{{ project.contribution }}</p>
+                                  </div>
+                                  <div class="right-section">
+                                      <button class="btn btn-light px-3 py-1"
+                                          style="border-radius: 20px; background-color: #e8f5e9;">
+                                          Edit <i class="bi bi-pencil"></i>
+                                      </button>
+                                  </div>
+                              </div>
+
+                              <div class="divider"></div>
+
+                              <div class="project-info">
+                                  <p><strong>Technology Used:</strong> <span class="tech-used">{{ project.technologies }}</span></p>
+                              </div>
+
+                              <div class="description">
+                                  <p>{{ project.description|safe }}</p>
+                              </div>
+                          </div>
+                          {% endfor %}
+                          <a href="{% url 'add_project' %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
+                      {% else %}
+                              <div class="no-projects">
+                                  <p>No projects or experiences to display.</p>
+                                  <a href="{% url 'add_project' %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
+                              </div>
+                      {% endif %}
+                  </div>
+
+                  <!-- Billing Info Section -->
+                  <div id="billingInfo" class="content-section" style="display:none;">
+                      <!-- Billing Info Section -->
+                      <div class="billing-info-section">
+                          <!-- Add Billing Card -->
+                          <h3>Billing Info</h3>
+                          <div class="billing-card p-4 rounded d-flex justify-content-between align-items-center mb-4"
+                              style="border: 1px solid #e0e0e0; background-color: #fff; border-radius: 15px;">
+                              <!-- Left Side: Text -->
+                              <div>
+                                  <h4 class="fw-bold mb-2">Add your billing Info to receive and make payment</h4>
+                                  <p class="text-muted mb-0">Comprehensive overview of payment methods, billing
+                                      cycles, and account management.</p>
+                              </div>
+                              <!-- Right Side: Button -->
+                              <button class="btn btn-light px-3 py-1"
+                                  style="border-radius: 25px; font-size: 1rem; font-weight: 600;">Add Billing</button>
+                          </div>
+
+                          <!-- Total Balance Section -->
+                          <div class="balance-card p-4 rounded d-flex justify-content-between align-items-center"
+                              style="border: 1px solid #e0e0e0; background-color: #fff; border-radius: 15px;">
+                              <!-- Left Side: Text -->
+                              <div>
+                                  <h4 class="fw-bold mb-2">Total Balance:</h4>
+                                  <p class="{% if current_balance < 0 %}text-danger{% else %}text-success{% endif %}" style="font-size: 3rem; color: #000;">{{ current_balance | floatformat:2 }}</p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <!-- Billing Methods Section -->
+                      {% comment %} <div class="billing-methods-section p-4 rounded shadow-sm mb-4 mt-4"
+                          style="border: 1px solid #e0e0e0;">
+                          <!-- Title -->
+                          <h5 class="fw-bold mb-3">Billing Methods</h5>
+                          <p class="text-muted mb-4">Manage billing information and view recipes</p>
+
+                          <!-- UPI Method -->
+                          <div class="method-item d-flex justify-content-between align-items-center mb-3"
+                              style="border: 1px solid #e0e0e0; padding: 10px; border-radius: 8px;">
+                              <div class="d-flex align-items-center">
+                                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Unified_Payments_Interface_logo.svg"
+                                      alt="UPI" style="width: 40px; margin-right: 15px;">
+                                  <span>UPI ending with ******6324@ybl</span>
+                              </div>
+                              <button class="btn btn-light" style="border-radius: 20px;">Remove</button>
+                          </div>
+
+                          <!-- VISA Method -->
+                          <div class="method-item d-flex justify-content-between align-items-center"
+                              style="border: 1px solid #e0e0e0; padding: 10px; border-radius: 8px;">
+                              <div class="d-flex align-items-center">
+                                  <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="VISA"
+                                      style="width: 40px; margin-right: 15px;">
+                                  <span>VISA ending with 6589</span>
+                              </div>
+                              <button class="btn btn-light" style="border-radius: 20px;">Remove</button>
+                          </div>
+                      </div> {% endcomment %}
+                      <!-- Payment History Section -->
+                      <div class="payment-history-section p-4 rounded shadow-sm mb-4"
+                          style="border: 1px solid #e0e0e0;">
+                          <!-- Title -->
+                          <h5 class="fw-bold mb-3">Payment History</h5>
+                          <p class="text-muted mb-4">Manage billing information and view recipes</p>
+
+                          <!-- Table for Payment History -->
+                          <div class="table-responsive">
+                              <table class="table table-borderless">
+                                  <thead>
+                                      <tr>
+                                          <th class="text-muted">Date</th>
+                                          <th class="text-muted">From</th>
+                                          <th class="text-muted">Status</th>
+                                          <th class="text-muted">Amount</th>
+                                          <th class="text-muted">Recipes</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      {% if payments_made%}
+                                          {% for payment in payments_made %}  
+                                              <tr>
+                                                  <td>{{ payment.payment_date|date:"Y-m-d" }}</td>
+                                                  <td>{{ payment.recruiter.username }}</td>
+                                                  <td>{{ payment.status }}</td>
+                                                  <td>₹{{ payment.amount }}</td>
+                                                  <td>
+                                                      <button class="btn btn-light"
+                                                          style="border-radius: 20px;">Download</button>
+                                                          <button type="button" class="px-3" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal-{{ payment.id }}">
+                                                              <span>View Payment Details</span>
+                                                          </button>
+                                                  </td>
+                                              </tr>
+                                              <!-- Modal -->
+                                              <div class="modal fade" id="paymentDetailsModal-{{ payment.id }}" tabindex="-1" aria-labelledby="paymentDetailsModalLabel-{{ payment.id }}" aria-hidden="true">
+                                                  <div class="modal-dialog">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header">
+                                                              <h5 class="modal-title" id="paymentDetailsModalLabel-{{ payment.id }}">Payment Details</h5>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                              <p><strong>Amount:</strong> ₹{{ payment.amount }}</p>
+                                                              <p><strong>Payment ID:</strong> {{ payment.razorpay_payment_id }}</p>
+                                                              <p><strong>Order ID:</strong> {{ payment.razorpay_order_id }}</p>
+                                                              <p><strong>Recruiter:</strong> {{ payment.recruiter.username }}</p>
+                                                              <p><strong>Date:</strong> {{ payment.payment_date }}</p>
+                                                              <p><strong>Status:</strong> {{ payment.status }}</p>
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                              <button type="button" class="px-3" data-bs-dismiss="modal"><span>Close</span></button>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          {% endfor %} 
+                                      {% else %}
+                                      <p>No payment yet</p>
+                                      {% endif %}
+                                  </tbody>
+                              </table>
+                          </div>
+
+                          <!-- Load More Button -->
+                          <a href="#" class="text-success">Load More</a>
+                      </div>
+                  </div>
+
+                  <!-- Connect With Section -->
+                  <div id="connectWith" class="content-section" style="display:none;">
+                      <h3>Connect With</h3>
+                      <div class="billing-card p-4 rounded d-flex justify-content-between align-items-center mb-4"
+                          style="border: 1px solid #e0e0e0; background-color: #fff; border-radius: 15px;">
+                          <!-- Left Side: Text -->
+                          <div>
+                              <h4 class="fw-bold mb-2">Add your social media Links</h4>
+                              <p class="text-muted mb-0">Manage your social media links to connect with world</p>
+                          </div>
+                          <!-- Right Side: Button -->
+                          <a href="{% url "add_social_link" %}">
+                              <button class="px-3">
+                                <span>Add Links</span>
+                              </button>
+                          </a>
+                      </div>
+
+                      <!-- Social Links Section -->
+                      <div class="social-links-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                          <!-- Title and Edit Button -->
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <h5 class="fw-bold">Social Links</h5>
+                              <button class="px-3">
+                                  <span>Edit <i class="bi bi-pencil"></i></span>
+                              </button>
+                          </div>
+
+                          <!-- Links List -->
+                          <div class="links-list">
+                              {% for links in social_links %}
+                                  {% if links.platform == 'linkedin' %}
+                                  <div class="link-item mb-3">
+                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                  </div>
+                                  {% elif links.platform == 'github' %}
+                                  <div class="link-item mb-3">                                   
+                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-github"></i> Github</a>
+                                  </div>
+                                  {% elif links.platform == 'twitter' %}
+                                  <div class="link-item mb-3">
+                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-twitter"></i> Twitter</a>
+                                  </div>
+                                  {% elif links.platform == 'facebook' %}
+                                  <div class="link-item mb-3">
+                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-facebook"></i> Facebook</a>
+                                  </div>
+                                  {% elif links.platform == 'instagram' %}
+                                  <div class="link-item mb-3">
+                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-instagram"></i> Instagram</a>
+                                  </div>
+                                  {% elif links.platform == 'website' %}
+                                  <div class="link-item mb-3">
+                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fa-solid fa-globe"></i> Website</a>
+                                  </div>
+                                  {% endif %}
+                              {% empty %}
+                              <p>No social link added yet</p>
+                              {% endfor %}
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- ProjectProgress Section -->
+                  <div id="ProjectProgress" class="content-section" style="display:none;">
+                      <h3>Project Progress</h3>
+                      <!-- Profile Section -->
+                      {% if request.session.user_role == "Recruiter" %}
+                        <p>Track your project progress</p>
+                          {% if projects %}
+                              {% for project in projects %}
+                              <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
+                                  <div class="profile-section p-4 rounded shadow-sm mb-4" style="border: 1px solid #e0e0e0;" id="profileSection">
+                                      {% if project.image %}
+                                          <div class="project-image" style="margin-right: 15px;">
+                                              <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                          </div>
+                                      {% endif %}
+                                      <div class="profile-info">
+                                          <h5>Project {{ project.id }}: <span> {{ project.project_name }}</span></h5>
+                                          <p><strong>Assigned Candidate:</strong> {{ project.user.first_name }} {{ project.user.last_name }}</p>
+                                          <p><strong>Project Costing:</strong> {{ project.project_costing }}</p>
+                                          {% if project.status == 'terminated' %}
+                                              <p class="terminated-status">Status: Terminated</p>
+                                          {% endif %}
+                                      </div>
+                                  </div>
+                              </a>
+                              {% endfor %}
+                          {% else %}
+                            <div>
+                                <p>No project to display</p>
+                            </div>
+                          {% endif %}
+                      {% else %}
+
+                        {% if candidate_projects %}
+                            <p>Track your project progress</p>    
+                            {% for project in candidate_projects %}
+                            <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
+                                <div class="profile-section p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;" id="profileSection">
+                                    {% if project.image %}
+                                        <div class="project-image" style="margin-right: 15px;">
+                                            <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                        </div>
+                                    {% endif %}
+                                    <div class="profile-info">
+                                        <h5>Project {{ project.id }}: <span> {{ project.name }}</span></h5>
+                                        <p><strong>Client Name:</strong> {{ project.client_name }}</p>
+                                        <p><strong>Project Costing:</strong> {{ project.project_costing }}</p>
+                                        {% if project.status == 'terminated' %}
+                                            <p class="terminated-status">Status: Terminated</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        {% else %}
+                            <div>
+                                <p>No project to display</p>
+                            </div>
+                        {% endif %}
+                      {% endif %}
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </div>
 {% endblock %}
 
-{% block content %}
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3 sidebar">
-          <h3 class="mb-4">Profile</h3>
-          {% if request.session.user_role == "Candidate" %}
-            <a href="#" id="myInfoLink" class="active">My Info</a>
-            <a href="#" id="projectsLink">Projects / Experience</a>
-            <a href="#" id="testLink">Take your Test</a>
-            <a href="#" id="projectProgressLink">Project Progress</a>
-            <a href="#" id="socialLink">Social Link</a>
-            {% elif request.session.user_role == "Recruiter" %}
-            <a href="#" id="myInfoLink" class="active">My Info</a>
-            <a href="#" id="projectProgressLink">Project Progress</a>
-            <a href="#" id="billingLink">Billing & Payments</a>
-            <a href="#" id="socialLink">Social Link</a>
-          {% endif %}
-        </div>
 
-        <div class="col-md-9 main-content">
-          <div id="myInfoSection" class="content-section active">
-            <h4 class="section-heading">My Info</h4>
-            <p>{{ user.role }} Account</p>
-            <div class="card card-custom mb-4">
-                <h5>Account</h5>
-                <div class="d-flex align-items-center">
-                    <div class="profile" style="margin-right: 15px;">
-                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-image">
-                    </div>
-                    <div>
-                        <p class="mb-1 profile_name">{{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="mb-1">{{ user_profile.position }}</p>
-                        <small>Email: {{ user.email }}</small>
-                    </div>
-                </div>
-            </div>
+{% block extra_js %}
+<script>
+  // Function to show content and manage the active link
+  function showContent(sectionId) {
 
-            <div class="card card-custom mb-4">
-                <h5>Profile details</h5>
-                <div class="d-flex">
-                    <div class="profile" style="margin-right: 15px;">
-                      <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-image">
-                    </div>
-                    <div>
-                        <p class="profile_detailes"><span>Name :</span><br>{{ user.first_name }} {{ user.last_name }}</p>
-                        <p class="profile_detailes"><span>User Name :</span><br>{{ user.username }}</p>
-                        {% if request.session.user_role == "Candidate" %}
-                          <p class="profile_detailes"><span>Date of Birth :</span><br>{{ user_profile.dob }}</p>
-                          <p class="profile_detailes"><span>Phone :</span><br>{{ user.phone }}</p>
-                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}, {{ user_profile.city }}, {{ user_profile.state }}, {{ user_profile.country.name }}, {{ user_profile.postal_code }}</p>
-                          <p class="profile_detailes"><span>Position:</span><br>{{ user_profile.position }}</p>
-                          <p class="profile_detailes"><span>Experience :</span><br>{{ user_profile.experience }}</p>
-                          <p class="profile_detailes"><span>Skills :</span><br>{{ user_profile.skills }}</p>
-                          <p class="profile_detailes"><span>Language :</span><br>{{ user_profile.languages }}</p>
-                          <p class="profile_detailes"><span>Education :</span><br>{{ user_profile.education }}</p>
-                        {% elif request.session.user_role == "Recruiter" %}
-                          <p class="profile_detailes"><span>Phone :</span><br>{{ user.phone }}</p>
-                          <p class="profile_detailes"><span>Address :</span><br>{{ user_profile.address }}, {{ user_profile.city }}, {{ user_profile.state }}, {{ user_profile.country.name }}, {{ user_profile.postal_code }}</p>
-                          <p class="profile_detailes"><span>Position:</span><br>{{ user_profile.position }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="ml-auto" style="display: flex; right: 20px; position: absolute;">
-                        <a href="{% url 'profile_edit' %}"><span class="edit-icon"><i class="fa-regular fa-pen-to-square"></i></span></a>
-                    </div>
-                </div>
-                {% if request.session.user_role == "Candidate" %}
-                  <div>
-                    <h5 class="balance m-3">Attempts left : <span>3</span></h5>
-                  </div>
-                {% endif %}
-            </div>
+    var sections = document.getElementsByClassName('content-section');
+    for (var i = 0; i < sections.length; i++) {
+        sections[i].style.display = 'none';
+    }
 
-            {% if request.session.user_role == "Candidate" %}
-              <div class="card card-custom mb-4">
-                <h5>Resume</h5>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    {% if user_profile.resume %}
-                      <button type="button" class="px-3" onclick="viewResume('{{ user_profile.resume.url }}')">
-                        <span>View Resume</span>
-                      </button>
-                    {% else %}
-                      <p>No resume uploaded.</p>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>            
-            {% endif %}
-          </div>
+    document.getElementById(sectionId).style.display = 'block';
 
-          <div id="projectsSection" class="content-section">
-            <h4 class="section-heading">Projects / Experience</h4>
-            <p>Below is a summary of my professional projects and experiences:</p>
-            {% if project_experiences %}
-            {% for project in project_experiences %}
-                <div class="card card-custom mb-4">
-                    <h5 class="mb-3">Project {{ project.project_number }}: <span>{{ project.title }}</span></h5>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="d-flex">
-                          <div class="profile" style="margin-right: 15px;">
-                              <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-image">
-                          </div>
-                          <div>
-                              <p><strong>Contribution:</strong>{{ project.contribution }}</p>
-                              <p><strong>Technologies:</strong>{{ project.technologies }}</p>
-                              <p><strong>Description:</strong>{{ project.description|safe }}</p>
-                          </div>
-                        </div>
-                        <div>
-                          <a href="{% url 'delete_project_experience' project_experience_id=project.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project experience?');">Delete</a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            <a href="{% url 'add_project' %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
-            {% else %}
-                <div class="no-projects">
-                    <p>No projects or experiences to display.</p>
-                    <a href="{% url 'add_project' %}"><button type="button" class="px-3" data-toggle="modal" data-target="#addProjectModal"><span>Add Project / Experience</span></button></a>
-                </div>
-            {% endif %}
-        
-          </div>
+    var links = document.getElementsByClassName('nav-link');
+    for (var i = 0; i < links.length; i++) {
+        links[i].classList.remove('active');
+    }
 
-          <div id="testSection" class="content-section">
-            <h4 class="section-heading">Take your Test</h4>
-            <p>Start your test and submit your answer link below:</p>
-            <div class="card card-custom mb-4">
-              <div class="d-flex align-items-center">
-                <a href="{% url 'rules_and_regulations' %}"><button type="button" class="px-3"><span>Start Test</span></button></a>
-              </div>
-            </div>
-            <div class="card card-custom mb-4">
-              <div class="form-group mb-4">
-                <label for="answerLink" class="mb-2">Submit your answer link:</label>
-                <input type="url" class="form-control" id="answerLink" placeholder="Enter the link to your test answer">
-              </div>
-              <div class="d-flex align-items-center">
-                <button type="button" class="px-3" id="submitAnswerLinkButton"><span>Submit Link</span></button>
-              </div>
-            </div>
-          </div>
+    event.target.classList.add('active');
 
-          <div id="projectProgressSection" class="content-section">
-            {% if request.session.user_role == "Recruiter" %}
-              <h5>Your Assigned Projects:</h5>
-              <p>Track your project progress</p>
-              {% if projects %}
-                  {% for project in projects %}
-                      <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
-                          <div class="card card-custom mb-4 d-flex flex-row">
-                              {% if project.image %}
-                              <div class="project-image" style="margin-right: 15px;">
-                                  <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                              </div>
-                              {% endif %}
-                              <div class="align-items-center">
-                                  <h5>Project {{ project.id }}: <span> {{ project.project_name }}</span></h5>
-                                  <p><strong>Assigned Candidate:</strong> {{ project.user.first_name }} {{ project.user.last_name }}</p>
-                                  <p><strong>Project Costing:</strong> {{ project.project_costing }}</p>
-                                  {% if project.status == 'terminated' %}
-                                      <p class="terminated-status">Status: Terminated</p>
-                                  {% endif %}
-                              </div>
-                          </div>
-                      </a>
-                  {% endfor %}
-              {% else %}
-                  <div class="no-projects">
-                      <p>No project progress to display.</p>
-                  </div>
-              {% endif %}   
-            {% else %}      
-            <h4 class="section-heading mt-5">Project Progress</h4>
-            <p>Track your project progress</p>
-              {% if candidate_projects %}
-                {% for project in candidate_projects %}
-                  <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
-                    <div class="card card-custom mb-4 d-flex flex-row">
-                      {% if project.image %}
-                      <div class="project-image" style="margin-right: 15px;">
-                        <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                      </div>
-                      {% endif %}
-                      <div class="align-items-center">
-                        <h5>Project {{ project.id }}: <span> {{ project.name }}</span></h5>
-                        <p><strong>Client Name:</strong> {{ project.client_name }}</p>
-                        <p> <strong>Project Costing:</strong> {{ project.project_costing }}</p>
-        
-                        {% if project.status == 'terminated' %}
-                        <p class="terminated-status">Status: Terminated</p>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </a>
-                {% endfor %}
-              {% else %}
-                <div class="no-projects">
-                  <p>No project progress to display.</p>
-                </div>
-              {% endif %}    
-            {% endif %}                    
-          </div>
+    localStorage.setItem('activeSection', sectionId);
+  }
 
-          <div id="billingSection" class="content-section">
-            <h4 class="mb-4">Billing & Payments</h4>
-        
-            <!-- Current Balance -->
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Current Balance</h5>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">Your current balance is:</p>
-                        <p class="mb-0 h4 {% if current_balance < 0 %}text-danger{% else %}text-primary{% endif %}">
-                          <i class="fa-solid fa-indian-rupee-sign"></i>
-                          {{ current_balance | floatformat:2 }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        
-            <!-- Billing History -->
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Billing History</h5>
-                    <p>Review your billing history:</p>
-        
-                    <div class="accordion" id="billingHistoryAccordion">
-                        <div class="card">
-                            <div class="card-header" id="headingPaymentsMade">
-                                <h6 class="mb-0">
-                                    <button class="px-3" type="button" data-toggle="collapse" data-target="#collapsePaymentsMade" aria-expanded="true" aria-controls="collapsePaymentsMade">
-                                        <span>Payments Made</span>
-                                    </button>
-                                </h6>
-                            </div>
-        
-                            <div id="collapsePaymentsMade" class="collapse show" aria-labelledby="headingPaymentsMade" data-parent="#billingHistoryAccordion">
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush">
-                                        {% if payments_made %}
-                                            {% for payment in payments_made %}
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <span>{{ payment.payment_date|date:"Y-m-d" }}</span>
-                                                    <span class="text-muted">₹{{ payment.amount }}</span>
-                                                    <span class="text-muted">Status: {{ payment.status }}</span>
-                                                    <!-- Button to trigger the modal -->
-                                                    <button type="button" class="px-3" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal-{{ payment.id }}">
-                                                        <span>View Payment Details</span>
-                                                    </button>
-                                                </li>
-        
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="paymentDetailsModal-{{ payment.id }}" tabindex="-1" aria-labelledby="paymentDetailsModalLabel-{{ payment.id }}" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="paymentDetailsModalLabel-{{ payment.id }}">Payment Details</h5>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p><strong>Amount:</strong> ₹{{ payment.amount }}</p>
-                                                                <p><strong>Payment ID:</strong> {{ payment.razorpay_payment_id }}</p>
-                                                                <p><strong>Order ID:</strong> {{ payment.razorpay_order_id }}</p>
-                                                                <p><strong>Recruiter:</strong> {{ payment.recruiter.username }}</p>
-                                                                <p><strong>Date:</strong> {{ payment.payment_date }}</p>
-                                                                <p><strong>Status:</strong> {{ payment.status }}</p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="px-3" data-bs-dismiss="modal"><span>Close</span></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        {% else %}
-                                            <li class="list-group-item">No payments made yet.</li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          </div>
+  window.onload = function () {
+    var activeSection = localStorage.getItem('activeSection');
 
-          <!-- Social Links Section -->
-          <div id="socialSection" class="content-section">
-            <h4 class="section-heading">Social Links</h4>
+    if (activeSection) {
+        showContent(activeSection);
+    } else {
+        document.getElementsByClassName('content-section')[0].style.display = 'block';
+    }
+  }
 
-            <!-- Display existing social links -->
-            <div class="card card-custom mb-4">
-              <div class="d-flex justify-content-between align-items-baseline mb-2">
-                <h5>My Social Links</h5>
-                <a href="{% url "add_social_link" %}" ><button><span>Add Social Link</span></button></a>
-              </div>
-              <ul class="list-group list-group-flush">
-                {% for links in social_links %}
-                  <li class="link_list">
-                      {% if links.platform == 'linkedin' %}
-                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                      {% elif links.platform == 'github' %}
-                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                      {% elif links.platform == 'twitter' %}
-                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
-                      {% elif links.platform == 'facebook' %}
-                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
-                      {% elif links.platform == 'instagram' %}
-                          <a href="{{ links.link }}" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-                      {% elif links.platform == 'website' %}
-                          <a href="{{ links.link }}" target="_blank"><i class="fa-solid fa-globe"></i> Website</a>
-                      {% endif %}
-                  </li>
-                {% empty %}
-                    <p>No social links added yet.</p>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        
-        </div>
-      </div>
-    </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Function to show a specific content section and hide others
-        function showSection(sectionId) {
-          const sections = document.querySelectorAll('.content-section');
-          sections.forEach(function(section) {
-            section.classList.remove('active');
-          });
-          const selectedSection = document.getElementById(sectionId);
-          if (selectedSection) {
-            selectedSection.classList.add('active');
-          }
-        }
+  document.getElementById('saveChangesBtn').addEventListener('click', function() {
+    // Get values from the form inputs
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
 
-        // Event listeners for sidebar links
-        const sidebarLinks = document.querySelectorAll('.sidebar a');
-        sidebarLinks.forEach(function(link) {
-          link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const sectionId = this.id.replace('Link', 'Section');
-            showSection(sectionId);
+    // Update the displayed information
+    document.getElementById('displayFirstName').textContent = firstName;
+    document.getElementById('displayLastName').textContent = lastName;
+    document.getElementById('displayEmail').textContent = email;
+    document.getElementById('displayPhone').textContent = phone;
 
-            // Remove 'active' class from all links and add to the clicked link
-            sidebarLinks.forEach(function(link) {
-              link.classList.remove('active');
-            });
-            this.classList.add('active');
-          });
-        });
+    // Close the modal after saving changes
+    const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+    modal.hide();
+  });
 
-        // Set the initial active section based on the initial active link
-        const initialActiveLink = document.querySelector('.sidebar a.active');
-        if (initialActiveLink) {
-          const initialSectionId = initialActiveLink.id.replace('Link', 'Section');
-          showSection(initialSectionId);
-        }
-      });
+  document.getElementById('showPassword').addEventListener('change', function () {
+    const passwordFields = [document.getElementById('oldPassword'), document.getElementById('newPassword'), document.getElementById('confirmPassword')];
+    passwordFields.forEach(field => {
+        field.type = this.checked ? 'text' : 'password';
+    });
+  });
 
-      // Function to view resume in a new window
-      function viewResume(url) {
-        window.open(url, '_blank');
-      }
-    </script>
+  // Handle "Change Password" button click
+  document.getElementById('changePasswordBtn').addEventListener('click', function() {
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
 
-{% endblock content %}
+    // Perform your validation here
+    if (newPassword === confirmPassword && oldPassword) {
+        alert('Password changed successfully!');
+        // Close the modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+        modal.hide();
+    } else {
+        alert('Passwords do not match or fields are empty!');
+    }
+  });
+</script>
+{% endblock %}

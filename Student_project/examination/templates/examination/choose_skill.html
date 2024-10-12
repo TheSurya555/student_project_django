@@ -6,18 +6,26 @@ Choose a Skill
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Choose a Skill</h2>
-    <ul>
-        {% for skill in skills %}
-            <li class="mb-5">
-                <select class="form-control" id="skills" multiple>
-                    <option value="{{skill.id}}">{{ skill.name }}</option>
-                </select>
-                <form action="{% url 'start_test' skill.id %}" method="get" style="display:inline;">
-                    <button type="submit" class="px-3 mt-3"><span>Select</span></button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+    <h1>Choose a Skill to Start the Test</h1>
+
+    <div class="container mt-4">
+        <div class="row">
+            {% if skills %}
+                {% for skill in skills %}
+                    <div class="col-md-4 mb-4"> <!-- Adjust the column size as needed -->
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ skill.name }}</h5>
+                                <p class="card-text">Description: {{ skill.description|truncatewords:20 }}</p> <!-- Add a description if available -->
+                                <a href="{% url 'start_test' skill.id %}" ><button class="px-3"><span>Start Test</span></button></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No skills available.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

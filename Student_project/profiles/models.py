@@ -20,6 +20,7 @@ class UserProfile(models.Model):
     skills = models.CharField(max_length=255, null=True, blank=True)
     languages = models.CharField(max_length=255, null=True, blank=True)
     education = models.CharField(max_length=255, null=True, blank=True)
+    university = models.CharField(max_length=255, null=True, blank=True)
     vat_id = models.CharField(max_length=20, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     resume = models.FileField(upload_to='resumes/', null=True, blank=True)

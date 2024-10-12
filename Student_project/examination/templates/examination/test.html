@@ -1,0 +1,66 @@
+{% extends "main/Layout.html" %}
+
+{% block title %}
+Test
+{% endblock %}
+
+{% block content %}
+    <!-- content -->
+    <section>
+        <div class="container form-container">
+            <div class="row">
+                <div class="mt-4 info-card p-4">
+
+                    <div class="col-md-8 offset-md-2">
+                        <h1 class="mb-4">Take Your Test</h1>
+
+                        <!-- Test Instructions -->
+                        <div class="text-instruction">
+                            <h2 class="mt-4">Instructions</h2>
+                            <p>Please read the following instructions carefully before starting the test:</p>
+                            <ul>
+                                <li>The test consists of multiple-choice questions.</li>
+                                <li>You have a total of 60 minutes to complete the test.</li>
+                                <li>Each question carries equal marks.</li>
+                                <li>Make sure to submit your answers before the time runs out.</li>
+                            </ul>
+
+                            <!-- Test Structure Overview -->
+                            <h2 class="mt-4">Test Structure</h2>
+                            <p>The test is divided into three sections:</p>
+                            <ol>
+                                <li>General Knowledge</li>
+                                <li>Technical Skills</li>
+                                <li>Problem Solving</li>
+                            </ol>
+                            <p>Each section has a different number of questions, so please manage your time accordingly.</p>
+                            <!-- Frequently Asked Questions -->
+                            <h2 class="mt-4">FAQs</h2>
+                            <div class="mb-3">
+                                <strong>1. Can I pause the test?</strong>
+                                <p>No, the test cannot be paused once started. Please ensure you have a stable internet connection before beginning.</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>2. What happens if I lose my internet connection?</strong>
+                                <p>If you lose your connection, try to reconnect. However, any unanswered questions will not be saved.</p>
+                            </div>
+                            <div class="mb-3">
+                                <strong>3. Will I receive my results immediately?</strong>
+                                <p>Results will be available within 24 hours after the test completion.</p>
+                            </div>
+                        </div>
+
+                        <!-- Start Test Button -->
+                        <div class="mb-4 p-4 rounded text-center">
+                            <a href="{% url 'rules_and_regulations' %}">
+                                <button type="button" class="px-3"><span>Start Test</span></button>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- content end -->
+{% endblock %}

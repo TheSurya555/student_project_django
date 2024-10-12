@@ -75,8 +75,9 @@
                                             </a>
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                                 <li><a class="dropdown-item" href="{% url 'profiles' %}">Profile</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'test' %}">Test</a></li>
                                                 <li><a class="dropdown-item" href="{% url 'settings' %}">Setting</a></li>
-                                                <li><a class="dropdown-item" href="{% url 'messages' %}">Message</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'messages' %}">Notification</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                             </ul>
@@ -110,7 +111,7 @@
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                                 <li><a class="dropdown-item" href="{% url 'profiles' %}">Profile</a></li>
                                                 <li><a class="dropdown-item" href="{% url 'settings' %}">Setting</a></li>
-                                                <li><a class="dropdown-item" href="{% url 'messages' %}">Message</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'messages' %}">Notification</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                             </ul>
@@ -142,7 +143,7 @@
                                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                                 <li><a class="dropdown-item" href="{% url 'profiles' %}">Profile</a></li>
                                                 <li><a class="dropdown-item" href="{% url 'settings' %}">Setting</a></li>
-                                                <li><a class="dropdown-item" href="{% url 'messages' %}">Message</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'messages' %}">Notification</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                             </ul>
@@ -381,7 +382,8 @@
   
     {% endblock %}
     
-    {% block extra_js %}{% endblock %}   
+    {% block extra_js %}
+    {% endblock %}   
 
 </body>
 </html>

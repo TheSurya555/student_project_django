@@ -5,6 +5,16 @@ from .models import Skill, Test, Question, Answer
 from datetime import timedelta
 from profiles.models import UserProfile
 
+def test(request):
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+    return render(request, 'examination/test.html', {'profile_image_url':profile_image_url})
+
 def choose_skill(request):
     profile_image_url = None
     if request.user.is_authenticated:
@@ -46,6 +56,7 @@ def start_test(request, skill_id):
     
     test, created = Test.objects.get_or_create(user=request.user, skill=skill, completed=False)
     return redirect('take_test', test_id=test.id)
+
 
 @login_required
 def take_test(request, test_id):
