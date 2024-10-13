@@ -1,9 +1,10 @@
 from django import forms
 from talents.models import Skills
-from examination.models import Skill ,Question ,Answer,Test
+from examination.models import Skill ,Question ,Answer,Test,ExamRule
 from aboutUs.models import *
 from payment.models import Subscription
 from tinymce.widgets import TinyMCE 
+
 
 
 # Skill form
@@ -70,3 +71,13 @@ class ScoreForm(forms.ModelForm):
     class Meta:
         model = Test
         fields = ['score'] 
+
+
+class ExamRulesForm(forms.ModelForm):
+    class Meta:
+        model = ExamRule
+        fields = ['title','description']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Rules title'}),
+            'description': TinyMCE(attrs={'class': 'form-control', 'placeholder': 'Write Your Rules here'}), 
+        }         

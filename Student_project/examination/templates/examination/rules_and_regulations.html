@@ -21,37 +21,6 @@ Rules and Regulations
         color: #333;
     }
     
-    .rule-item {
-        margin-bottom: 15px;
-    }
-    
-    .rule-item h4 {
-        font-weight: bold;
-        color: #007bff;
-    }
-    
-    .rule-item p {
-        margin: 0;
-        color: #555;
-    }
-    
-    .btn-custom {
-        background-color: #007bff;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 25px;
-        margin-top: 20px;
-        display: block;
-        width: 100%;
-        text-align: center;
-        font-size: 18px;
-    }
-    
-    .btn-custom:hover {
-        background-color: #0056b3;
-        color: white;
-    }
-    
     /* Responsive styling */
     @media (max-width: 768px) {
         .rules-container {
@@ -64,50 +33,14 @@ Rules and Regulations
 {% block content %}
     <!-- content -->
     <div class="container rules-container mt-5">
-        <h2 class="rules-title">Rules and Regulations</h2>
+        {% for rule in rules %}
+        <h2 class="rules-title">{{ rule.title }}</h2>
 
-        <!-- Rule 1 -->
-        <div class="rule-item mb-4">
-            <h4>Rule 1: Code Quality</h4>
-            <p class="fs-5">Your code should be clean, readable, and maintainable. Avoid using unnecessary variables, comments, or code blocks.</p>
+        <!-- Rule  -->
+        <div class="p-3 mt-4">
+            {{ rule.description|safe }}
         </div>
-
-        <!-- Rule 2 -->
-        <div class="rule-item mb-4">
-            <h4>Rule 2: Functionality</h4>
-            <p class="fs-5">Your code should correctly implement the required functionality. Make sure to test your code thoroughly before submitting it.</p>
-        </div>
-
-        <!-- Rule 3 -->
-        <div class="rule-item mb-4">
-            <h4>Rule 3: Time Limit</h4>
-            <p class="fs-5">You have a limited amount of time to complete the test. Make sure to manage your time effectively and submit your code before the deadline.</p>
-        </div>
-
-        <!-- Rule 4 -->
-        <div class="rule-item mb-4">
-            <h4>Rule 4: Code Length</h4>
-            <p class="fs-5">Your code should be concise and efficient. Avoid writing unnecessary code or using complex algorithms when simpler ones will suffice.</p>
-        </div>
-
-        <!-- Rule 5 -->
-        <div class="rule-item mb-4">
-            <h4>Rule 5: Code Style</h4>
-            <p class="fs-5">Your code should follow a consistent style and formatting. Use a consistent naming convention, indentation, and spacing throughout your code.</p>
-        </div>
-
-        <!-- Rule 6 -->
-        <div class="rule-item mb-4">
-            <h4>Rule 6: No External Libraries</h4>
-            <p class="fs-5">You are not allowed to use any external libraries or dependencies in your code. You must write your code from scratch.</p>
-        </div>
-
-        <!-- Rule 7 -->
-        <div class="rule-item mb-4">
-            <h4>Rule 7: No Cheating</h4>
-            <p class="fs-5">You are not allowed to cheat or copy someone else's code. Any form of cheating will result in immediate disqualification.</p>
-        </div>
-
+        {% endfor %}
         <!-- Proceed Button -->
          <div class="text-center mt-5"> 
 

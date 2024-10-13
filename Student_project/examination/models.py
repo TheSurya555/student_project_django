@@ -36,3 +36,11 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"{self.test.user.username} - {self.question.text}: {self.answer}"
+
+
+class ExamRule(models.Model):
+    title = models.CharField(max_length=255)  # Title of the rule
+    description = models.TextField()  # Detailed description of the rule
+    
+    def __str__(self):
+        return self.title    

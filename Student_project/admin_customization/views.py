@@ -11,6 +11,8 @@ from django.http import HttpResponseForbidden
 from .forms import SkillForm ,Exam_SkillForm, QuestionForm, AnswerCorrectionForm
 from django.http import JsonResponse
 from notifications.models import Notification
+from examination.models import ExamRule
+from .forms import ExamRulesForm
 
 def admin_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -87,6 +89,7 @@ def examination(request):
     questions = []
     student_tests = Test.objects.all()
     notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')[:5]
+    rules = ExamRule.objects.all()
 
     # Check if a skill has been selected by the admin
     if 'skill_id' in request.GET:
@@ -99,6 +102,7 @@ def examination(request):
         'questions': questions,
         'student_tests': student_tests,
         'notifications':notifications,
+        'rules': rules,
         'site_header': "Manage Examination Skills and Questions"
     }
 
@@ -241,6 +245,61 @@ def view_student_test(request, user_id):
     return render(request, 'admin_customization/exam/view_student_test.html', context)
 
 # Admin examination view end
+
+# Admin view to add a new exam rule
+@login_required
+@admin_required
+def add_exam_rule(request):
+    if request.method == 'POST':
+        form = ExamRulesForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Rule added successfully!")
+            return redirect(reverse('examination'))
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ExamRulesForm()
+
+    context = {
+        'form': form,
+        'site_header': "Add New Exam Rule"
+    }
+    return render(request, 'admin_customization/exam/add_exam_rule.html', context)
+
+
+# Admin view to edit an exam rule
+@login_required
+@admin_required
+def edit_exam_rule(request, rule_id):
+    rule = get_object_or_404(ExamRule, id=rule_id)
+
+    if request.method == 'POST':
+        form = ExamRulesForm(request.POST, instance=rule)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Rule updated successfully!")
+            return redirect(reverse('examination'))
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ExamRulesForm(instance=rule)
+
+    context = {
+        'form': form,
+        'site_header': "Edit Exam Rule"
+    }
+    return render(request, 'admin_customization/exam/edit_exam_rule.html', context)
+
+
+# Admin view to delete an exam rule
+@login_required
+@admin_required
+def delete_exam_rule(request, rule_id):
+    rule = get_object_or_404(ExamRule, id=rule_id)
+    rule.delete()
+    messages.success(request, "Rule deleted successfully!")
+    return redirect(reverse('examination'))
 
 
 # Admin logout view start

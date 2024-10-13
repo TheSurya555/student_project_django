@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .models import Skill, Test, Question, Answer
+from .models import Skill, Test, Question, Answer ,ExamRule
 from datetime import timedelta
 from profiles.models import UserProfile
 
@@ -35,8 +35,14 @@ def rules_and_regulations(request):
             profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
         except UserProfile.DoesNotExist:
             profile_image_url = None
-        
-    return render(request, 'examination/rules_and_regulations.html', {'profile_image_url':profile_image_url})
+            
+    rules = ExamRule.objects.all()        
+    context = {
+        'rules': rules,
+        'profile_image_url':profile_image_url,
+        'site_header': "Examination Rules and Regulations"
+    }
+    return render(request, 'examination/rules_and_regulations.html', context)
 
 @login_required
 def start_test(request, skill_id):

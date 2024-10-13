@@ -1,0 +1,366 @@
+.expert-section {
+    position: relative;
+    overflow: hidden; /* Ensures content doesn't overflow */
+    z-index: 1;
+    height: 100vh;
+    background-color: #ffffff;
+  }
+  
+  .wave-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensures it stays in the background */
+    overflow: hidden;
+  }
+  
+  .wave1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: auto;
+    animation: continuousWave 15s linear infinite;
+  }
+  
+  .wave2 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: auto;
+    opacity: 0.6;
+    animation: continuousWave 20s linear infinite; /* Slower secondary wave */
+  }
+  
+  @keyframes continuousWave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  /* Curved Background */
+  .expert-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background-color: #e0f7f5;
+      clip-path: ellipse(65% 70% at 80% 50%);
+      z-index: -1;
+  }
+  
+  .home-sec {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+  }
+  
+  /* Text Section */
+  .expert-text {
+      text-align: left;
+      margin-bottom: 30px;
+  }
+  
+  .imgm {
+      height: 700px;
+  }
+  
+  .expert-section h1 {
+      font-weight: bold;
+      font-size: 4rem;
+      line-height: 1.2;
+      color: #1a1a1a;
+  }
+  
+  .expert-section p {
+      font-size: 1rem;
+      color: #2d2d2d;
+      font-weight: 500;
+      max-width: 600px;
+  }
+  
+  .btn-custom {
+      margin-top: 20px;
+      padding: 10px 30px;
+      background-color: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+  }
+  
+  /* Profile Images */
+  .profile-images {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-top: 20px;
+  }
+  
+  .profile-images img {
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      height: auto;
+  }
+  
+  .profile-images img:nth-child(1) {
+      position: absolute;
+      left: 118px;
+      top: 34px;
+      width: 200px;
+      z-index: 1;
+  }
+  
+  .profile-images img:nth-child(2) {
+      z-index: 2;
+      width: 250px;
+  }
+  
+  .profile-images img:nth-child(3) {
+      position: absolute;
+      right: 118px;
+      top: 34px;
+      width: 200px;
+      z-index: 1;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .expert-section h1 {
+        font-size: 2.5rem;
+    }
+
+    .profile-images img {
+        width: 140px;
+    }
+
+    .profile-images img:nth-child(1) {
+        left: -4px;
+    }
+
+    .profile-images img:nth-child(3) {
+        right: -4px;
+    }
+  }    
+
+  @media (max-width: 768px) {
+    .expert-section h1 {
+        font-size: 2rem;
+    }
+
+    .profile-images img {
+        width: 120px;
+    }
+
+    .profile-images img:nth-child(1) {
+        position: relative;
+        left: 109px;
+        top: 5px;
+    }
+
+    .profile-images img:nth-child(3) {
+        position: relative;
+        right: 109px;
+        top: 5px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+      .expert-section h1 {
+          font-size: 1.8rem;
+      }
+  
+      .profile-images img:nth-child(1) {
+          position: relative;
+          left: 146px;
+          right: 0;
+      }
+  
+      .profile-images img:nth-child(3) {
+          position: relative;
+          left: -146px;
+          right: 0;
+      }
+  
+      .row {
+          margin-left: 0px;
+          margin-right: 0px;
+      }
+  
+      .profile-images img {
+          margin-bottom: 10px;
+      }
+  }
+
+.talent-section {
+    background-color: #2e8b57;
+    /* Similar to your background color */
+    color: white;
+}
+
+.talent-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.talent-card img {
+    border-radius: 10px;
+}
+
+.talent-card:hover {
+    transform: scale(1.05);
+}
+
+.work-step img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.work-step h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.work-step {
+    border-bottom: 4px solid #7fa77f;
+    border-radius: 10px;
+    transition: all .3s ease-in-out;
+    padding: 10px 10px;
+}
+
+.work-step:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 11px 0px #c2bebe;
+    border-bottom: none;
+}
+
+/* ........ */
+/* 2nd card */
+/* Flip Card Container */
+.flip-card {
+    background-color: transparent;
+    perspective: 1000px;
+    /* Allows 3D flipping */
+    width: 100%;
+    height: 300px;
+    border-radius: 15px;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s ease-in-out;
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+    /* Rotate the card on hover */
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Front Side */
+.flip-card-front {
+    background-color: #9fc59f8a;
+    color: black;
+    display: flex;
+    justify-content: space-around;
+}
+
+.flip-card-front {
+    font-size: 16px;
+}
+
+.card-img {
+    border-radius: 15px;
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+}
+
+/* Back Side */
+.flip-card-back {
+    background-color: #9fc59f8a;
+    color: white;
+    transform: rotateY(180deg);
+    /* Back side hidden by default */
+    padding: 20px;
+}
+.flip-card-back h5 {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.flip-card-back .description {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.flip-card-back a {
+    margin-top: 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    padding: 8px 20px;
+    text-decoration: none;
+    color: white;
+}
+
+.card-imgg {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.contact-info h2 {
+    color: #2e8b57;
+}
+.contact-info h4 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #878282;
+}
+
+.contact-info p {
+    font-size: 20px;
+    font-weight: 500;
+    color: #7b7b7b;
+}
+
+.contact-imge {
+    height: 500px;
+    object-fit: cover;
+}
+
+.trust-ed img {
+    height: 45px;
+    object-fit: cover;
+}
+@media (max-width:768) {
+    .cont-ct{
+      display: flex;
+      flex-direction: column;
+    }
+}

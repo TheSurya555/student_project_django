@@ -7,475 +7,207 @@ Home
 {% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/index.css' %}">
-  <style>
-    canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1; /* Ensure canvas does not overlap other content */
-    }
-
-    .header-section {
-        position: relative;
-        z-index: 1; /* Ensure the header is above the canvas */
-        padding: 20px;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0.5); /* Optional: Add a background for better text visibility */
-    }    
-
-    /*===================*/
-    .ezy__service23-card {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-
-    .ezy__service23-card:hover {
-        transform: translateY(-10px);
-    }
-
-    .ezy__howitworks5-card {
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-
-    .ezy__howitworks5-card:hover {
-      transform: translateY(-10px);
-    }
-
-    .pagination {
-        margin: 0 auto;
-    }
-
-    .pagination .dot {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background-color: #098761; /* Adjust to your desired color */
-        margin: 0 5px;
-        cursor: pointer;
-    }
-
-    .pagination .dot.active {
-        background-color: #000; /* Adjust to your desired active color */
-    }
-
-    .pagination .arrow {
-      border-radius: 0;
-      background: none;
-      font-size: 60px;
-      line-height: 40px;
-      text-align: center;
-      vertical-align: middle;
-      margin: 0 20px;
-      cursor: pointer;
-    }
-
-    /* Online dot */
-    .testimonial-online-dot ,.testimonial-offline-dot {
-      position: absolute;
-      width: 15px;
-      top: 60px;
-      height: 15px;
-      background-color: #098761;
-      border-radius: 50%;
-      border: 3px solid #fff;
-    }
-
-    .testimonial-online-dot{
-      background-color: #098761;
-    }
-
-    /* Offline dot */
-    .testimonial-offline-dot {
-      background-color: #A9A9A9;
-    }    
-
-    @media (min-width: 1400px) {
-      .testimonial-offline-dot ,.testimonial-online-dot {
-        left: 170px;
-      }
-    }
-
-    @media (max-width: 1399px) {
-      .testimonial-offline-dot ,.testimonial-online-dot {
-        left: 140px;
-      }
-    }
-
-    @media (max-width: 1199px) {
-      .testimonial-offline-dot ,.testimonial-online-dot {
-        left: 110px;
-      }
-    }
-
-    /* Fixed card size and alignment */
-    .ezy__service23-card,
-    .ezy__blog3-post {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
-
-    .ezy__service23-card .card-body,
-    .ezy__blog3-post .card-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .ezy__service23-card-title,
-    .ezy__blog3-title {
-        height: 50px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .ezy__service23-card-sub-title,
-    .ezy__blog3-description {
-        height: 72px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .ezy__service23-card,
-    .ezy__blog3-post {
-        max-height: 450px; /* Adjust the max height as needed */
-    }
-
-    .ezy__service23-card-body,
-    .ezy__blog3-post-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }    
-  </style>
+  <link rel="stylesheet" href="{% static 'css/service.css' %}">
+  <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 {% endblock %}
 
 {% block content %}
     <!-- hero section start -->
-    <header class="ezy__header41">
-        <div class="container">
-          <div class="row align-items-center justify-content-center">
-            <div class="col-12 col-md-9 col-lg-7 text-center text-lg-start mb-5 mb-lg-0">
-              <div class="position-relative mb-3 pb-4">
-                <div class="ezy__header41-bg-holder"></div>
-                <h2 class="ezy__header41-heading">Hire the  Expert For <span class="text-success fst-italic">Future</span></h2>
+    <header class="expert-section d-flex align-items-center position-relative py-5 ">
+      <div class="wave-container">
+          <svg class="wave wave1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+              <path fill="#72cbc3" fill-opacity="1" d="M0,192L80,192C160,192,320,192,480,160C640,128,800,64,960,74.7C1120,85,1280,171,1360,213.3L1440,256L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+          </svg>
+          <svg class="wave wave2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+              <path fill="#72cbc3" fill-opacity="0.8" d="M0,160L80,160C160,160,320,160,480,128C640,96,800,64,960,64C1120,64,1280,128,1360,160L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+          </svg>
+      </div>        
+      <div class="container">
+          <div class="row align-items-center home-sec">
+              <!-- Left Section (Text and Button) -->
+              <div class="col-lg-6 expert-text mb-5">
+                  <h1>Hire the  Expert <br> For <span class="text-success fst-italic">Future</span></h1>
+                  <div class="col-12 col-lg-8 my-4">
+                    <a href="{% url 'signup' %}"><button class="px-3"><span>Connect With US <i class="fa-solid fa-arrow-right"></i></span></button></a>
+                  </div>
+                  <p>Unlock Your Future with Top Internships and Jobs! Connect with leading employers and discover opportunities tailored for students. Build your career, gain experience, and grow your network—all in one place. Join us now to start your journey toward professional success.</p>
               </div>
-              <div class="row">
-                <div class="col-12 col-lg-8">
-                  <p class="ezy__header41-sub-heading mb-5">
-                    An activity that requires a person's mental or physical effort is work.If a person is trained for a
-                    certain type of job, they may have a job or profession which suits.
-                  </p>
-                </div>
+              <!-- Right Section (Profile Images) -->
+              <div class="col-lg-6 profile-images">
+                <img src="{% static 'assets/creative.jpeg' %}" alt="Profile 3">
+                <img src="{% static 'assets/nature1.jpeg' %}" alt="Profile 2">
+                <img src="{% static 'assets/nature2.jpeg' %}" alt="Profile 1">
               </div>
-              
-              <div class="col-12 col-lg-8">
-                <a href="{% url 'signup' %}"><button class="px-3"><span>Connect With US <i class="fa-solid fa-arrow-right"></i></span></button></a>
-              </div>
-
-            </div>
-            <div class="col-12 col-lg-5 position-relative text-center">
-              <div class="ezy__header41-shape"></div>
-              <div>
-                <img src="{% static 'assets/character3.png' %}" alt="" class="img-fluid"/>
-              </div>
-            </div>
           </div>
-        </div>
+      </div>
     </header>
     <!-- hero section end -->
 
-
-    <!-- client section start -->
-    <section class="ezy__clients4 light">
-        <div class="container">
-          <div class="text-center mb-5">
-            <h2 class="ezy__clients4-heading">Meet Our Clients & Partners</h2>
+    <!-- service section start -->
+    <section class="services-section container my-5">
+      <div class="row text-center">
+          <h1 class="fw-bold mb-3">Our Services</h1>
+          <p class="lead" style=" font-size: 16px; font-weight: 400;">"Welcome to our website! We offer a range of services, including web design, development,
+              and marketing. Our team of experts will work with you to create a customized solution that meets your
+              unique needs and goals. Contact us today to learn more and take your business to the next level!"</p>
+      </div>
+      <div class="row align-items-center justify-content-between serve my-5">
+          <div class="col-lg-4 col-md-4 col-sm-12 text-center justify-content-center">
+              <img src="{% static 'assets/creative.jpeg' %}" alt="Services Illustration" class="img-fluid imgm rounded" style="height: auto;">
           </div>
-          <marquee behavior="scroll" direction="left" loop>
-            <div class="d-flex justify-content-center align-items-center text-center">
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-1.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-2.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-3.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-4.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-5.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-6.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-7.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-              <img src="https://cdn.easyfrontend.com/pictures/logos/color-logo-8.png" alt=""
-                class="ezy__clients4-img img-fluid px-5 my-4" />
-            </div>
-          </marquee>
-        </div>
-    </section>
-    <!-- client section end -->
 
-    <!-- Service section start -->
-    <section class="ezy__service23 light service" id="ezy__service23">
-      <div class="container">
-          <div class="row ezy__service23-separator justify-content-center">
-              <!-- Start: Section Heading -->
-              <div class="col-12 mb-5 text-center">
-                  <div class="row justify-content-center">
-                      <div class="col-12 col-md-10 col-lg-5">
-                          <h3 class="ezy__service23-heading">Services List</h3>
-                      </div>
-                  </div>
-                  <p class="ezy__service23-sub-heading mt-4 px-md-4">
-                      Discover our wide range of services designed to meet your needs. 
-                      From professional consulting to cutting-edge technology solutions, 
-                      our offerings are tailored to help you achieve your goals efficiently and effectively.
-                  </p>
-              </div>
-              <!-- End: Section Heading -->
-
-              <!-- Services container -->
-              <div id="services-container" class="row">
+          <!-- card -->
+          <div class="col-lg-8 col-md-8 service">
+              <div class="row gy-4 card-dt">
                   <!-- Loop through services and display them -->
-                  {% for service in page_obj %}
-                  <div class="col-12 col-md-6 col-xl-4 mt-4 d-flex align-items-stretch ">
-                      <div class="card ezy__service23-card border-0 rounded-0 w-100">
-                          <div class="card-body pt-4 text-center d-flex flex-column align-items-center">
-                              <div class="ezy__service23-card-icon mb-3">
-                                  <!-- Use the icon field from the Service model -->
-                                  <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" width="50">
-                              </div>
-                              <div class="card-body pb-4 text-center">
-                                  <h5 class="ezy__service23-card-title mb-3">{{ service.name }}</h5>
-                                  <p class="ezy__service23-card-sub-title mb-0">{{ service.description }}</p>
-                                  <a href="{% url 'service_candidates' service.id %}">
-                                      <button class="px-3 mt-3"><span>View Candidates</span></button>
-                                  </a>
+                  {% for service in page_obj|slice:":4" %}
+                      <div class="col-lg-6 col-md-6 col-sm-12 mb-4 card-i">
+                          <div class="card card-div h-100">
+                              <div class="card-body">
+                                  <div class="front">
+                                      {% if  service.icon %}
+                                      <img src="{{ service.icon.url }}" alt="{{ service.name }} Icon" class="img-fluid mb-3 rounded">
+                                      {% else %}
+                                      <img src="{% static 'assets/nature1.jpeg' %}" alt="{{ service.name }}" class="img-fluid mb-3 rounded">
+                                      {% endif %}
+                                      <h5 class="card-title text-center">{{ service.name }}</h5>
+                                      <p class="card-text">{{ service.description|safe|truncatewords:10 }}</p>
+                                  </div>
+                                  <div class="back-card">
+                                      <a href="{% url 'service_candidates' service.id %}">
+                                          <button class="px-3"><span>Learn More</span></button>
+                                      </a>
+                                  </div>
                               </div>
                           </div>
                       </div>
-                  </div>
                   {% endfor %}
                   <!-- End loop -->
               </div>
-              <!-- End: Services container -->
-               
-              <!-- Pagination controls -->
-              <div class="col-12 mt-4">
-                  <nav aria-label="Page navigation">
-                      <ul class="pagination justify-content-center d-flex align-items-center" id="paginator" >
-                          <!-- Pagination dots will be dynamically generated here -->
-                      </ul>
-                  </nav>
-              </div>
-              <!-- End: Pagination controls -->
-
-              <!-- View All button -->
-              <div class="col-12 mt-4 text-center">
-                  <a href="{% url 'all_services' %}">
-                      <button class="px-3"><span>View All Services</span></button>
-                  </a>
-              </div>
           </div>
-          <!-- End: .row -->
+          <div class="col-12 mt-5 text-center">
+            <a href="{% url 'all_services' %}">
+                <button class="px-3"><span>View All Services</span></button>
+            </a>
+          </div>
       </div>
-      <!-- End: .container -->
     </section>
-    <!-- Service section end -->
+    <!-- service section end-->
 
-
-    {% comment %} testimonial section {% endcomment %}
-    <section class="ezy__testimonial5 light" id="Talents">
+    <!-- testimonial section -->
+    <section class="talent-section py-5 my-5 text-center">
       <div class="container">
-          <div class="row justify-content-center mb-4 mb-md-5">
-              <div class="col-lg-6 col-xl-5 text-center">
-                  <h2 class="ezy__testimonial5-heading mb-3">Meet Our Talents</h2>
-                  <p class="ezy__testimonial5-sub-heading mb-0">
-                      From there give dominion, lights doesn't good all rule let open, appear our beast second bearing.
-                  </p>
-              </div>
-          </div>
-          <div class="row">
-              {% for user in users %}
-                  {% if user.role == 'candidate' %}
-                      <div class="col-md-6 col-lg-4">
-                          <div class="ezy__testimonial5-item p-4 py-lg-5 mt-4 text-center position-relative">
-                              <div>
-                                {% if user.userprofile.profile_image %}
-                                <img class="post_avatar" src="{{ user.userprofile.profile_image.url }}" alt="avatar" style="width: 80px; height: 80px;">
-                                {% else %}
-                                    <img class="post_avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar" style="width: 80px; height: 80px;">
-                                {% endif %}
-                                {% if user.is_online %}
-                                    <div class="testimonial-online-dot"></div>
-                                {% else %}
-                                    <div class="testimonial-offline-dot"></div>
-                                {% endif %}
-                              </div>
-                              <div class="ezy__testimonial5-content mt-3">
-                                  <h4 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h4>
-                                  <p class="mb-4 ezy__testimonial5-rating">
-                                      <span class="fas fa-star active"></span>
-                                      <span class="fas fa-star active"></span>
-                                      <span class="fas fa-star active"></span>
-                                      <span class="fas fa-star active"></span>
-                                      <span class="fas fa-star-half-alt active"></span>
-                                  </p>
-                                  <p class="opacity-50 mb-0">
-                                      It’s easier to reach your savings goals when you have the right savings account. Take a look and find
-                                      the right one for you.
-                                  </p>
-                              </div>
+          <h2 class="fw-bold mb-3">Meet Our Talents</h2>
+          <p class="lead" style=" font-size: 16px; font-weight: 400;">Results-driven software engineer with 5+ years of experience in developing scalable and efficient solutions.</p>
+          
+          <div class="row justify-content-center gap-2 mt-5">
+            {% for user in users|slice:"10" %}
+              <!-- Flip Card -->
+              {% if user.role == 'candidate' %}
+              <div class="col-lg-2 col-md-4 col-sm-6 col-xs-6 mb-4">
+                  <div class="flip-card">
+                      <div class="flip-card-inner">
+                          <!-- Front Side of the Card -->
+                          <div class="flip-card-front">
+                              {% if user.userprofile.profile_image %}
+                              <img src="{{ user.userprofile.profile_image.url }}" alt="Surya Prasad Sahoo" class="img-fluid card-img">
+                              {% else %}
+                              <img src="{% static 'assets/candidate2.jpg' %}" alt="Surya Prasad Sahoo" class="img-fluid card-img">
+                              {% endif %}
+                              <h5 class="text-white mt-3" style="font-size: 16px;font-weight: 500;">{{ user.first_name }} {{ user.last_name }}</h5>
+                          </div>
+                          <!-- Back Side of the Card -->
+                          <div class="flip-card-back">
+                              {% if user.userprofile.profile_image %}
+                              <img src="{{ user.userprofile.profile_image.url }}" alt="Surya Prasad Sahoo" class="img-fluid card-imgg">
+                              {% else %}
+                              <img src="{% static 'assets/candidate2.jpg' %}" alt="Surya Prasad Sahoo" class="img-fluid card-imgg">
+                              {% endif %}
+                              <h5 class="mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
+                              <p class="description">Tech enthusiast | AI assistant | Helping users with coding queries and providing innovative solutions.</p>
+                              {% comment %} <a href="#" class="btn btn-dark">View Profile</a> {% endcomment %}
                           </div>
                       </div>
-                  {% endif %}
-              {% endfor %}
+                  </div>
+              </div>
+              <!-- You can add more cards here -->
+              {% endif %}
+            {% endfor %}   
           </div>
       </div>
     </section>
-    {% comment %} testimonial section end {% endcomment %}
+    <!-- testimonial section end -->
 
 
-    {% comment %} how it work section{% endcomment %}
-    <section class="ezy__howitworks5 light" >
-        <div class="container">
-          <div class="row justify-content-center text-center">
-            <div class="col-md-6">
-              <h2 class="ezy__howitworks5-heading mb-3">How It Works</h2>
-              <p class="ezy__howitworks5-sub-heading">
-                Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid blanditiis
-                eligendi qui nihil repellendus dicta sapiente.
-              </p>
-            </div>
+    <!-- how we work section -->
+    <section class="work-section py-5 text-center">
+      <div class="container">
+          <div class="row text-center">
+            <h1 class="fw-bold mb-3">How We Work</h1>
+            <p class="lead" style=" font-size: 16px; font-weight: 400;">"Assumenda non repellendus distinctio nihil dicta sapiente, quibusdam maiores, illum at, aliquid blanditiis eligendi qui nihil repellendus dicta sapiente."</p>
           </div>
-          <div class="row">
-            <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100 w-100">
-                <div class="card-body p-4 p-lg-5">
-                  <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
-                    <i class="fas fa-sign-in-alt"></i>
+          <div class="row justify-content-between my-5">
+              <div class="col-md-2 col-sm-6 mb-3">
+                  <div class="work-step py-3">
+                      <div class="d-flex justify-content-center align-items-center mb-4" style="border-radius: 50px; background-color: #9fc59f8a; width: 50px; height: 50px;">
+                        <i class="fas fa-sign-in-alt" ></i>
+                      </div>
+                      <h5>Login</h5>
+                      <p>The challenge facing online banks is to meet the needs.</p>
                   </div>
-                  <h5 class="card-title fs-4 mb-3 fw-bold">Log in</h5>
-                  <p class="card-text opacity-75">The challenge facing online banks is to meet the needs.</p>
-                </div>
               </div>
-            </div>
-      
-            <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100 w-100">
-                <div class="card-body p-4 p-lg-5">
-                  <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
-                    <i class="fas fa-cannabis"></i>
+              <div class="col-md-2 col-sm-6 mb-3">
+                  <div class="work-step py-3">
+                      <div class="d-flex justify-content-center align-items-center mb-4" style="border-radius: 50px; background-color: #9fc59f8a; width: 50px; height: 50px;">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                      </div>
+                      <h5>Login</h5>
+                      <p>The challenge facing online banks is to meet the needs.</p>
                   </div>
-                  <h5 class="card-title fs-4 mb-3 fw-bold">Select Service</h5>
-                  <p class="card-text opacity-75">The challenge facing online banks is to meet the needs.</p>
-                </div>
               </div>
-            </div>
-      
-            <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100 w-100">
-                <div class="card-body p-4 p-lg-5">
-                  <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
-                    <i class="fas fa-camera"></i>
+              <div class="col-md-2 col-sm-6 mb-3">
+                  <div class="work-step py-3">
+                      <div class="d-flex justify-content-center align-items-center mb-4" style="border-radius: 50px; background-color: #9fc59f8a; width: 50px; height: 50px;">
+                        <i class="fa-solid fa-hand-pointer"></i>
+                      </div>
+                      <h5>Login</h5>
+                      <p>The challenge facing online banks is to meet the needs.</p>
                   </div>
-                  <h5 class="card-title fs-4 mb-3 fw-bold">Select Amount</h5>
-                  <p class="card-text opacity-75">The challenge facing online banks is to meet the needs.</p>
-                </div>
               </div>
-            </div>
-      
-            <div class="col-12 col-md-6 col-lg-3 mt-5">
-              <div class="card ezy__howitworks5-card h-100 w-100">
-                <div class="card-body p-4 p-lg-5">
-                  <div class="ezy__howitworks5-icon d-flex justify-content-center align-items-center mb-4">
-                    <i class="fas fa-random"></i>
+              <div class="col-md-2 col-sm-6 mb-3">
+                  <div class="work-step py-3">
+                      <div class="d-flex justify-content-center align-items-center mb-4" style="border-radius: 50px; background-color: #9fc59f8a; width: 50px; height: 50px;">
+                        <i class="fa-solid fa-receipt"></i>
+                      </div>
+                      <h5>Login</h5>
+                      <p>The challenge facing online banks is to meet the needs.</p>
                   </div>
-                  <h5 class="card-title fs-4 mb-3 fw-bold">Payment</h5>
-                  <p class="card-text opacity-75">The challenge facing online banks is to meet the needs.</p>
-                </div>
               </div>
-            </div>
           </div>
-        </div>
+      </div>
     </section>
-    {% comment %} how it work section{% endcomment %}
+    <!-- how we work section  end-->
+
+    <!-- contact -->
+    <section class="contact-section container my-5">
+      <div class="row align-items-center justify-content-between mt-4 cont-ct">
+          <div class="col-lg-6 col-md-8 col-12 text-center justify-content-center">
+              <img src="{% static 'assets/contact_us.png' %}" alt="Services Illustration" class="img-fluid contact-imge rounded-3">
+          </div>
+          <div class="col-lg-6 col-md-4 contact">
+              <div class="contact-info">
+                  <h2 class="mb-3">Let’s discuss your project and find out a perfect candidate together</h2>
+                  <h4 class="mb-3">Surya Prasad Sahoo</h4>
+                  <p>+91 8144336324</p>
+                  <p>talentsprout@gmail.com</p>
+                  <a href="mailto:talentsprout@gmail.com"><button class="px-3"><span>Contact Us</span></button></a>
+                </div>
+          </div>
+    </section>
+    <!-- content end -->
     
 {% endblock %}
 
 {% block extra_js %}
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const paginator = document.getElementById("paginator");
-        const totalPages = {{ page_obj.paginator.num_pages }};
-        let currentPage = {{ page_obj.number }};
-
-        function loadPage(page) {
-            fetch(`?page=${page}`)
-                .then(response => response.text())
-                .then(data => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, 'text/html');
-                    const newContent = doc.getElementById('services-container').innerHTML;
-                    document.getElementById('services-container').innerHTML = newContent;
-
-                    currentPage = page;
-                    updatePaginator();
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function updatePaginator() {
-            paginator.innerHTML = "";
-
-            const prevArrow = document.createElement("li");
-            prevArrow.classList.add("arrow");
-            prevArrow.innerHTML = "&laquo;";
-            prevArrow.addEventListener("click", function() {
-                if (currentPage > 1) {
-                    loadPage(currentPage - 1);
-                }
-            });
-            paginator.appendChild(prevArrow);
-
-            for (let i = 1; i <= totalPages; i++) {
-                const dot = document.createElement("li");
-                dot.classList.add("dot");
-                if (i === currentPage) {
-                    dot.classList.add("active");
-                }
-                dot.setAttribute("data-page", i);
-                dot.addEventListener("click", function() {
-                    const page = parseInt(this.getAttribute("data-page"));
-                    loadPage(page);
-                });
-                paginator.appendChild(dot);
-            }
-
-            const nextArrow = document.createElement("li");
-            nextArrow.classList.add("arrow");
-            nextArrow.innerHTML = "&raquo;";
-            nextArrow.addEventListener("click", function() {
-                if (currentPage < totalPages) {
-                    loadPage(currentPage + 1);
-                }
-            });
-            paginator.appendChild(nextArrow);
-        }
-
-        updatePaginator();
-    });
-  </script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
 {% endblock %}

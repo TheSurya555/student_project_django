@@ -4,6 +4,15 @@
 Examination Management
 {% endblock %}
 
+{% block admin_extra_css %}
+<style>
+.table-white {
+    background-color: white;
+    border-radius: 10px; /* Adjust the value as needed */
+    overflow: hidden; /* Ensures the rounded corners are visible */
+}
+</style>
+{% endblock %}
 
 {% block admin_content %}
 <div class="container mt-5">
@@ -61,62 +70,95 @@ Examination Management
     </div>
     {% endif %}
 
-   <!-- Section 3: Display Students Who Appeared in the Test (in table form) -->
-   <div class="card mb-4">
-    <div class="card-header">
-        <h3>Students Appeared for "{{ selected_skill.name }}" Test</h3>
-    </div>
-    <div class="card-body">
-        {% if student_tests %}
-        <!-- Make the table responsive -->
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Sl No</th>
-                        <th scope="col">Student</th>
-                        <th scope="col">Score</th>
-                        <th scope="col">Completed</th>
-                        <th scope="col">Completion Date</th>
-                        <th scope="col">GitHub Link</th>
-                        <th scope="col">Created At</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for test in student_tests %}
-                    <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ test.user.username }}</td>
-                        <td>{{ test.score }}</td>
-                        <td>{{ test.completed|yesno:"Yes,No" }}</td>
-                        <td>
-                            {% if test.completed_date %}
-                                {{ test.completed_date|date:"d M, Y H:i" }}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if test.github_link %}
-                                <a href="{{ test.github_link }}" target="_blank">{{ test.github_link }}</a>
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        <td>{{ test.created_at|date:"d M, Y H:i" }}</td>
-                        <td>
-                            <a href="{% url 'view_student_test' test.user.id %}" class="btn btn-info btn-sm">View</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <h2 class="my-5 text-center">Exam Rules and Regulations</h2>
+    {% if rules.count > 0 %}
+        <a href="{% url 'add_exam_rule' %}" class="d-none">Add Exam Rules and Regulations</a>
+    {% else %}
+        <a href="{% url 'add_exam_rule' %}" class="btn btn-primary mb-3">Add Exam Rules and Regulations</a>
+    {% endif %}
+
+    <table class="table table-bordered table-white">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in rules %}
+                <tr>
+                    <td>{{ rule.title }}</td>
+                    <td>{{ rule.description|safe|truncatewords:20 }}</td>
+                    <td>
+                        <a href="{% url 'edit_exam_rule' rule.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'delete_exam_rule' rule.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this message?');">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No Rules available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Section 3: Display Students Who Appeared in the Test (in table form) -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Students Appeared for "{{ selected_skill.name }}" Test</h3>
         </div>
-        {% else %}
-        <p>No students have appeared for this test yet.</p>
-        {% endif %}
+        <div class="card-body">
+            {% if student_tests %}
+            <!-- Make the table responsive -->
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sl No</th>
+                            <th scope="col">Student</th>
+                            <th scope="col">Score</th>
+                            <th scope="col">Completed</th>
+                            <th scope="col">Completion Date</th>
+                            <th scope="col">GitHub Link</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for test in student_tests %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ test.user.username }}</td>
+                            <td>{{ test.score }}</td>
+                            <td>{{ test.completed|yesno:"Yes,No" }}</td>
+                            <td>
+                                {% if test.completed_date %}
+                                    {{ test.completed_date|date:"d M, Y H:i" }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if test.github_link %}
+                                    <a href="{{ test.github_link }}" target="_blank">{{ test.github_link }}</a>
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>{{ test.created_at|date:"d M, Y H:i" }}</td>
+                            <td>
+                                <a href="{% url 'view_student_test' test.user.id %}" class="btn btn-info btn-sm">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>No students have appeared for this test yet.</p>
+            {% endif %}
+        </div>
     </div>
-</div>
 </div>
 {% endblock %}
