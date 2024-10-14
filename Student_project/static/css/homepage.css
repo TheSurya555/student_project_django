@@ -1,64 +1,20 @@
-.expert-section {
-    position: relative;
-    overflow: hidden; /* Ensures content doesn't overflow */
-    z-index: 1;
-    height: 100vh;
-    background-color: #ffffff;
-  }
-  
-  .wave-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Ensures it stays in the background */
-    overflow: hidden;
-  }
-  
-  .wave1 {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 200%;
-    height: auto;
-    animation: continuousWave 15s linear infinite;
-  }
-  
-  .wave2 {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 200%;
-    height: auto;
-    opacity: 0.6;
-    animation: continuousWave 20s linear infinite; /* Slower secondary wave */
-  }
-  
-  @keyframes continuousWave {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  
-  /* Curved Background */
-  .expert-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50%;
-      height: 100%;
-      background-color: #e0f7f5;
-      clip-path: ellipse(65% 70% at 80% 50%);
-      z-index: -1;
-  }
-  
-  .home-sec {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-  }
-  
+    .expert-section {
+        position: relative;
+        height: 90vh; /* Adjust this as needed */
+        background-color: #ffffff; /* Fallback background color */
+        overflow: hidden; /* Ensures no overflow issues */
+        z-index: 1;
+    }
+
+    .expert-text {
+        z-index: 2; /* Ensure text stays on top of the animation */
+    }
+
+    .home-sec {
+        position: relative;
+        z-index: 2; /* Content should stay above the animated background */
+    }
+
   /* Text Section */
   .expert-text {
       text-align: left;
