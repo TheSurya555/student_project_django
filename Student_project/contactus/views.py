@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import ConsultingForm
-from .models import *
+from .models import ConsultingMessage, SupportInfo
 from django.contrib import messages
 from profiles.models import UserProfile
 from notifications.signals import notify
@@ -17,15 +17,30 @@ def consulting_View(request):
             # Get admin users (filter based on your custom logic)
             admin_users = CustomUser.objects.filter(is_staff=True)
 
+            # Prepare sender and target
+            if request.user.is_authenticated:
+                sender = request.user
+                full_name = sender.get_full_name()
+            else:
+                sender = None  # No sender for anonymous users
+                full_name = 'Anonymous'  # Use a placeholder for anonymous users
+
             # Send notification to all admin users
             for admin in admin_users:
-                notify.send(
-                    request.user, 
-                    recipient=admin, 
-                    verb='sent a new consulting message',
-                    description=f'A new consulting message has been sent by {request.user.get_full_name()}.',
-                    target=consulting_message
-                )
+                try:
+                    # Ensure that consulting_message is valid
+                    if consulting_message:
+                        notify.send(
+                            sender,  # This can be None for anonymous users
+                            recipient=admin,
+                            verb='sent a new consulting message',
+                            description=f'A new consulting message has been sent by {full_name}.',
+                            target=consulting_message  # Ensure this is a valid instance
+                        )
+                    else:
+                        print("Consulting message is None.")
+                except Exception as e:
+                    print(f"Error sending notification: {e}")
 
             return redirect('contactus')
     else:

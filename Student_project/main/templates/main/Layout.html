@@ -25,10 +25,7 @@
     {% block head_css %}
     <link rel="stylesheet" href="{% static 'css/button.css' %}">
     <link rel="stylesheet" href="{% static 'css/inputfield.css' %}">
-    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
-    <link rel="stylesheet" href="{% static 'css/talent.css' %}">
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <link rel="stylesheet" href="{% static 'css/Layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
     {% endblock %}
@@ -184,18 +181,17 @@
             <div class="d-flex footer-link f-link">
                 <div>
                     <img src="{% static 'assets/LOGOW.png' %}" alt="logo" class="logoss">
-                    <p class="footer-para">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo rerum omnis
-                        magnam
-                        eveniet obcaecati. Provident nisi, laudantium fugit quibusdam porro cupiditate totam autem
-                        quidem,
-                        dolore magnam pariatur quis nihil ab!
+                    <p class="footer-para">
+                        TalentSprout is a platform that connects businesses with top talent, 
+                        delivering tailored solutions for successful project outcomes. Find skilled professionals 
+                        ready to bring your ideas to life with creativity and precision.
                     </p>
 
                     <div class="social-icon">
                         <ul class="example-2">
                           <li class="icon-content">
                             <a
-                              href="https://www.linkedin.com/company/boostr-netwave/mycompany/"
+                              href="https://www.linkedin.com/company/talentssprout/about/"
                               aria-label="LinkedIn"
                               data-social="linkedin"
                               target="_blank"
@@ -346,36 +342,41 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="{% static 'js/script.js' %}"></script>
         <script src="{% static 'js/account_creation.js' %}"></script>
-        <script src="{% static 'js/message.js' %}"></script>
     
         {% comment %} show password js {% endcomment %}
         <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
-            const passwordFields = document.querySelectorAll('input[type="password"]');
-        
-            showPasswordCheckbox.addEventListener('change', function () {
-                const showPassword = this.checked;
-                passwordFields.forEach(function (field) {
-                    field.type = showPassword ? 'text' : 'password';
-                });
+            document.addEventListener('DOMContentLoaded', function () {
+                const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+                if (showPasswordCheckbox) {  // Check if the element exists
+                    const passwordFields = document.querySelectorAll('input[type="password"]');
+                
+                    showPasswordCheckbox.addEventListener('change', function () {
+                        const showPassword = this.checked;
+                        passwordFields.forEach(function (field) {
+                            field.type = showPassword ? 'text' : 'password';
+                        });
+                    });
+                }
             });
-        });  
         </script>
 
         {% comment %} nav toggle js {% endcomment %}
         <script>
-            const menuBar = document.getElementById('menu-icon');
-            const menuList = document.querySelector('.menu-list');
-
-            menuBar.addEventListener('click', () => {
-                menuList.classList.toggle('menu-active');
-
-                let icon = menuBar.firstElementChild;
-                if (menuList.classList.contains('menu-active')) {
-                    icon.classList.replace('fa-bars', 'fa-xmark');
-                } else {
-                    icon.classList.replace('fa-xmark', 'fa-bars');
+            document.addEventListener('DOMContentLoaded', function () {
+                const menuBar = document.getElementById('menu-icon');
+                const menuList = document.querySelector('.menu-list');
+                
+                if (menuBar && menuList) {  // Check if the elements exist
+                    menuBar.addEventListener('click', () => {
+                        menuList.classList.toggle('menu-active');
+        
+                        let icon = menuBar.firstElementChild;
+                        if (menuList.classList.contains('menu-active')) {
+                            icon.classList.replace('fa-bars', 'fa-xmark');
+                        } else {
+                            icon.classList.replace('fa-xmark', 'fa-bars');
+                        }
+                    });
                 }
             });
         </script>

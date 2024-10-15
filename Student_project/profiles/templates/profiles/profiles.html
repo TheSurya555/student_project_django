@@ -146,22 +146,25 @@ Profile
                           </div>
                       </div>
 
-                      <div class="mt-4 p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
-                          <!-- Resume Section -->
-                          {% if request.session.user_role == "Candidate"%}
-                          <div class="resume-section">
-                              <h3>Resume</h3>
-                              <!-- View Resume Button -->                          
-                              {% if user_profile.resume %}
-                              <button type="button" class="px-3" onclick="viewResume('{{ user_profile.resume.url }}')">
-                                <span>View Resume</span>
-                              </button>
-                              {% else %}
-                              <p>No resume uploaded.</p>
-                              {%endif%}       
-                          </div>
-                          {%endif%}       
-                      </div>
+                    <div class="mt-4 p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                        <!-- Resume Section -->
+                        {% if request.session.user_role == "Candidate" %}
+                        <div class="resume-section">
+                            <h3>Resume</h3>
+                            <!-- View Resume Button -->                          
+                            {% if user_profile.resume %}
+                            <a href="{{ user_profile.resume.url }}" target="_blank" >
+                                <button class="px-3">
+                                    <span>View Resume</span>
+                                </button>
+                            </a>
+                            {% else %}
+                            <p>No resume uploaded.</p>
+                            {% endif %}       
+                        </div>
+                        {% endif %}       
+                    </div>
+                    
                   </div>
 
                   <!-- Projects Section -->
