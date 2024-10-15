@@ -8,6 +8,7 @@ from .views_message import *
 from .views_notification import *
 from .views_progress import *
 from .views_dashboard import *
+from .views_homepage import *
 
 urlpatterns = [
     path('', admin_login, name='admin_login'),
@@ -95,6 +96,24 @@ urlpatterns = [
     path('edit-project/<int:project_id>/', edit_project, name='edit_project'),
     path('project/<int:project_id>/progress/', project_progress, name='admin_project_progress'),
     
+    
+    # Hero Section URLs
+    path('admin/homepage/', admin_home_page, name='admin_home_page'),
+    path('add_hero_section/', add_hero_section, name='add_hero_section'),
+    path('edit_hero_section/<int:id>/', edit_hero_section, name='edit_hero_section'),
+    path('delete_hero_section/<int:id>/', delete_hero_section, name='delete_hero_section'),
+    
+    # Work Step URLs
+    path('add_work_step/', add_work_step, name='add_work_step'),
+    path('edit_work_step/<int:id>/', edit_work_step, name='edit_work_step'),
+    path('delete_work_step/<int:id>/', delete_work_step, name='delete_work_step'),
+    
+    # Contact Info URLs
+    path('add_contact_info/', add_contact_info, name='add_contact_info'),
+    path('edit_contact_info/<int:id>/', edit_contact_info, name='edit_contact_info'),
+    path('delete_contact_info/<int:id>/', delete_contact_info, name='delete_contact_info'),
+
+    # Admin logout url
     path('admin_logout/', admin_logout_view, name='admin_logout'),
     
 ]
