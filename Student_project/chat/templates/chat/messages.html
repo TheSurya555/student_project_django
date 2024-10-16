@@ -27,162 +27,185 @@ Messages
 
 {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col-md-3 sidebar">
-            <h3 class="mb-4">Messages</h3>
-            <a href="#" id="inboxLink" class="active">Inbox</a>
-            <a href="#" id="sentLink">Sent</a>
-            <a href="#" id="notificationsLink">
-                Notifications
-                {% if unread_notifications_count > 0 %}
-                <span class="red-dot"></span>
-                {% endif %}
-            </a>
-            <a href="#" id="composeLink">Compose</a>
-        </div>        
-        <div class="col-md-9 main-content">
-            <!-- Inbox Section -->
-            <div id="inboxSection" class="content-section active">
-                <h4 class="section-heading">Inbox</h4>
-                <div class="card card-custom mb-4">
-                    <h5 class="mb-4">Messages</h5>
-                    <div class="message-list">
-                        {% for message in received_messages %}
-                        <div class="message-preview mb-4" style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
+    <div class="main-container my-5">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div>
+                    <h4 class="text-center">Messages</h4>
+                </div>
+                <a href="#inboxSection" id="inboxLink" class="nav-link active my-4 px-4">Inbox</a>
+                <a href="#sentSection" id="sentLink" class="nav-link my-4 px-4">Sent</a>
+                <a href="#notificationsSection" id="notificationsLink" class="nav-link my-4 px-4">Notifications
+                    {% if unread_notifications_count > 0 %}
+                    <span class="red-dot"></span>
+                    {% endif %}
+                </a>
+                <a href="#composeSection" id="composeLink" class="nav-link my-4 px-4">Compose</a>
+            </div>     
+            <div class="col-sm-10 col-md-8 col-lg-9 ms-5 content-area">
+                <!-- Inbox Section -->
+                <div id="inboxSection" class="content-section active">
+                    <h4 class="section-heading">Inbox</h4>
+                    <div class="card card-custom mb-4 p-4">
+                        <h5 class="mb-4">Messages</h5>
+                        <div class="message-list">
+                            {% for message in received_messages %}
+                            <div class="message-preview mb-4" style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <p><strong>Sent on:</strong> <small>{{ message.timestamp }}</small></p>
+                                    <p>From: {{ message.sender.first_name }} {{ message.sender.last_name }}</p>
+                                    <p>{{ message.content }}</p>
+                                </div>
+                                <div>
+                                    <button class="px-3 reply-button" data-username="{{ message.sender.username }}"><span>Reply</span></button>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p>No messages received.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Sent Section -->
+                <div id="sentSection" class="content-section" style="display:none;">
+                    <h4 class="section-heading">Sent</h4>
+                    <div class="card card-custom mb-4 p-4">
+                        <h5 class="mb-4">Messages</h5>
+                        <div class="message-list">
+                            {% for message in sent_messages %}
+                            <div class="message-preview mb-5">
                                 <p><strong>Sent on:</strong> <small>{{ message.timestamp }}</small></p>
-                                <p>From: {{ message.sender.first_name }} {{ message.sender.last_name }}</p>
+                                <p>To: {{ message.receiver.first_name }} {{ message.receiver.last_name }}</p>
                                 <p>{{ message.content }}</p>
                             </div>
-                            <div>
-                                <button class="px-3 reply-button" data-username="{{ message.sender.username }}"><span>Reply</span></button>
+                            {% empty %}
+                            <p>No messages sent.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Compose Section -->
+                <div id="composeSection" class="content-section" style="display:none;">
+                    <h4 class="section-heading">Compose</h4>
+                    <div class="card card-custom mb-4 p-4">
+                        <h5 class="mb-4">New Message</h5>
+                        <form method="post" action="{% url 'send_message' %}">
+                            {% csrf_token %}
+                            <div class="form-group mb-3">
+                                <label for="to_username" class="mb-1">To (Username):</label>
+                                <input type="text" class="form-control" id="to_username" name="to_username" placeholder="Enter recipient's username">
                             </div>
-                        </div>
-                        {% empty %}
-                        <p>No messages received.</p>
-                        {% endfor %}
+                            <div class="form-group mb-3">
+                                <label for="message" class="mb-1">Message:</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" placeholder="Enter your message"></textarea>
+                            </div>
+                            <button type="submit" class="px-3"><span>Send</span></button>
+                        </form>
                     </div>
                 </div>
-            </div>
-
-            <!-- Sent Section -->
-            <div id="sentSection" class="content-section">
-                <h4 class="section-heading">Sent</h4>
-                <div class="card card-custom mb-4">
-                    <h5 class="mb-4">Messages</h5>
-                    <div class="message-list">
-                        {% for message in sent_messages %}
-                        <div class="message-preview mb-5">
-                            <p><strong>Sent on:</strong> <small>{{ message.timestamp }}</small></p>
-                            <p>To: {{ message.receiver.first_name }} {{ message.receiver.last_name }}</p>
-                            <p>{{ message.content }}</p>
+    
+                <!-- Notifications Section -->
+                <div id="notificationsSection" class="content-section" style="display:none;">
+                    <h4 class="section-heading">Notifications</h4>
+                    <div class="card card-custom mb-4 p-4">
+                        <h5 class="mb-4">Recent Notifications</h5>
+                        <div class="notification-list">
+                            {% for notification in notifications %}
+                            <div class="notification">
+                                <p><strong>Sent on:</strong> <small>{{ notification.timestamp }}</small></p>
+                                <strong>{{ notification.actor.get_full_name }} </strong> {{ notification.verb }}
+                                <p>{{ notification.description }}</p>
+                            </div>
+                            {% empty %}
+                            <p>No notifications.</p>
+                            {% endfor %}
                         </div>
-                        {% empty %}
-                        <p>No messages sent.</p>
-                        {% endfor %}
                     </div>
                 </div>
+    
             </div>
-
-            <!-- Compose Section -->
-            <div id="composeSection" class="content-section">
-                <h4 class="section-heading">Compose</h4>
-                <div class="card card-custom mb-4">
-                    <h5 class="mb-4">New Message</h5>
-                    <form method="post" action="{% url 'send_message' %}">
-                        {% csrf_token %}
-                        <div class="form-group mb-3">
-                            <label for="to_username" class="mb-1">To (Username):</label>
-                            <input type="text" class="form-control" id="to_username" name="to_username" placeholder="Enter recipient's username">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="message" class="mb-1">Message:</label>
-                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Enter your message"></textarea>
-                        </div>
-                        <button type="submit" class="px-3"><span>Send</span></button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Notifications Section -->
-            <div id="notificationsSection" class="content-section">
-                <h4 class="section-heading">Notifications</h4>
-                <div class="card card-custom mb-4">
-                    <h5 class="mb-4">Recent Notifications</h5>
-                    <div class="notification-list">
-                        {% for notification in notifications %}
-                        <div class="notification">
-                            <p><strong>Sent on:</strong> <small>{{ notification.timestamp }}</small></p>
-                            <strong>{{ notification.actor.get_full_name }} </strong> {{ notification.verb }}
-                            <p>{{ notification.description }}</p>
-                        </div>
-                        {% empty %}
-                        <p>No notifications.</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
+{% endblock %}
 
-
+{% block extra_js %}
 <script>
-    // Tab Switching
-    document.getElementById('inboxLink').onclick = function() {
-        document.getElementById('inboxSection').classList.add('active');
-        document.getElementById('sentSection').classList.remove('active');
-        document.getElementById('composeSection').classList.remove('active');
-        document.getElementById('notificationsSection').classList.remove('active');
-    };
-
-    document.getElementById('sentLink').onclick = function() {
-        document.getElementById('sentSection').classList.add('active');
-        document.getElementById('inboxSection').classList.remove('active');
-        document.getElementById('composeSection').classList.remove('active');
-        document.getElementById('notificationsSection').classList.remove('active');
-    };
-
-    document.getElementById('composeLink').onclick = function() {
-        document.getElementById('composeSection').classList.add('active');
-        document.getElementById('inboxSection').classList.remove('active');
-        document.getElementById('sentSection').classList.remove('active');
-        document.getElementById('notificationsSection').classList.remove('active');
-    };
-
-    document.getElementById('notificationsLink').onclick = function() {
-        document.getElementById('notificationsSection').classList.add('active');
-        document.getElementById('inboxSection').classList.remove('active');
-        document.getElementById('sentSection').classList.remove('active');
-        document.getElementById('composeSection').classList.remove('active');
-        
-        // Mark notifications as read
-        fetch('{% url "mark_notifications_as_read" %}', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({}),
-        }).then(response => {
-            if (response.ok) {
-                // Remove the red dot
-                document.querySelector('.red-dot').style.display = 'none';
-            }
+    document.addEventListener("DOMContentLoaded", function() {
+        // Sidebar section switching
+        const links = document.querySelectorAll(".sidebar a");
+        const sections = document.querySelectorAll(".content-section");
+    
+        links.forEach(link => {
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+    
+                // Remove active class from all links and sections
+                links.forEach(link => link.classList.remove("active"));
+                sections.forEach(section => section.style.display = "none");
+    
+                // Add active class to the clicked link and show the corresponding section
+                this.classList.add("active");
+                const targetSection = document.querySelector(this.getAttribute("href"));
+                if (targetSection) {
+                    targetSection.style.display = "block";
+                }
+            });
         });
-    };
-
-    // Auto-fill Compose Form for Reply
-    document.querySelectorAll('.reply-button').forEach(function(button) {
-        button.onclick = function() {
-            const username = this.getAttribute('data-username');
-            document.getElementById('to_username').value = username;
-            document.getElementById('composeSection').classList.add('active');
-            document.getElementById('inboxSection').classList.remove('active');
-            document.getElementById('sentSection').classList.remove('active');
-            document.getElementById('notificationsSection').classList.remove('active');
-        };
+    
+        // Notification dot visibility logic
+        const unreadNotifications = {{ unread_notifications_count }}; // Server-side context
+        const notificationDot = document.querySelector('.red-dot');
+    
+        if (unreadNotifications > 0) {
+            notificationDot.style.display = 'inline-block'; // Show red dot if there are unread notifications
+        } else {
+            notificationDot.style.display = 'none'; // Hide red dot if all notifications are read
+        }
+    
+        // Mark notifications as read and hide the red dot when Notifications link is clicked
+        const notificationLink = document.getElementById("notificationsLink");
+        notificationLink.addEventListener("click", function(e) {
+            e.preventDefault();
+            fetch("{% url 'mark_notifications_as_read' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}",  // Include CSRF token for security
+                },
+                body: JSON.stringify({ 'action': 'mark_as_read' })  // Data payload (can be empty)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    notificationDot.style.display = 'none'; // Hide red dot once notifications are marked as read
+                } else {
+                    console.error('Error:', data.message);
+                }
+            })
+            .catch(error => console.error('Error marking notifications as read:', error));
+        });
+    
+        // Reply button functionality
+        const replyButtons = document.querySelectorAll('.reply-button');
+        const composeLink = document.getElementById('composeLink');
+        const toUsernameInput = document.getElementById('to_username');
+    
+        replyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const username = this.getAttribute('data-username');
+    
+                // Open the Compose section
+                composeLink.click();
+    
+                // Fill the To (Username) field with the sender's username
+                toUsernameInput.value = username;
+            });
+        });
     });
+    
 </script>
+  
 {% endblock %}

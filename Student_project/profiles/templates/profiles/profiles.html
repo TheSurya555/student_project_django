@@ -26,7 +26,6 @@ Profile
                   <a href="#" class="nav-link active my-4 px-4" onclick="showContent('myInfo')">My Info</a>
                   <a href="#" class="nav-link my-4 px-4" onclick="showContent('projects')">Projects</a>
                   <a href="#" class="nav-link my-4 px-4" onclick="showContent('ProjectProgress')">Project Progress</a>
-                  <a href="#" class="nav-link my-4 px-4" onclick="showContent('Test')">Test</a>
                   <a href="#" class="nav-link my-4 px-4" onclick="showContent('connectWith')">Connect With</a>
                   {% elif request.session.user_role == "Recruiter"%}
                   <a href="#" class="nav-link active my-4 px-4" onclick="showContent('myInfo')">My Info</a>
@@ -181,8 +180,7 @@ Profile
                           </div>
 
                           <!-- Right side: Button -->
-                          <a href="{% url 'add_project' %}"><button class="btn btn-light px-3 py-1"
-                                  style="border-radius: 25px;">Add Projects</button></a>
+                          <a href="{% url 'add_project' %}"><button class="px-3"><span>Add Projects</span></button></a>
                       </div>
 
                       <!-- Project Card 1 -->
@@ -411,7 +409,7 @@ Profile
                               {% endfor %}
                           </div>
                       </div>
-                  </div>
+                  </div>                                                                                                                                                                             
 
                   <!-- ProjectProgress Section -->
                   <div id="ProjectProgress" class="content-section" style="display:none;">
@@ -513,48 +511,6 @@ Profile
         document.getElementsByClassName('content-section')[0].style.display = 'block';
     }
   }
-
-
-  document.getElementById('saveChangesBtn').addEventListener('click', function() {
-    // Get values from the form inputs
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-
-    // Update the displayed information
-    document.getElementById('displayFirstName').textContent = firstName;
-    document.getElementById('displayLastName').textContent = lastName;
-    document.getElementById('displayEmail').textContent = email;
-    document.getElementById('displayPhone').textContent = phone;
-
-    // Close the modal after saving changes
-    const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
-    modal.hide();
-  });
-
-  document.getElementById('showPassword').addEventListener('change', function () {
-    const passwordFields = [document.getElementById('oldPassword'), document.getElementById('newPassword'), document.getElementById('confirmPassword')];
-    passwordFields.forEach(field => {
-        field.type = this.checked ? 'text' : 'password';
-    });
-  });
-
-  // Handle "Change Password" button click
-  document.getElementById('changePasswordBtn').addEventListener('click', function() {
-    const oldPassword = document.getElementById('oldPassword').value;
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    // Perform your validation here
-    if (newPassword === confirmPassword && oldPassword) {
-        alert('Password changed successfully!');
-        // Close the modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
-        modal.hide();
-    } else {
-        alert('Passwords do not match or fields are empty!');
-    }
-  });
 </script>
+
 {% endblock %}

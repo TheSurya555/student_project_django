@@ -7,57 +7,61 @@ Settings
 
 {% block head_css %}
 <link rel="stylesheet" href="{% static 'css/button.css' %}">
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/profiles.css' %}">
 <link rel="stylesheet" href="{% static 'css/Layout.css' %}">
 <link rel="stylesheet" href="{% static 'css/social_Icon_list.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-md-3 sidebar">
-      <h3 class="mb-4">Settings</h3>
-      <a href="#accountSection" id="accountLink" class="active">Account</a>
-      <a href="#securitySection" id="securityLink">Security</a>
-    </div>
-    <div class="col-md-9 main-content">
-      <div id="accountSection" class="content-section active">
-        <h4 class="section-heading">Account Settings</h4>
-        <div class="card card-custom mb-4">
-          <h5 class="mb-4">Personal Information</h5>
-          <div class="d-flex flex-column">
-            <p><strong>Name:</strong> {{ custom_user.first_name }} {{ custom_user.last_name }}</p>
-            <p><strong>Email:</strong> {{ custom_user.email }}</p>
-            <p><strong>Phone:</strong> {{ custom_user.phone }}</p>
-            {% if custom_user.role == "recruiter" %}
-              <p><strong>Company:</strong> {{ profile.company }}</p>
-            {% endif %}
-            <div>
-              <button type="button" class="px-3" data-toggle="modal" data-target="#editPersonalInfoModal"><span>Edit</span></button>
+<div class="container">
+    <div class="main-container my-5">
+      <div class="row">
+        <div class="col-md-3 col-lg-2 sidebar">
+          <div>
+              <h4 class="text-center">Setting</h4>
+          </div>
+          <a href="#accountSection" id="accountLink" class="nav-link active my-4 px-4">Account</a>
+          <a href="#securitySection" id="securityLink" class="nav-link my-4 px-4">Security</a>
+        </div>
+        <div class="col-sm-10 col-md-8 col-lg-9 ms-5 content-area">
+          <div id="accountSection" class="content-section active">
+            <h4 class="section-heading">Account Settings</h4>
+            <div class="card card-custom mb-4 p-4">
+              <h5 class="mb-4">Personal Information</h5>
+              <div class="d-flex flex-column">
+                <p><strong>Name:</strong> {{ custom_user.first_name }} {{ custom_user.last_name }}</p>
+                <p><strong>Email:</strong> {{ custom_user.email }}</p>
+                <p><strong>Phone:</strong> {{ custom_user.phone }}</p>
+                {% if custom_user.role == "recruiter" %}
+                  <p><strong>Company:</strong> {{ profile.company }}</p>
+                {% endif %}
+                <div>
+                  <button type="button" class="px-3" data-toggle="modal" data-target="#editPersonalInfoModal"><span>Edit</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <div id="securitySection" class="content-section" style="display:none;">
+            <h4 class="section-heading">Security</h4>
+            <p>Manage your security settings:</p>
+            <div class="card card-custom mb-4 p-4">
+              <h5 class="mb-4">Change Password</h5>
+              <div>
+                <button type="button" class="px-3" data-toggle="modal" data-target="#changePasswordModal"><span>Change Password</span></button>
+              </div>
+            </div>
+            <div class="card card-custom mb-4 p-4">
+              <h5 class="mb-4">Privacy Policy</h5>
+              <div class="privacy-policy-content">
+                <p>We value your privacy and are committed to protecting your personal information. Our privacy policy outlines how we collect, use, and protect your data. We do not share your information with third parties without your consent, and we take all necessary measures to ensure its security.</p>
+                <p>For more details, please read our full <a href="{% url "privacy_policy" %}">Privacy Policy</a>.</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div id="securitySection" class="content-section">
-        <h4 class="section-heading">Security</h4>
-        <p>Manage your security settings:</p>
-        <div class="card card-custom mb-4">
-          <h5 class="mb-4">Change Password</h5>
-          <div>
-            <button type="button" class="px-3" data-toggle="modal" data-target="#changePasswordModal"><span>Change Password</span></button>
-          </div>
-        </div>
-        <div class="card card-custom mb-4">
-          <h5 class="mb-4">Privacy Policy</h5>
-          <div class="privacy-policy-content">
-            <p>We value your privacy and are committed to protecting your personal information. Our privacy policy outlines how we collect, use, and protect your data. We do not share your information with third parties without your consent, and we take all necessary measures to ensure its security.</p>
-            <p>For more details, please read our full <a href="{% url "privacy_policy" %}">Privacy Policy</a>.</p>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- Edit Personal Information Modal -->
@@ -147,11 +151,14 @@ Settings
       link.addEventListener("click", function(e) {
         e.preventDefault();
 
+        // Remove active class from all links and sections
         links.forEach(link => link.classList.remove("active"));
-        this.classList.add("active");
+        sections.forEach(section => section.style.display = "none");
 
-        sections.forEach(section => section.classList.remove("active"));
-        document.querySelector(this.getAttribute("href")).classList.add("active");
+        // Add active class to the clicked link and show corresponding section
+        this.classList.add("active");
+        const targetSection = document.querySelector(this.getAttribute("href"));
+        targetSection.style.display = "block";
       });
     });
   });
