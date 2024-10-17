@@ -58,14 +58,21 @@ Home
     <!-- service section start -->
     <section class="services-section container my-5">
       <div class="row text-center">
-          <h1 class="fw-bold mb-3">Our Services</h1>
-          <p class="lead" style=" font-size: 16px; font-weight: 400;">"Welcome to our website! We offer a range of services, including web design, development,
-              and marketing. Our team of experts will work with you to create a customized solution that meets your
-              unique needs and goals. Contact us today to learn more and take your business to the next level!"</p>
+            <h1 class="fw-bold mb-3">Our Services</h1>
+            {% for service_page in service_pages %}
+            <p class="lead" style=" font-size: 16px; font-weight: 400;"> {{service_page.page_description}} </p>
+            {% endfor %}              
       </div>
       <div class="row align-items-center justify-content-between serve my-5">
           <div class="col-lg-4 col-md-4 col-sm-12 text-center justify-content-center">
-              <img src="{% static 'assets/creative.jpeg' %}" alt="Services Illustration" class="img-fluid imgm rounded" style="height: auto;">
+              {% comment %} <img src="{% static 'assets/creative.jpeg' %}" alt="Services Illustration" class="img-fluid imgm rounded" style="height: auto;"> {% endcomment %}
+                {% for service_page in service_pages %}
+                    {% if  service_page.service_banner_image %}
+                    <img src="{{ service_page.service_left_image.url }}" alt="Service left image" class="img-fluid mb-3 rounded">
+                    {% else %}
+                    <img src="{% static 'assets/nature1.jpeg' %}" alt="Service left Image" class="img-fluid rounded">
+                    {% endif %}
+                {% endfor %}
           </div>
 
           <!-- card -->
@@ -98,7 +105,7 @@ Home
               </div>
           </div>
           <div class="col-12 mt-5 text-center">
-            <a href="{% url 'all_services' %}">
+            <a href="{% url "services" %}">
                 <button class="px-3"><span>View All Services</span></button>
             </a>
           </div>

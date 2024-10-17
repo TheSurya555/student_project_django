@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from signUp.models import CustomUser
-from services.models import Service
+from services.models import Service, Service_page
 from profiles.models import UserProfile
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -28,6 +28,7 @@ def home_view(request):
         paginator = Paginator(services, 6)  # Paginate after fetching services
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        service_pages = Service_page.objects.all()
 
         # Fetch HeroSection, WorkStep, and ContactInfo
         hero_section = HeroSection.objects.first()
@@ -51,6 +52,7 @@ def home_view(request):
             'hero_section': hero_section,
             'work_steps': work_steps,
             'contact_info': contact_info,
+            'service_pages':service_pages
         })
     except UnicodeDecodeError:
         return render(request, 'main/error.html', {'error_message': 'UnicodeDecodeError occurred'})
