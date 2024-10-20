@@ -24,7 +24,9 @@ Edit Profile Form
         <ul class="stepsss">
             <li id="step1Sidebar" data-step="1" class="active">Personal Information</li>
             <li id="step2Sidebar" data-step="2">Professional Information</li>
+            {% if request.user.role == 'candidate' %}
             <li id="step3Sidebar" data-step="3">Educational Information</li>
+            {% endif %}
             <li id="step4Sidebar" data-step="4">Address Information</li>
             <li id="step5Sidebar" data-step="5">Finalize</li>
             <div class="progress">
@@ -58,10 +60,12 @@ Edit Profile Form
                     {{ form.profile_image }}
                     <label class="user-label" for="profile_image">Profile Image</label>
                 </div>
+                {% if request.user.role == 'candidate' %}
                 <div class="form-group position-relative mb-3">
                     {{ form.dob }}
                     <label class="user-label" for="dob">Date of Birth</label>
                 </div>
+                {% endif %}
             </div>
 
             
@@ -72,6 +76,7 @@ Edit Profile Form
                     {{ form.position }}
                     <label class="user-label" for="position">Position</label>
                 </div>
+                {% if request.user.role == 'candidate' %}
                 <div class="form-group position-relative mb-3">
                     {{ form.experience }}
                     <label class="user-label" for="experience">Experience</label>
@@ -84,20 +89,23 @@ Edit Profile Form
                     {{ form.resume }}
                     <label class="user-label" for="resume">Upload Resume</label>
                 </div>
+                {% endif %}
             </div>
 
-            <!-- Step 3: Educational Information -->
-            <div id="step3" class="step">
-                <h1>Educational Information</h1>
-                <div class="form-group position-relative mb-3">
-                    {{ form.education }}
-                    <label class="user-label" for="education">Enter Last Exam Passed</label>
+            {% if request.user.role == 'candidate' %}
+                <!-- Step 3: Educational Information -->
+                <div id="step3" class="step">
+                    <h1>Educational Information</h1>
+                    <div class="form-group position-relative mb-3">
+                        {{ form.education }}
+                        <label class="user-label" for="education">Enter Last Exam Passed</label>
+                    </div>
+                    <div class="form-group position-relative mb-3">
+                        {{ form.university }}
+                        <label class="user-label" for="university">University</label>
+                    </div>
                 </div>
-                <div class="form-group position-relative mb-3">
-                    {{ form.university }}
-                    <label class="user-label" for="education">Univercity</label>
-                </div>
-            </div>
+            {% endif %}
 
             <!-- Step 4: Address Information -->
             <div id="step4" class="step">

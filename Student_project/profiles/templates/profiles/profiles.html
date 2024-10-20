@@ -126,7 +126,7 @@ Profile
                               </div>
                           </div>
                       </div>
-
+                      {% if request.session.user_role == "Candidate"%}
                       <!-- Education Section -->
                       <div class="mt-4 info-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
                           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -144,10 +144,10 @@ Profile
                               </div>
                           </div>
                       </div>
-
+                      {% endif %}
+                    {% if request.session.user_role == "Candidate"%}
                     <div class="mt-4 p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
                         <!-- Resume Section -->
-                        {% if request.session.user_role == "Candidate" %}
                         <div class="resume-section">
                             <h3>Resume</h3>
                             <!-- View Resume Button -->                          
@@ -160,9 +160,9 @@ Profile
                             {% else %}
                             <p>No resume uploaded.</p>
                             {% endif %}       
-                        </div>
-                        {% endif %}       
+                        </div>    
                     </div>
+                    {% endif %}
                     
                   </div>
 
@@ -234,9 +234,6 @@ Profile
                                   <p class="text-muted mb-0">Comprehensive overview of payment methods, billing
                                       cycles, and account management.</p>
                               </div>
-                              <!-- Right Side: Button -->
-                              <button class="btn btn-light px-3 py-1"
-                                  style="border-radius: 25px; font-size: 1rem; font-weight: 600;">Add Billing</button>
                           </div>
 
                           <!-- Total Balance Section -->
@@ -250,35 +247,6 @@ Profile
                           </div>
                       </div>
 
-                      <!-- Billing Methods Section -->
-                      {% comment %} <div class="billing-methods-section p-4 rounded shadow-sm mb-4 mt-4"
-                          style="border: 1px solid #e0e0e0;">
-                          <!-- Title -->
-                          <h5 class="fw-bold mb-3">Billing Methods</h5>
-                          <p class="text-muted mb-4">Manage billing information and view recipes</p>
-
-                          <!-- UPI Method -->
-                          <div class="method-item d-flex justify-content-between align-items-center mb-3"
-                              style="border: 1px solid #e0e0e0; padding: 10px; border-radius: 8px;">
-                              <div class="d-flex align-items-center">
-                                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Unified_Payments_Interface_logo.svg"
-                                      alt="UPI" style="width: 40px; margin-right: 15px;">
-                                  <span>UPI ending with ******6324@ybl</span>
-                              </div>
-                              <button class="btn btn-light" style="border-radius: 20px;">Remove</button>
-                          </div>
-
-                          <!-- VISA Method -->
-                          <div class="method-item d-flex justify-content-between align-items-center"
-                              style="border: 1px solid #e0e0e0; padding: 10px; border-radius: 8px;">
-                              <div class="d-flex align-items-center">
-                                  <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="VISA"
-                                      style="width: 40px; margin-right: 15px;">
-                                  <span>VISA ending with 6589</span>
-                              </div>
-                              <button class="btn btn-light" style="border-radius: 20px;">Remove</button>
-                          </div>
-                      </div> {% endcomment %}
                       <!-- Payment History Section -->
                       <div class="payment-history-section p-4 rounded shadow-sm mb-4"
                           style="border: 1px solid #e0e0e0;">
@@ -307,8 +275,6 @@ Profile
                                                   <td>{{ payment.status }}</td>
                                                   <td>₹{{ payment.amount }}</td>
                                                   <td>
-                                                      <button class="btn btn-light"
-                                                          style="border-radius: 20px;">Download</button>
                                                           <button type="button" class="px-3" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal-{{ payment.id }}">
                                                               <span>View Payment Details</span>
                                                           </button>
