@@ -8,17 +8,21 @@ from tinymce.widgets import TinyMCE
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['dob', 'phone', 'country', 'state', 'city', 'address', 'postal_code', 'role', 'position', 'experience', 'skills', 'languages', 'education', 'university', 'vat_id', 'profile_image','resume']
+        fields = [
+            'dob', 'phone', 'country', 'state', 'city', 'address', 'postal_code', 
+            'role', 'position', 'experience', 'skills', 'languages', 'education', 
+            'university', 'vat_id', 'profile_image', 'resume', 'career_objective'
+        ]
         
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.fields['dob'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'input', 'autocomplete': 'off'})
-        self.fields['phone'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
-        self.fields['country'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
-        self.fields['state'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
-        self.fields['city'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
-        self.fields['address'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
-        self.fields['postal_code'].widget.attrs.update({'class': 'input', 'autocomplete': 'off' })
+        self.fields['phone'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['country'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['state'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['city'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['address'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['postal_code'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['role'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['position'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['experience'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
@@ -29,6 +33,7 @@ class UserProfileForm(forms.ModelForm):
         self.fields['vat_id'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['profile_image'].widget.attrs.update({'class': 'input', 'type': 'file'})
         self.fields['resume'].widget.attrs.update({'class': 'input', 'type': 'file'})
+        self.fields['career_objective'].widget = forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Write your career objective'})
         
     def clean_dob(self):
         dob = self.cleaned_data.get('dob')
@@ -38,8 +43,9 @@ class UserProfileForm(forms.ModelForm):
             max_age_date = today - timedelta(days=365*18)
             if not (min_age_date <= dob <= max_age_date):
                 raise forms.ValidationError("Date of birth must be between 18 and 27 years from today.")
-        return dob        
-
+        return dob
+      
+      
 class ProjectExperienceForm(forms.ModelForm):
     class Meta:
         model = ProjectExperience
