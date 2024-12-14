@@ -1,0 +1,155 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+{{ candidate.user.username }}'s Profile
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* General Styling */
+    .container {
+        max-width: 1200px;
+    }
+    h2 {
+        color: #333;
+    }
+    p {
+        color: #666;
+        font-size: 16px;
+    }
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* Candidate Card Styling */
+    .candidate-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fff;
+    }
+
+    .candidate-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .candidate-avatar {
+        width: 120px;
+        height: 120px;
+        margin-top: -60px;
+        border: 5px solid #fff;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .candidate-card:hover .candidate-avatar {
+        transform: scale(1.1);
+    }
+
+    .card-body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .candidate-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        margin: 10px 0;
+    }
+
+    .candidate-skills, .candidate-education {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 15px;
+    }
+
+    .section-heading h2 {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .section-heading p {
+        font-size: 18px;
+        color: #555;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .candidate-card {
+            margin: 20px 0;
+        }
+
+        .section-heading h2 {
+            font-size: 28px;
+        }
+
+        .section-heading p {
+            font-size: 16px;
+        }
+    }
+
+    .btn.btn-green {
+        background-color: #28a745; /* Green background color */
+        color: white !important; /* Force white text color */
+        border: none;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn.btn-secondary {
+        border: none;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="ezy__candidates light" id="ezy__candidates">
+    <div class="container mt-5">
+        <div class="row justify-content-center section-heading text-center pb-5">
+            <div class="col-md-10 col-lg-8">
+                <h2 class="ezy__service23-heading">All Candidates</h2>
+                <p>Here are candidates that match the required skills. Click on a candidate to view their full profile.</p>
+            </div>
+        </div>  
+
+        <div class="row justify-content-center">
+            {% for candidate in all_candidates %}
+            <div class="col-md-6 col-lg-4 mb-5 pb-5">
+                <div class="card candidate-card" style="height: 300px;">
+                    <div class="text-center">
+                        {% if candidate.userprofile.profile_image %}
+                            <img class="candidate-avatar" src="{{ candidate.userprofile.profile_image.url }}" alt="{{ candidate.user.username }}">
+                        {% else %}
+                            <img class="candidate-avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h4 class="candidate-name">{{ candidate.first_name }} {{ candidate.last_name }}</h4>
+                        <p class="candidate-skills">{{ candidate.userprofile.skills }}</p>
+                        <p class="candidate-education">{{ candidate.userprofile.education }}</p>
+                        <p class="candidate-education">{{ candidate.userprofile.career_objective|default:"No career objective provided." }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- The button should be outside the loop -->
+        <div class="col-12 mt-5 text-center">
+            <a href="{% url "services" %}">
+                <button class="px-3"><span>Filter Through the Services</span></button></a>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

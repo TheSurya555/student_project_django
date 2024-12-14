@@ -40,6 +40,24 @@ Student Test Details
                         <li class="list-group-item"><strong>Created At:</strong> {{ test.created_at|date:"d M, Y H:i" }}</li>
                     </ul>
 
+                    <!-- Section to update the test score -->
+                    <h5 class="mt-4">Update Test Score:</h5>
+                    <div class="mt-3 border p-3 rounded">
+                        <form method="post" action="{% url 'update_test_score' test.id %}">
+                            {% csrf_token %}
+                            <label for="id_score" class="form-label">Score:</label>
+                            <input 
+                                type="number" 
+                                name="score" 
+                                id="id_score" 
+                                value="{{ test.score }}" 
+                                class="form-control" 
+                                placeholder="Enter new score" 
+                                required>
+                            <button type="submit" class="btn btn-success btn-sm mt-2">Update Score</button>
+                        </form>
+                    </div>
+
                     <!-- Section to display student answers -->
                     <h5 class="mt-4">Answers Provided:</h5>
                     <div>

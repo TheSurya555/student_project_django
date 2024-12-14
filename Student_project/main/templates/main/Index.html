@@ -115,46 +115,55 @@ Home
 
     <!-- testimonial section -->
     <section class="talent-section py-5 my-5 text-center">
-      <div class="container">
-          <h2 class="fw-bold mb-3">Meet Our Talents</h2>
-          <p class="lead" style=" font-size: 16px; font-weight: 400;">Results-driven software engineer with 5+ years of experience in developing scalable and efficient solutions.</p>
-          
-          <div class="row justify-content-center gap-2 mt-5">
-            {% for user in users|slice:"10" %}
-              <!-- Flip Card -->
-              {% if user.role == 'candidate' %}
-              <div class="col-lg-2 col-md-4 col-sm-6 col-xs-6 mb-4">
-                  <div class="flip-card">
-                      <div class="flip-card-inner">
-                          <!-- Front Side of the Card -->
-                          <div class="flip-card-front">
-                              {% if user.userprofile.profile_image %}
-                              <img src="{{ user.userprofile.profile_image.url }}" alt="Surya Prasad Sahoo" class="img-fluid card-img">
-                              {% else %}
-                              <img src="{% static 'assets/candidate2.jpg' %}" alt="Surya Prasad Sahoo" class="img-fluid card-img">
-                              {% endif %}
-                              <h5 class="text-white mt-3" style="font-size: 16px;font-weight: 500;">{{ user.first_name }} {{ user.last_name }}</h5>
-                          </div>
-                          <!-- Back Side of the Card -->
-                          <div class="flip-card-back">
-                              {% if user.userprofile.profile_image %}
-                              <img src="{{ user.userprofile.profile_image.url }}" alt="Surya Prasad Sahoo" class="img-fluid card-imgg">
-                              {% else %}
-                              <img src="{% static 'assets/candidate2.jpg' %}" alt="Surya Prasad Sahoo" class="img-fluid card-imgg">
-                              {% endif %}
-                              <h5 class="mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
-                              <p class="description">{{ user.userprofile.career_objective|default:"No career objective provided." }}</p>
-                              {% comment %} <a href="#" class="btn btn-dark">View Profile</a> {% endcomment %}
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <!-- You can add more cards here -->
-              {% endif %}
-            {% endfor %}   
-          </div>
-      </div>
-    </section>
+        <div class="container">
+            <h2 class="fw-bold mb-3">Meet Our Talents</h2>
+            <p class="lead" style="font-size: 16px; font-weight: 400;">
+                Results-driven software engineer with 5+ years of experience in developing scalable and efficient solutions.
+            </p>
+            <div class="row justify-content-center gap-2 mt-5">
+                {% for user in users %}
+                    <!-- Flip Card -->
+                    <div class="col-lg-2 col-md-4 col-sm-6 col-xs-6 mb-4">
+                        <div class="flip-card">
+                            <div class="flip-card-inner">
+                                <!-- Front Side of the Card -->
+                                <div class="flip-card-front">
+                                    {% if user.profile_image %}
+                                        <img src="{{ user.profile_image }}" alt="{{ user.first_name }} {{ user.last_name }}" class="img-fluid card-img">
+                                    {% else %}
+                                        <img src="{% static 'assets/candidate2.jpg' %}" alt="Default Candidate" class="img-fluid card-img">
+                                    {% endif %}
+                                    <h5 class="text-white mt-3" style="font-size: 16px;font-weight: 500;">
+                                        {{ user.first_name }} {{ user.last_name }}
+                                    </h5>
+                                    {% if user.level %}
+                                        <p class="text-light" style="font-size: 14px;">Level: {{ user.level }}</p>
+                                    {% endif %}
+                                </div>
+                                <!-- Back Side of the Card -->
+                                <div class="flip-card-back">
+                                    {% if user.profile_image %}
+                                        <img src="{{ user.profile_image }}" alt="{{ user.first_name }} {{ user.last_name }}" class="img-fluid card-imgg">
+                                    {% else %}
+                                        <img src="{% static 'assets/candidate2.jpg' %}" alt="Default Candidate" class="img-fluid card-imgg">
+                                    {% endif %}
+                                    <h5 class="mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
+                                    <p class="description">{{ user.career_objective}}</p>
+                                    {% if user.level %}
+                                    <p class="level">Level: {{ user.level }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- View All Candidates Button -->
+        <div class="mt-4">
+            <a href="{% url 'all_candidates' %}" class="btn-view-profile"><button class="px-3"><span>View All Candidates</span></button></a>
+        </div>
+    </section>    
     <!-- testimonial section end -->
 
 

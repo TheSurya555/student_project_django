@@ -1,60 +1,106 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
-from .forms import ProjectExperienceForm, EditUserForm, CustomPasswordChangeForm, UserProfileForm ,SocialLinkForm
-from .models import UserProfile, ProjectExperience, PrivacyPolicy,SocialLink
+from .forms import ProjectExperienceForm, EditUserForm, CustomPasswordChangeForm, UserProfileForm, SocialLinkForm
+from .models import UserProfile, ProjectExperience, PrivacyPolicy, SocialLink
 from signUp.models import CustomUser, RecruiterProfile, CandidateProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from progress_tracker.models import Project
-from payment.models import Payment 
+from progress_tracker.models import Project, Progress
+from payment.models import Payment
 from django.db.models import Sum
+from examination.models import Test  # Import the Test model
+from progress_tracker.models import Project
 
 @login_required
 def profiles_View(request):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        user_profile = UserProfile.objects.create(user=request.user)
-
+    # Ensure the user has a profile
+    user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
-    project_experiences = ProjectExperience.objects.filter(user_profile=user_profile)
-
-    # Fetch projects where the logged-in user is the client
+    
+    # Get the user's projects
     candidate_projects = Project.objects.filter(user=request.user)
-    projects = Project.objects.filter(client=request.user)
+    client_projects = Project.objects.filter(client=request.user)
 
-    # Initialize variables for payments made and received
-    total_payments_made = 0
-    total_payments_received = 0
-
-    # Handle recruiter payments made
+    # Aggregate payment data
     payments_made = Payment.objects.filter(recruiter=request.user)
     total_payments_made = payments_made.aggregate(Sum('amount'))['amount__sum'] or 0
-    
-    # Handle candidate payments received
+
+    payments_received = None
+    total_payments_received = 0
     if hasattr(request.user, 'candidateprofile'):
         payments_received = Payment.objects.filter(candidate=request.user.candidateprofile)
         total_payments_received = payments_received.aggregate(Sum('amount'))['amount__sum'] or 0
 
-    # Calculate the current balance
+    # Calculate current balance
     current_balance = total_payments_made
-    
-    # social Links
+
+    # Social Links
     social_links = SocialLink.objects.filter(user_profile=user_profile)
+
+    # Default values for score and level
+    score, level = None, None
+    if hasattr(request.user, 'candidate_profile'):
+        test_records = Test.objects.filter(user=request.user, completed=True)
+        
+        if test_records.exists():
+            # Calculate average score
+            total_score = test_records.aggregate(Sum('score'))['score__sum'] or 0
+            test_count = test_records.count()
+            score = total_score / test_count  # Average score
+            
+            # Determine level based on average score and completed projects
+            completed_projects_count = Project.objects.filter(user=request.user, status='terminated').count()
+            print(completed_projects_count)
+            level = (
+                "Level 4" if score > 80 and completed_projects_count >= 5 else
+                "Level 3" if score > 80 and completed_projects_count >= 3 else
+                "Level 2" if score > 80 and completed_projects_count >= 1 else
+                "Beginner"
+            )
+        else:
+            level = "No Level"
+        
+        # Update level in profile
+        user_profile.level = level
+        user_profile.save()
+
+    # Check if all stages are completed and confirmed for the user's projects
+    all_stages_completed = True
+    for project in candidate_projects:
+        progresses = Progress.objects.filter(project=project)
+        # Check if all stages for this project are completed and confirmed
+        if progresses.filter(is_completed=True, client_confirmation=True).count() != progresses.count():
+            all_stages_completed = False
+            break
+
+    # Count the number of completed projects
+    completed_projects_count = candidate_projects.filter(status='terminated').count()
+
+    # Identify user roles (ensures values are always defined)
+    role = getattr(request.user, 'role', None)
+    is_candidate = role == 'candidate'
+    is_recruiter = role == 'recruiter'
+    is_admin = role == 'admin'
 
     return render(request, 'profiles/profiles.html', {
         'user_profile': user_profile,
         'profile_image_url': profile_image_url,
-        'project_experiences': project_experiences,
-        'projects': projects,
+        'project_experiences': ProjectExperience.objects.filter(user_profile=user_profile),
+        'projects': client_projects,
         'candidate_projects': candidate_projects,
-        'payments_made': payments_made,  # Pass payments made to the template
-        'total_payments_received': total_payments_received,  # Pass the total payments received to the template
-        'current_balance': current_balance,  # Pass the current balance to the template
+        'payments_made': payments_made,
+        'total_payments_received': total_payments_received,
+        'current_balance': current_balance,
         'social_links': social_links,
+        'level': level if is_candidate else None,
+        'score': score if is_candidate else None,
+        'is_candidate': is_candidate,
+        'is_recruiter': is_recruiter,
+        'is_admin': is_admin,
+        'all_stages_completed': all_stages_completed,  # Pass the completion status to the template
+        'completed_projects_count': completed_projects_count, # Display count of completed projects
     })
-
 
 
 @login_required

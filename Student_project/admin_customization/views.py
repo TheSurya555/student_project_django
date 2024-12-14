@@ -8,11 +8,11 @@ from django.contrib.auth.decorators import login_required
 from talents.models import Skills
 from examination.models import Skill, Question, Test, Answer
 from django.http import HttpResponseForbidden
-from .forms import SkillForm ,Exam_SkillForm, QuestionForm, AnswerCorrectionForm
+from .forms import SkillForm ,Exam_SkillForm, QuestionForm, AnswerCorrectionForm,ScoreForm,ExamRulesForm
 from django.http import JsonResponse
 from notifications.models import Notification
 from examination.models import ExamRule
-from .forms import ExamRulesForm
+from django.http import HttpResponse
 
 def admin_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -300,6 +300,19 @@ def delete_exam_rule(request, rule_id):
     rule.delete()
     messages.success(request, "Rule deleted successfully!")
     return redirect(reverse('examination'))
+
+
+@login_required
+@admin_required
+def update_test_score(request, test_id):
+    test = get_object_or_404(Test, id=test_id)
+    if request.method == 'POST':
+        form = ScoreForm(request.POST, instance=test)
+        if form.is_valid():
+            form.save()
+            return redirect('view_student_test', user_id=test.user.id)
+        return HttpResponse('Invalid form submission', status=400)
+    return HttpResponse('Invalid request method', status=400)
 
 
 # Admin logout view start

@@ -44,6 +44,8 @@ urlpatterns = [
     path('rules/add/', add_exam_rule, name='add_exam_rule'),
     path('rules/edit/<int:rule_id>/', edit_exam_rule, name='edit_exam_rule'),
     path('rules/delete/<int:rule_id>/', delete_exam_rule, name='delete_exam_rule'),
+    path('update-test-score/<int:test_id>/', update_test_score, name='update_test_score'),
+
     
     # about us urls
     path('about-us/', admin_aboutus_view, name='admin_aboutus'),

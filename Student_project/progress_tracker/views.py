@@ -10,7 +10,6 @@ from django.db.models import Q
 from profiles.models import UserProfile
 
 User = get_user_model()
-
 @login_required
 def project_progress_view(request, project_id):
     project = get_object_or_404(Project, id=project_id)
@@ -23,16 +22,23 @@ def project_progress_view(request, project_id):
         except UserProfile.DoesNotExist:
             profile_image_url = None
 
-    
     # Create initial progress records only if they don't exist for the project
     if not Progress.objects.filter(project=project).exists():
         stages = project.get_stages()
         for stage in stages:
             Progress.objects.create(project=project, stage=stage, user=request.user)
-    
+
     progresses = Progress.objects.filter(project=project)
     cost_per_stage = project.get_cost_per_stage()
-    
+
+    # Check if all progress stages are completed and confirmed
+    all_stages_completed = progresses.filter(is_completed=True, client_confirmation=True).count() == progresses.count()
+
+    # Update project status to "completed" if all stages are completed
+    if all_stages_completed and project.status != "completed":
+        project.status = "completed"
+        project.save()
+
     progress_data = [
         {
             'progress': progress,
@@ -40,12 +46,13 @@ def project_progress_view(request, project_id):
         }
         for progress in progresses
     ]
-    
+
     return render(request, 'progress_tracker/project_progress.html', {
         'project': project,
         'progress_data': progress_data,
         'cost_per_stage': cost_per_stage,
         'profile_image_url': profile_image_url,
+        'all_stages_completed': all_stages_completed,
     })
 
 @login_required

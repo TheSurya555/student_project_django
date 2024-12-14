@@ -23,7 +23,26 @@ def layout_View(request):
     
 def home_view(request):
     try:
-        users = CustomUser.objects.select_related('recruiter_profile', 'candidate_profile').all()
+        # users = CustomUser.objects.select_related('recruiter_profile', 'candidate_profile').all()
+        users = (
+        UserProfile.objects.filter(user__role=CustomUser.CANDIDATE)
+        .select_related('user').order_by('-level')
+        )
+        
+        # Transform users into a list of dictionaries for easy use in the template
+        user_data = [
+             {
+                 'id': user.user.id,
+                 'candidate_id': user.id,
+                 'first_name': user.user.first_name,
+                 'last_name': user.user.last_name,
+                 'profile_image': user.profile_image.url if user.profile_image else None,
+                 'career_objective': user.career_objective if user.career_objective else "No career objective provided.",
+                 **({'level': user.level} if user.level else {})
+             }
+                for user in users
+                    ]
+        
         services = Service.objects.all()
         paginator = Paginator(services, 6)  # Paginate after fetching services
         page_number = request.GET.get('page')
@@ -45,7 +64,8 @@ def home_view(request):
                 profile_image_url = None
 
         return render(request, 'main/Index.html', {
-            'users': users,
+            # 'users': users,
+            'users': user_data,
             'profile_image_url': profile_image_url,
             'services': services,  # Services might not be necessary since you already have page_obj
             'page_obj': page_obj,
@@ -56,6 +76,7 @@ def home_view(request):
         })
     except UnicodeDecodeError:
         return render(request, 'main/error.html', {'error_message': 'UnicodeDecodeError occurred'})
-    
+
+
 def custom_404(request, exception):
     return render(request, '404.html', status=404)

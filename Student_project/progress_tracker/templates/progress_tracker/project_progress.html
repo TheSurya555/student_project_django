@@ -141,7 +141,7 @@ Progress Tracker
     </div>
     {% endif %}
 
-    <div class="project-details mb-5">
+    {% comment %} <div class="project-details mb-5">
         <div class="d-flex flex-row">
             {% if project.image %}
             <div class="project-image" style="margin-right: 20px;">
@@ -158,7 +158,35 @@ Progress Tracker
                 {% endif %}
             </div>
         </div>
+    </div> {% endcomment %}
+
+    <div class="project-details mb-5">
+        <div class="d-flex flex-row align-items-start">
+            {% if project.image %}
+            <div class="project-image me-3">
+                <img src="{{ project.image.url }}" alt="Project Image" 
+                     class="rounded shadow-sm" 
+                     style="width: 120px; height: 120px; object-fit: cover;">
+            </div>
+            {% endif %}
+            <div>
+                <h5 class="mb-2">
+                    Project {{ project.id }}: <span class="text-primary">{{ project.project_name }}</span>
+                </h5>
+                <p class="mb-1"><strong>Client Name:</strong> {{ project.client_name }}</p>
+                <p class="mb-1"><strong>Project Costing:</strong> {{ project.project_costing }}</p>
+    
+                {% if project.status == 'terminated' %}
+                <p class="text-danger fw-bold">Status: Terminated</p>
+                {% elif all_stages_completed %}
+                <p class="text-success fw-bold">Overall Status: Completed</p>
+                {% else %}
+                <p class="text-warning fw-bold">Status: In Progress</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
+    
     
     <div class="progress-container mb-5">
         <h2>Update Your Progress</h2>

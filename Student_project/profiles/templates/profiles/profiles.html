@@ -39,17 +39,28 @@ Profile
               <div class="col-sm-10 col-md-8 col-lg-9 ms-5 content-area">
                   <!-- My Info Section -->
                   <div id="myInfo" class="content-section">
-                      <h3>MyInfo</h3>
-                      <p>{{user.role}} account</p>
-                      <div class="profile-section p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
-                          <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-img">
-                          <div class="profile-info">
-                              <h4>{{ user.first_name}} {{ user.last_name}}</h4>
-                              <p>{{user_profile.position}}</p>
-                              <p>{{ user.username }}</p>
-
-                          </div>
-                      </div>
+                        <h3>MyInfo</h3>
+                        <p>{{user.role}} account</p>
+                        <div class="profile-section p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                                <img src="{% if user_profile.profile_image %}{{ user_profile.profile_image.url }}{% else %}{% static 'assets/requiter2.jpg' %}{% endif %}" alt="Profile" class="profile-img">
+                                <div class="profile-info">
+                                    <h4>{{ user.first_name}} {{ user.last_name}}</h4>
+                                    <p>{{user_profile.position}}</p>
+                                    <p>{{ user.username }}</p>
+                                </div>
+                                <!-- Score and Level on the Far Right -->
+                                <div class="col-md-4 text-end d-flex flex-column align-items-end" style="padding-right: 0;">
+                                    {% if is_candidate %}
+                                        <p style="margin: 0; white-space: nowrap;">Score: <span style="font-weight: bold;">{{ score }}</span></p>
+                                        <p style="margin: 0; white-space: nowrap;">Level: {{ level }}</p>
+                                    {% elif is_recruiter %}
+                                        <p style="margin: 0; white-space: nowrap;">Welcome, Recruiter!</p>
+                                        <p style="margin: 0; font-size: 0.9em; white-space: nowrap;">Payments Made: {{ payments_made|length }}</p>
+                                    {% elif is_admin %}
+                                        <p style="margin: 0; white-space: nowrap;">Admin Dashboard Access</p>
+                                    {% endif %}
+                                </div>
+                        </div>
                         <div class="profile-section mt-4 p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
                             <div class="d-flex flex-column">
                                 <h4>Career Objective</h4>
@@ -98,7 +109,7 @@ Profile
                               </div>
                               <div class="col-md-6 mb-3">
                                   <p class="text-muted mb-1">Date Of Birth</p>
-                                  <p class="fw-bold">{{user.profile.dob}}</p>
+                                  <p class="fw-bold">{{user_profile.dob}}</p>
                               </div>
                               {% elif request.session.user_role == "Recruiter"%}
                               <div class="col-md-6 mb-3">
@@ -389,42 +400,46 @@ Profile
 
                   <!-- ProjectProgress Section -->
                   <div id="ProjectProgress" class="content-section" style="display:none;">
-                      <h3>Project Progress</h3>
-                      <!-- Profile Section -->
-                      {% if request.session.user_role == "Recruiter" %}
-                        <p>Track your project progress</p>
-                          {% if projects %}
-                              {% for project in projects %}
-                              <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
-                                  <div class="profile-section p-4 rounded shadow-sm mb-4" style="border: 1px solid #e0e0e0;" id="profileSection">
-                                      {% if project.image %}
-                                          <div class="project-image" style="margin-right: 15px;">
-                                              <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                                          </div>
-                                      {% endif %}
-                                      <div class="profile-info">
-                                          <h5>Project {{ project.id }}: <span> {{ project.project_name }}</span></h5>
-                                          <p><strong>Assigned Candidate:</strong> {{ project.user.first_name }} {{ project.user.last_name }}</p>
-                                          <p><strong>Project Costing:</strong> {{ project.project_costing }}</p>
-                                          {% if project.status == 'terminated' %}
-                                              <p class="terminated-status">Status: Terminated</p>
-                                          {% endif %}
-                                      </div>
-                                  </div>
-                              </a>
-                              {% endfor %}
-                          {% else %}
-                            <div>
-                                <p>No project to display</p>
-                            </div>
-                          {% endif %}
-                      {% else %}
+                        <h3>Project Progress</h3>
+                        <!-- Profile Section -->
+                        {% if request.session.user_role == "Recruiter" %}
+                            <p>Track your project progress</p>
+                            {% if projects %}
+                                {% for project in projects %}
+                                <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
+                                    <div class="profile-section p-4 rounded shadow-sm mb-5" style="border: 1px solid #e0e0e0;" id="profileSection">
+                                        {% if project.image %}
+                                            <div class="project-image" style="margin-right: 15px;">
+                                                <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                            </div>
+                                        {% endif %}
+                                        <div class="profile-info">
+                                            <h5>Project {{ project.id }}: <span> {{ project.project_name }}</span></h5>
+                                            <p><strong>Assigned Candidate:</strong> {{ project.user.first_name }} {{ project.user.last_name }}</p>
+                                            <p><strong>Project Costing:</strong> {{ project.project_costing }}</p>
+                                            {% if project.status == 'terminated' %}
+                                            <p class="text-danger fw-bold">Status: Terminated</p>
+                                            {% elif all_stages_completed %}
+                                            <p class="text-success fw-bold">Overall Status: Completed</p>
+                                            {% else %}
+                                            <p class="text-warning fw-bold">Status: In Progress</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            {% else %}
+                                <div>
+                                    <p>No project to display</p>
+                                </div>
+                            {% endif %}
+                        {% else %}
 
                         {% if candidate_projects %}
                             <p>Track your project progress</p>    
                             {% for project in candidate_projects %}
                             <a href="{% url 'project_progress' project_id=project.id %}" style="text-decoration: none;color: #000;">
-                                <div class="profile-section p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;" id="profileSection">
+                                <div class="profile-section p-4 rounded shadow-sm mb-5" style="border: 1px solid #e0e0e0;" id="profileSection">
                                     {% if project.image %}
                                         <div class="project-image" style="margin-right: 15px;">
                                             <img src="{{ project.image.url }}" alt="Project Image" class="project-image-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
@@ -435,7 +450,11 @@ Profile
                                         <p><strong>Client Name:</strong> {{ project.client_name }}</p>
                                         <p><strong>Project Costing:</strong> {{ project.project_costing }}</p>
                                         {% if project.status == 'terminated' %}
-                                            <p class="terminated-status">Status: Terminated</p>
+                                        <p class="text-danger fw-bold">Status: Terminated</p>
+                                        {% elif all_stages_completed %}
+                                        <p class="text-success fw-bold">Overall Status: Completed</p>
+                                        {% else %}
+                                        <p class="text-warning fw-bold">Status: In Progress</p>
                                         {% endif %}
                                     </div>
                                 </div>
