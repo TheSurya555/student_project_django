@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PrivacyPolicy ,UserProfile, ProjectExperience
+from .models import PrivacyPolicy ,UserProfile, ProjectExperience,EducationDetail
 from tinymce.widgets import TinyMCE
 from django import forms
 
@@ -28,3 +28,8 @@ class ProjectExperienceAdmin(admin.ModelAdmin):
     list_display = ('user_profile', 'title', 'contribution', 'project_number')
     search_fields = ('title', 'contribution')
     list_filter = ('user_profile__user__username',)
+
+@admin.register(EducationDetail)
+class EducationDetailAdmin(admin.ModelAdmin):
+    list_display = ('user_profile', 'education_level', 'degree', 'college_name', 'start_year', 'end_year',)  
+    

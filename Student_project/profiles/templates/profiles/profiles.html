@@ -120,6 +120,41 @@ Profile
                           </div>
                       </div>
 
+                      <!-- .....Professional Information..... -->
+                      <div class="mt-4 info-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="mb-0">Professional Information</h4>
+                        </div>
+                        <div class="row">
+                            <!-- Current company and Previous Company -->
+                            <div class="col-md-6 mb-3">
+                                <p class="text-muted mb-1">Current company</p>
+                                <p class="fw-bold">{{user_profile.current_company}}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p class="text-muted mb-1">Current Company Position</p>
+                                <p class="fw-bold">{{user_profile.current_company_position}}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <p class="text-muted mb-1">Current Salary</p>
+                              <p class="fw-bold">{{user_profile.current_salary}}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <p class="text-muted mb-1">Expected Salary</p>
+                              <p class="fw-bold">{{user_profile.expected_salary}}</p>
+                            </div>
+                            <!-- Preferred Location and   -->
+                            <div class="col-md-6 mb-3">
+                                <p class="text-muted mb-1">Preferred Location</p>
+                                <p class="fw-bold">{{user_profile.preferred_location}}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p class="text-muted mb-1">Previous Company</p>
+                                <p class="fw-bold">{{user_profile.previous_company}}</p>
+                            </div>
+                        </div>
+                      </div>                      
+
                       <!-- Address Section -->
                       <div class="mt-4 info-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
                           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -154,15 +189,25 @@ Profile
                               <h4 class="mb-0">Education</h4>
                           </div>
                           <div class="row">
-                              <!-- Country and State -->
+                              <!-- Degree and University ,Start Year,End Year....... -->
+                              {% for education in education_details %}
                               <div class="col-md-6 mb-3">
-                                  <p class="text-muted mb-1">Last Exam Pass</p>
-                                  <p class="fw-bold">{{user_profile.education}}</p>
+                                  <p class="text-muted mb-1">Degree</p>
+                                  <p class="fw-bold">{{education.degree}}</p>
                               </div>
                               <div class="col-md-6 mb-3">
-                                  <p class="text-muted mb-1">State</p>
-                                  <p class="fw-bold">{{user_profile.university}}</p>
+                                  <p class="text-muted mb-1">University</p>
+                                  <p class="fw-bold">{{education.university}}</p>
                               </div>
+                              <div class="col-md-6 mb-3">
+                                <p class="text-muted mb-1">Start Year</p>
+                                <p class="fw-bold">{{education.start_year}}</p>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                <p class="text-muted mb-1">End Year</p>
+                                <p class="fw-bold">{{education.end_year}}</p>
+                              </div>
+                              {% endfor %}
                           </div>
                       </div>
                       {% endif %}

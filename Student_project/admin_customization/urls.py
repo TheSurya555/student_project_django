@@ -45,7 +45,7 @@ urlpatterns = [
     path('rules/edit/<int:rule_id>/', edit_exam_rule, name='edit_exam_rule'),
     path('rules/delete/<int:rule_id>/', delete_exam_rule, name='delete_exam_rule'),
     path('update-test-score/<int:test_id>/', update_test_score, name='update_test_score'),
-
+    path('test/delete/<int:test_id>/', delete_student_test, name='delete_student_test'),
     
     # about us urls
     path('about-us/', admin_aboutus_view, name='admin_aboutus'),
@@ -114,6 +114,17 @@ urlpatterns = [
     path('add_contact_info/', add_contact_info, name='add_contact_info'),
     path('edit_contact_info/<int:id>/', edit_contact_info, name='edit_contact_info'),
     path('delete_contact_info/<int:id>/', delete_contact_info, name='delete_contact_info'),
+    
+    # Footer URLs
+    path('add_footer/', add_footer, name='add_footer'),
+    path('edit_footer/<int:id>/', edit_footer, name='edit_footer'),
+    path('delete_footer/<int:id>/', delete_footer, name='delete_footer'),
+
+    # Portfolio Image URLs for Footer
+    path('add_footer_portfolio_image/<int:footer_id>/', add_footer_portfolio_image, name='add_footer_portfolio_image'),
+    path('edit_footer_portfolio_image/<int:footer_id>/<int:image_id>/', edit_footer_portfolio_image, name='edit_footer_portfolio_image'),
+    path('delete_footer_portfolio_image/<int:footer_id>/<int:image_id>/', delete_footer_portfolio_image, name='delete_footer_portfolio_image'),
+    path('manage_footer_portfolio_images/<int:footer_id>/', manage_footer_portfolio_images, name='manage_footer_portfolio_images'),
 
     # Admin logout url
     path('admin_logout/', admin_logout_view, name='admin_logout'),

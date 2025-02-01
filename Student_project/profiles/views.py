@@ -11,6 +11,9 @@ from payment.models import Payment
 from django.db.models import Sum
 from examination.models import Test  # Import the Test model
 from progress_tracker.models import Project
+from .models import UserProfile, EducationDetail
+from .forms import UserProfileForm, EducationDetailForm
+from django.forms import modelformset_factory
 
 @login_required
 def profiles_View(request):
@@ -38,32 +41,32 @@ def profiles_View(request):
     # Social Links
     social_links = SocialLink.objects.filter(user_profile=user_profile)
 
-    # Default values for score and level
-    score, level = None, None
-    if hasattr(request.user, 'candidate_profile'):
-        test_records = Test.objects.filter(user=request.user, completed=True)
-        
-        if test_records.exists():
-            # Calculate average score
-            total_score = test_records.aggregate(Sum('score'))['score__sum'] or 0
-            test_count = test_records.count()
-            score = total_score / test_count  # Average score
-            
-            # Determine level based on average score and completed projects
-            completed_projects_count = Project.objects.filter(user=request.user, status='terminated').count()
-            print(completed_projects_count)
-            level = (
-                "Level 4" if score > 80 and completed_projects_count >= 5 else
-                "Level 3" if score > 80 and completed_projects_count >= 3 else
-                "Level 2" if score > 80 and completed_projects_count >= 1 else
-                "Beginner"
-            )
+    # Education Details............................
+    education_details = EducationDetail.objects.filter(user_profile=user_profile)
+    
+    # Fetch score and level
+    score = Test.fetch_latest_score(request.user) if hasattr(request.user, 'candidate_profile') else None
+    completed_projects_count = candidate_projects.filter(status='terminated').count()
+
+    level = "Beginner"  # Default level
+    
+    if score is not None:
+        if score > 80:
+            if completed_projects_count >= 5:
+                level = "Level 4"
+            elif completed_projects_count >= 3:
+                level = "Level 3"
+            elif completed_projects_count >= 1:
+                level = "Level 2"
+            else:
+                level = "Level 1"
         else:
-            level = "No Level"
-        
-        # Update level in profile
-        user_profile.level = level
-        user_profile.save()
+            level = "Beginner"
+
+    # Update level in profile
+    user_profile.level = level
+    user_profile.save()
+    
 
     # Check if all stages are completed and confirmed for the user's projects
     all_stages_completed = True
@@ -93,6 +96,7 @@ def profiles_View(request):
         'total_payments_received': total_payments_received,
         'current_balance': current_balance,
         'social_links': social_links,
+        'education_details': education_details,
         'level': level if is_candidate else None,
         'score': score if is_candidate else None,
         'is_candidate': is_candidate,
@@ -158,9 +162,17 @@ def edit_profile_View(request):
 
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
 
+    # Create a formset for EducationDetail
+    EducationFormSet = modelformset_factory(EducationDetail, form=EducationDetailForm, extra=1, can_delete=True)
+    
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
+        
+        education_formset = EducationFormSet(request.POST, queryset=EducationDetail.objects.filter(user_profile=user_profile))
+        
+        
+        if form.is_valid() and education_formset.is_valid():
+            # Handle file naming for profile image and resume
             if 'profile_image' in request.FILES:
                 profile_image = request.FILES['profile_image']
                 max_filename_length = 1000
@@ -176,17 +188,29 @@ def edit_profile_View(request):
 
             try:
                 form.save()
+                
+                # Save education formset
+                education_instances = education_formset.save(commit=False)
+                for instance in education_instances:
+                    instance.user_profile = user_profile
+                    instance.save()
+                education_formset.save()
+                
                 messages.success(request, 'Profile updated successfully.', extra_tags='edit_profile')
                 return redirect('profiles')
             except ValidationError as e:
                 edit_messages = e.message_dict
-                return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages})
+                return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages,'education_formset': education_formset,})
         else:
-            edit_messages = form.errors
-            return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages})
+            # edit_messages = form.errors
+            edit_messages = form.errors if not form.is_valid() else education_formset.errors
+            return render(request, 'profiles/edit_profile.html', {'form': form, 'edit_messages': edit_messages, 'education_formset': education_formset})
     else:
         form = UserProfileForm(instance=user_profile)
-    return render(request, 'profiles/edit_profile.html', {'form': form , 'profile_image_url':profile_image_url})
+        #eduction
+        education_formset = EducationFormSet(queryset=EducationDetail.objects.filter(user_profile=user_profile))
+
+    return render(request, 'profiles/edit_profile.html', {'form': form , 'profile_image_url':profile_image_url,'education_formset': education_formset,})
 
 @login_required
 def add_project(request):

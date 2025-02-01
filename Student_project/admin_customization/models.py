@@ -44,3 +44,24 @@ class ContactInfo(models.Model):
 
     def __str__(self):
         return self.name    
+    
+    
+class Footer(models.Model):
+    company_name = models.CharField(max_length=100, blank=True, null=True)
+    copyright_text = models.CharField(max_length=255, default="© 2024 Your Company. All rights reserved.")
+    quick_links = models.JSONField(default=dict, blank=True)  # Store quick links as key-value pairs (e.g., {"About Us": "/about"})
+    social_links = models.JSONField(default=dict, blank=True)  # Store social links as key-value pairs (e.g., {"Facebook": "https://facebook.com"})
+    address = models.TextField(blank=True, null=True)  # Company address in the footer
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+
+    def __str__(self):
+        return self.company_name or "Footer"    
+    
+class FooterPortfolioImage(models.Model):
+    footer = models.ForeignKey(Footer, related_name="portfolio_images", on_delete=models.CASCADE)  # Relation to Footer
+    image = models.ImageField(upload_to='footer_portfolio_images/')
+    caption = models.CharField(max_length=255, blank=True, null=True)  # Optional caption for the image
+
+    def __str__(self):
+        return f"Portfolio Image for {self.footer.company_name or 'Footer'}"    

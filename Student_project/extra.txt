@@ -3583,3 +3583,31 @@ ADMIN Dashboard
     });
 </script>
 {% endblock %} {% endcomment %}
+
+
+    # # Default values for score and level
+    # score, level = None, None
+    # if hasattr(request.user, 'candidate_profile'):
+    #     test_records = Test.objects.filter(user=request.user, completed=True)
+        
+    #     if test_records.exists():
+    #         # Calculate average score
+    #         total_score = test_records.aggregate(Sum('score'))['score__sum'] or 0
+    #         test_count = test_records.count()
+    #         score = total_score / test_count  # Average score
+            
+    #         # Determine level based on average score and completed projects
+    #         completed_projects_count = Project.objects.filter(user=request.user, status='terminated').count()
+    #         print(completed_projects_count)
+    #         level = (
+    #             "Level 4" if score > 80 and completed_projects_count >= 5 else
+    #             "Level 3" if score > 80 and completed_projects_count >= 3 else
+    #             "Level 2" if score > 80 and completed_projects_count >= 1 else
+    #             "Beginner"
+    #         )
+    #     else:
+    #         level = "No Level"
+        
+    #     # Update level in profile
+    #     user_profile.level = level
+    #     user_profile.save()

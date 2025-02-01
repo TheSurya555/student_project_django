@@ -1,5 +1,5 @@
 from django import forms
-from .models import UserProfile, ProjectExperience ,SocialLink
+from .models import UserProfile, ProjectExperience ,SocialLink,EducationDetail
 from django.contrib.auth import authenticate
 from signUp.models import CustomUser
 from datetime import date, timedelta
@@ -10,8 +10,12 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = [
             'dob', 'phone', 'country', 'state', 'city', 'address', 'postal_code', 
-            'role', 'position', 'experience', 'skills', 'languages', 'education', 
-            'university', 'vat_id', 'profile_image', 'resume', 'career_objective'
+            'role', 'position', 'experience', 'skills', 'languages', 
+            'vat_id', 'profile_image', 'resume', 'career_objective',
+            'current_company', 'current_company_position', 'current_company_start_date',
+            'previous_company', 'previous_company_position', 
+            'previous_company_start_date', 'previous_company_end_date','preferred_location',
+            'expected_salary','current_salary',
         ]
         
     def __init__(self, *args, **kwargs):
@@ -28,12 +32,24 @@ class UserProfileForm(forms.ModelForm):
         self.fields['experience'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['skills'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['languages'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
-        self.fields['education'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
-        self.fields['university'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        #self.fields['education'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        #self.fields['university'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['vat_id'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['profile_image'].widget.attrs.update({'class': 'input', 'type': 'file'})
         self.fields['resume'].widget.attrs.update({'class': 'input', 'type': 'file'})
         self.fields['career_objective'].widget = forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Write your career objective'})
+        self.fields['current_company'].widget.attrs.update({'class': 'input', 'autocomplete': 'off','placeholder': 'Enter N/A if no current company.'})
+        self.fields['current_company_position'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['current_company_start_date'].widget= forms.DateInput(attrs={'type': 'date', 'class': 'input', 'autocomplete': 'off'})
+        self.fields['previous_company'].widget.attrs.update({'class': 'input', 'autocomplete': 'off','placeholder': 'Enter N/A if no previous company.'})
+        self.fields['previous_company_position'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['previous_company_start_date'].widget= forms.DateInput(attrs={'type': 'date', 'class': 'input', 'autocomplete': 'off'})
+        self.fields['previous_company_end_date'].widget = forms.DateInput(attrs={'type': 'date', 'class': 'input', 'autocomplete': 'off'})
+        self.fields['preferred_location'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['expected_salary'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['current_salary'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+    
+        
         
     def clean_dob(self):
         dob = self.cleaned_data.get('dob')
@@ -45,6 +61,15 @@ class UserProfileForm(forms.ModelForm):
                 raise forms.ValidationError("Date of birth must be between 18 and 27 years from today.")
         return dob
       
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('previous_company_start_date')
+        end_date = cleaned_data.get('previous_company_end_date')
+        
+        if start_date and end_date and start_date > end_date:
+            raise forms.ValidationError("Previous company's start date cannot be after the end date.")
+        
+        return cleaned_data      
       
 class ProjectExperienceForm(forms.ModelForm):
     class Meta:
@@ -147,3 +172,32 @@ class EditUserForm(forms.ModelForm):
         if len(phone) != 10 or not phone.isdigit():
             raise forms.ValidationError("Phone number must be exactly 10 digits.")
         return phone
+
+#eduction field
+
+class EducationDetailForm(forms.ModelForm):
+    
+    class Meta:
+        model = EducationDetail
+        fields = ['education_level','degree', 'specialization','university','college_name','start_year', 'end_year']
+    
+    def __init__(self, *args, **kwargs):
+        super(EducationDetailForm, self).__init__(*args, **kwargs)
+        self.fields['education_level'].widget.attrs.update({'class': 'input','autocomplete': 'off','placeholder': 'Enter 10th,12th,Graduation,Post Graduation,Other'})
+        self.fields['degree'].widget.attrs.update({'class': 'input','autocomplete': 'off'})
+        self.fields['university'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['specialization'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['college_name'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
+        self.fields['start_year'].widget=forms.NumberInput(attrs={'class': 'input', 'autocomplete': 'off'})
+        self.fields['end_year'].widget=forms.NumberInput(attrs={'class': 'input', 'autocomplete': 'off'})
+      
+    #End year must be greater than or equal to the start year.
+    def clean(self):
+        cleaned_data = super().clean()
+        start_year = cleaned_data.get("start_year")
+        end_year = cleaned_data.get("end_year")
+
+        if end_year and end_year < start_year:
+            raise forms.ValidationError("End year must be greater than or equal to the start year.")
+        
+        return cleaned_data

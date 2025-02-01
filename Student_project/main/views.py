@@ -26,7 +26,7 @@ def home_view(request):
         # users = CustomUser.objects.select_related('recruiter_profile', 'candidate_profile').all()
         users = (
         UserProfile.objects.filter(user__role=CustomUser.CANDIDATE)
-        .select_related('user').order_by('-level')
+        .select_related('user').order_by('-level')[:5]
         )
         
         # Transform users into a list of dictionaries for easy use in the template

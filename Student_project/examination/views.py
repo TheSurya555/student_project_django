@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from .models import Skill, Test, Question, Answer ,ExamRule
+from .models import Skill, Test, Answer ,ExamRule
 from datetime import timedelta
 from profiles.models import UserProfile
 
@@ -77,39 +77,44 @@ def take_test(request, test_id):
     test = get_object_or_404(Test, id=test_id, user=request.user)
     questions = test.skill.questions.all()
     
-    if request.method == 'POST':
-        github_link = request.POST.get('github_link')
-        
-        if github_link:
-            # If GitHub link is provided, save it and mark test as completed
-            test.github_link = github_link
-            test.completed = True
-            test.completed_date = timezone.now()
-            test.save()
-            return redirect('test_completed', test_id=test.id)
-        else:
-            # If no GitHub link, process answers for each question
-            for question in questions:
-                answer_text = request.POST.get(f'question_{question.id}')
-                if not answer_text:
-                    return render(request, 'examination/take_test.html', {'test': test, 'questions': questions, 'error': 'All questions must be answered.'})
-                is_correct = answer_text == question.correct_answer
-                Answer.objects.create(
-                    test=test,
-                    question=question,
-                    answer=answer_text,
-                    is_correct=is_correct
-                )
-            
-            # Calculate score and mark test as completed
-            test.completed = True
-            test.completed_date = timezone.now()
-            test.score = sum(answer.is_correct for answer in test.answers.all()) / len(questions) * 100
-            test.save()
-            return redirect('test_completed', test_id=test.id)
-    
-    return render(request, 'examination/take_test.html', {'test': test, 'questions': questions , 'profile_image_url':profile_image_url})
+    for question in questions:
+        if question.type == 'MCQ' and isinstance(question.options, list):
+            question.options_list = question.options
 
+    user_answers = {answer.question_id: answer.answer for answer in test.answers.all()}
+
+    # Initialize error variable
+    error = None    
+    
+    if request.method == 'POST':
+        print("Processing POST request")
+        for question in questions:
+            answer_text = request.POST.get(f'question_{question.id}')
+            print(f"Question {question.id}: Answer - {answer_text}")
+            if not answer_text:
+                error = 'All questions must be answered.'
+                break
+            is_correct = answer_text.strip().lower() == question.correct_answer.strip().lower()
+            Answer.objects.update_or_create(
+                test=test,
+                question=question,
+                defaults={'answer': answer_text, 'is_correct': is_correct}
+            )
+
+        if not error:
+            test.completed = True
+            test.completed_date = timezone.now()
+            test.save()
+            print(f"Redirecting to test_completed with test_id: {test.id}")
+            return redirect('test_completed', test_id=test.id)
+
+    return render(request, 'examination/take_test.html', {
+        'test': test,
+        'questions': questions,
+        'profile_image_url': profile_image_url,
+        'user_answers': user_answers,
+        'error': error
+    })
 
 @login_required
 def test_completed(request, test_id):

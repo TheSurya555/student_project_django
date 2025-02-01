@@ -122,6 +122,43 @@ Admin Home Page Customization
             {% endif %}
         </div>
 
+        <!-- Footer Section -->
+        <div class="col-md-12 mt-5">
+            <h3>Footer Content</h3>
+            
+            {% if footer_items %}
+                <a href="{% url 'add_footer' %}" class="btn btn-primary mb-3">Add New Footer Content</a>
+                
+                <table class="table table-striped bg-white">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for footer in footer_items %}
+                        <tr>
+                            <td>{{ footer.title }}</td>
+                            <td>{{ footer.description }}</td>
+                            <td>
+                                <a href="{% url 'edit_footer' footer.id %}" class="btn btn-info btn-sm">Edit</a>
+                                <form method="post" action="{% url 'delete_footer' footer.id %}" class="d-inline-block" onsubmit="return confirmDelete()">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No footer content available. <a href="{% url 'add_footer' %}" class="btn btn-primary">Add Footer Content</a></p>
+            {% endif %}
+        </div>
+
+
     </div>
 </div>
 

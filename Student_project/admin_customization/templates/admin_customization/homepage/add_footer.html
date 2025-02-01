@@ -1,0 +1,155 @@
+{% extends "admin_customization/Index.html" %}
+
+{% block title %}
+    {{site_header}}
+{% endblock %}
+
+
+{% block admin_content %}
+<div class="container">
+    <h1>{{ site_header }}</h1>
+
+    <!-- Display success or error messages -->
+    {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <fieldset class="border p-4 mb-4">
+            <legend class="w-auto">Footer Details</legend>
+
+            <div class="form-group">
+                <label for="id_company_name">Company Name</label>
+                {{ form.company_name }}
+                {% if form.company_name.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.company_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_copyright_text">Copyright Text</label>
+                {{ form.copyright_text }}
+                {% if form.copyright_text.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.copyright_text.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_quick_links">Quick Links (JSON)</label>
+                {{ form.quick_links }}
+                {% if form.quick_links.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.quick_links.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_social_links">Social Links (JSON)</label>
+                {{ form.social_links }}
+                {% if form.social_links.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.social_links.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_address">Address</label>
+                {{ form.address }}
+                {% if form.address.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.address.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_phone">Phone</label>
+                {{ form.phone }}
+                {% if form.phone.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.phone.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </fieldset>
+
+        <fieldset class="border p-4 mb-4">
+            <legend class="w-auto">Portfolio Images</legend>
+            
+            {{ formset.management_form }}
+
+            {% for form in formset %}
+                <div class="form-row mb-3 border p-3">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.image.id_for_label }}">Image</label>
+                        {{ form.image }}
+                        {% if form.image.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.image.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="{{ form.caption.id_for_label }}">Caption</label>
+                        {{ form.caption }}
+                        {% if form.caption.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.caption.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-2 align-self-center">
+                        <label>Delete</label>
+                        {{ form.DELETE }}
+                    </div>
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary">Save Footer</button>
+        <a href="{% url 'admin_home_page' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -138,6 +138,10 @@
                         <p class="candidate-skills">{{ candidate.userprofile.skills }}</p>
                         <p class="candidate-education">{{ candidate.userprofile.education }}</p>
                         <p class="candidate-education">{{ candidate.userprofile.career_objective|default:"No career objective provided." }}</p>
+                        
+                        <a href="{% url 'candidate_detail' candidate.id %}" class="btn-view-profile">
+                            <button class="px-3"><span>View Profile</span></button>
+                        </a>
                     </div>
                 </div>
             </div>

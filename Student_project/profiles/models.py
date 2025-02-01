@@ -19,14 +19,25 @@ class UserProfile(models.Model):
     experience = models.CharField(max_length=100, null=True, blank=True)
     skills = models.CharField(max_length=255, null=True, blank=True)
     languages = models.CharField(max_length=255, null=True, blank=True)
-    education = models.CharField(max_length=255, null=True, blank=True)
-    university = models.CharField(max_length=255, null=True, blank=True)
+    #education = models.CharField(max_length=255, null=True, blank=True)
+    #university = models.CharField(max_length=255, null=True, blank=True)
     vat_id = models.CharField(max_length=20, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     resume = models.FileField(upload_to='resumes/', null=True, blank=True)
     career_objective = models.TextField(verbose_name='Career Objective', null=True, blank=True)
     level = models.CharField(max_length=20, null=True, blank=True)
-
+    # New Fields for Company Details
+    current_company = models.CharField(max_length=255, null=True, blank=True, verbose_name="Current Company")
+    current_company_position = models.CharField(max_length=255, null=True, blank=True, verbose_name="Current Position")
+    current_company_start_date = models.DateField(null=True, blank=True, verbose_name="Start Date at Current Company")
+    previous_company = models.CharField(max_length=255, null=True, blank=True, verbose_name="Previous Company")
+    previous_company_position = models.CharField(max_length=255, null=True, blank=True, verbose_name="Previous Position")
+    previous_company_start_date = models.DateField(null=True, blank=True, verbose_name="Start Date at Previous Company")
+    previous_company_end_date = models.DateField(null=True, blank=True, verbose_name="End Date at Previous Company")
+    preferred_location = models.CharField(max_length=255, null=True, blank=True, verbose_name="Preferred Job Location")
+    expected_salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Expected Salary")
+    current_salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Current Salary")
+   
     def __str__(self):
         return f"{self.user.username}'s Profile"
 
@@ -74,3 +85,28 @@ def reset_project_numbers(sender, instance, **kwargs):
     for idx, project in enumerate(projects, start=1):
         project.project_number = idx
         project.save()
+
+
+class EducationDetail(models.Model):
+    # EDUCATION_LEVEL_CHOICES = [
+    #     ('10th Grade', '10th Grade'),
+    #     ('12th Grade', '12th Grade'),
+    #     ('Graduation', 'Graduation'),
+    #     ('Post Graduation', 'Post Graduation'),
+    #     ('Other', 'Other'),
+    # ]choices=EDUCATION_LEVEL_CHOICES,
+
+    user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='educations')
+    education_level = models.CharField(max_length=255,null=True, blank=True, verbose_name="Education Level",)
+    degree = models.CharField(max_length=255, null=True, blank=True ,verbose_name="Degree")
+    specialization = models.CharField(max_length=255, null=True, blank=True, verbose_name="Specialization/Stream")
+    college_name = models.CharField(max_length=255, null=True, blank=True, verbose_name="College Name")
+    university = models.CharField(max_length=255, null=True, blank=True, verbose_name="University Name")
+    start_year = models.PositiveIntegerField(verbose_name="Start Year")
+    end_year = models.PositiveIntegerField(null=True,blank=True,verbose_name="End Year")  # Optional for ongoing degrees
+    
+    
+    def __str__(self):
+        
+        end_year_display = self.end_year or "Present"
+        return f"{end_year_display})"

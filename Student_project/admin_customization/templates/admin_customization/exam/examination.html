@@ -149,6 +149,13 @@ Examination Management
                             <td>{{ test.created_at|date:"d M, Y H:i" }}</td>
                             <td>
                                 <a href="{% url 'view_student_test' test.user.id %}" class="btn btn-info btn-sm">View</a>
+                                <form method="POST" action="{% url 'delete_student_test' test.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm" 
+                                            onclick="return confirm('Are you sure you want to delete this test?');">
+                                        Delete
+                                    </button>
+                                </form>                                
                             </td>
                         </tr>
                         {% endfor %}

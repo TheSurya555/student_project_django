@@ -1,180 +1,175 @@
 {% extends "main/Layout.html" %}
 {% load static %}
 
-{% block title %}
-Take Test
-{% endblock %}
-
+{% block title %}Take Test{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="row">
-    <div class="col-md-3 sidebar">
-      <h3 class="mb-4">Questions</h3>
-      <ul class="list-group">
-        {% for question in questions %}
-          <li class="list-group-item" data-question-id="{{ forloop.counter0 }}">{{ forloop.counter }}. {{ question.text|safe }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="col-md-9 main-content">
+    <div class="col-md-9 mx-auto">
       <div id="testSection" class="content-section active">
-        <h4 class="section-heading">Answer the Questions or Submit GitHub Link</h4>
-        <div class="card card-custom mb-4 p-3">
-          <form id="testForm" method="post">
-            {% csrf_token %}
-            {% for question in questions %}
-              <div class="question-section mb-3" data-question-id="{{ forloop.counter0 }}" style="display: none;">
-                <h5>Question {{ forloop.counter }}:</h5>
-                <label for="question_{{ question.id }}">{{ question.text|safe }}</label>
-                <textarea id="question_{{ question.id }}" name="question_{{ question.id }}" class="tinymce"></textarea>
-              </div>
-            {% endfor %}
-            <div class="mb-3">
-              <label for="github_link">Or Submit GitHub Project Link</label>
-              <input type="url" id="github_link" name="github_link" class="form-control" placeholder="https://github.com/username/repo">
-            </div>
-            <div class="d-flex justify-content-between">
-              <button type="button" class="px-3" id="prev-btn"><span>Previous</span></button>
-              <button type="button" class="px-3" id="next-btn"><span>Next</span></button>
-            </div>
-            <div class="text-center mt-3">
-              <button type="button" id="submit-btn" class="px-3"><span>Submit Answer</span></button>
-              <button type="submit" id="final-submit-btn" class="px-3" style="display: none;"><span>Final Submit</span></button>
-            </div>
-          </form>
+        <!-- Dynamic Heading -->
+        <h4 id="sectionHeading" class="section-heading"></h4>
+
+        <!-- Error Message Box -->
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+          {{ error }}
         </div>
+        {% endif %}
+
+        <form id="testForm" method="post">
+          {% csrf_token %}
+
+          <!-- Questions Section -->
+          <div id="mcq-section">
+            <h4>Multiple Choice Questions</h4>
+            {% for question in questions %}
+              {% if question.type == 'MCQ' %}
+                <div class="question-section mb-3" data-question-id="{{ forloop.counter0 }}" 
+                     data-question-type="{{ question.type }}">
+                  <h5>Question {{ forloop.counter }}:</h5>
+                  <label for="question_{{ question.id }}">{{ question.text|safe }}</label>
+
+                  <!-- MCQ Options -->
+                  <div class="form-group mt-2">
+                    {% for option in question.options_list %}
+                      <div class="form-check" style="margin-bottom: 15px;">
+                        <input class="form-check-input question-answer" type="radio" 
+                               name="question_{{ question.id }}" 
+                               value="{{ option }}" 
+                               id="option_{{ question.id }}_{{ forloop.counter }}">
+                        <label class="form-check-label" 
+                               for="option_{{ question.id }}_{{ forloop.counter }}" 
+                               style="color: black; margin-top: 12px; font-size: 18px;">
+                          {{ option }}
+                        </label>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Submit Button for MCQs -->
+          <div class="text-center mt-3">
+            <button type="button" class="px-3" id="submit-mcq-btn" style="background-color: #267136; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px;">
+              <span>Submit MCQs</span>
+            </button>
+          </div>
+
+          <!-- Code Section -->
+          <div id="code-section" style="display: none;">
+            <h4>Code-Based Questions</h4>
+            {% for question in questions %}
+              {% if question.type == 'CODE' %}
+                <div class="question-section mb-3" data-question-id="{{ forloop.counter0 }}" 
+                     data-question-type="{{ question.type }}">
+                  <h5>Question {{ forloop.counter }}:</h5>
+                  <label for="question_{{ question.id }}">{{ question.text|safe }}</label>
+
+                  <!-- Code Editor -->
+                  <div id="editor_{{ forloop.counter0 }}" class="ace-editor" style="height: 300px; width: 100%; border: 1px solid #ddd;"></div>
+                  <textarea id="hidden_editor_{{ forloop.counter0 }}" class="question-answer" name="question_{{ question.id }}" style="display: none;"></textarea>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Final Submit Button -->
+          <div class="text-center mt-3" id="final-submit-btn" style="display: none;">
+            <button type="submit" class="px-3" style="background-color: #267136; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px;">
+              <span>Submit Test</span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
 
+
+
 {% block extra_js %}
-<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js"></script>
+
 <script>
-    tinymce.init({
-        selector: 'textarea.tinymce',
-        menubar: false,
-        plugins: 'link code',
-        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code'
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const mcqSection = document.getElementById('mcq-section');
+    const codeSection = document.getElementById('code-section');
+    const submitMCQBtn = document.getElementById('submit-mcq-btn');
+    const finalSubmitBtn = document.getElementById('final-submit-btn');
+    const sectionHeading = document.getElementById('sectionHeading');
+    let currentSectionIndex = 0;
+    
+    // Initialize Ace Editors for Code-Based Questions
+    const editors = [];
+    const sections = document.querySelectorAll('.question-section');
+    
+    sections.forEach((section, index) => {
+        const editorDiv = document.getElementById(`editor_${index}`);
+        const hiddenField = document.getElementById(`hidden_editor_${index}`);
+        
+        if (editorDiv) {
+            const editor = ace.edit(editorDiv);
+            editor.setTheme("ace/theme/monokai");
+            editor.session.setMode("ace/mode/javascript");
+            editor.setOptions({
+                fontSize: "16px",
+                wrap: true,
+                showPrintMargin: false
+            });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const sections = document.querySelectorAll('.question-section');
-        const nextBtn = document.getElementById('next-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const submitBtn = document.getElementById('submit-btn');
-        const finalSubmitBtn = document.getElementById('final-submit-btn');
-        let currentSectionIndex = 0;
-
-        const githubLinkInput = document.getElementById('github_link');
-
-        // Disable copy/cut functionality globally except for GitHub input field
-        document.addEventListener('copy', function(e) {
-            if (document.activeElement !== githubLinkInput) {
-                e.preventDefault();
-                alert('Copying is disabled on this page.');
-            }
-        });
-
-        document.addEventListener('cut', function(e) {
-            if (document.activeElement !== githubLinkInput) {
-                e.preventDefault();
-                alert('Cutting is disabled on this page.');
-            }
-        });
-
-        document.addEventListener('contextmenu', function(e) {
-            if (document.activeElement !== githubLinkInput) {
-                e.preventDefault();
-                alert('Right-clicking is disabled on this page.');
-            }
-        });
-
-        document.onkeydown = function(e) {
-            if (document.activeElement !== githubLinkInput && (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v'))) {
-                e.preventDefault();
-                alert('Copy/Cut/Paste is disabled on this page.');
-            }
-        };
-
-        // Show the first question by default
-        sections[currentSectionIndex].style.display = 'block';
-        prevBtn.style.display = 'none'; // Hide previous button on the first question
-
-        function showQuestion(index) {
-            sections.forEach((section, i) => {
-                section.style.display = i === index ? 'block' : 'none';
+            // Sync with hidden textarea
+            editors.push({ editor, hiddenField });
+            editor.session.on('change', function () {
+                hiddenField.value = editor.getValue();
             });
         }
-
-        function updateButtons() {
-            if (currentSectionIndex === 0) {
-                prevBtn.style.display = 'none';
-            } else {
-                prevBtn.style.display = 'inline-block';
-            }
-
-            if (currentSectionIndex === sections.length - 1) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'none';
-                finalSubmitBtn.style.display = 'inline-block';
-            } else {
-                nextBtn.style.display = 'inline-block';
-                submitBtn.style.display = 'inline-block';
-                finalSubmitBtn.style.display = 'none';
-            }
-        }
-
-        function validateCurrentAnswer() {
-            const currentSection = sections[currentSectionIndex];
-            const textarea = currentSection.querySelector('textarea');
-            const content = tinymce.get(textarea.id).getContent({ format: 'text' }).trim();
-
-            // If GitHub link is provided, no need to validate textarea
-            const githubLink = document.getElementById('github_link').value.trim();
-            if (githubLink !== '') {
-                return true;
-            }
-
-            if (content === '') {
-                alert('Please write something in the textarea before proceeding.');
-                return false;
-            }
-
-            return true;
-        }
-
-        // Handle Next button click event
-        nextBtn.addEventListener('click', function() {
-            if (validateCurrentAnswer() && currentSectionIndex < sections.length - 1) {
-                currentSectionIndex++;
-                showQuestion(currentSectionIndex);
-                updateButtons();
-            }
-        });
-
-        // Handle Previous button click event
-        prevBtn.addEventListener('click', function() {
-            if (currentSectionIndex > 0) {
-                currentSectionIndex--;
-                showQuestion(currentSectionIndex);
-                updateButtons();
-            }
-        });
-
-        // Handle Submit Answer button click event
-        submitBtn.addEventListener('click', function() {
-            if (validateCurrentAnswer() && currentSectionIndex < sections.length - 1) {
-                currentSectionIndex++;
-                showQuestion(currentSectionIndex);
-                updateButtons();
-            }
-        });
-
-        // Initial button state update
-        updateButtons();
     });
+
+    // Show next section
+    function switchSection() {
+        if (currentSectionIndex === 0) {
+            mcqSection.style.display = 'block';
+            codeSection.style.display = 'none';
+            submitMCQBtn.style.display = 'inline-block';
+        } else if (currentSectionIndex === 1) {
+            mcqSection.style.display = 'none';
+            codeSection.style.display = 'block';
+            finalSubmitBtn.style.display = 'inline-block';
+        }
+    }
+
+    // Handle MCQ Submit
+    submitMCQBtn.addEventListener('click', function () {
+        submitMCQBtn.style.display = 'none';
+        currentSectionIndex++;
+        switchSection();
+    });
+
+    // Handle Final Submit
+    finalSubmitBtn.addEventListener('click', function () {
+        editors.forEach(({ editor, hiddenField }) => {
+            hiddenField.value = editor.getValue();
+        });
+    });
+ // Disable copy, paste, right-click, Ctrl+P, and Ctrl+C
+    document.addEventListener('contextmenu', (event) => event.preventDefault()); // Disable right-click
+    document.addEventListener('copy', (event) => event.preventDefault()); // Disable copy
+    document.addEventListener('paste', (event) => event.preventDefault()); // Disable paste
+    document.addEventListener('keydown', (event) => {
+        if (
+            event.ctrlKey && 
+            (event.key === 'c' || event.key === 'p')
+        ) {
+            event.preventDefault();
+        }
+    });
+    // Initial setup to display the first section
+    switchSection();
+});
 </script>
-{% endblock %} 
+{% endblock %}

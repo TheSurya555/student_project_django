@@ -123,7 +123,9 @@ def all_candidates(request):
                 profile_image_url = None
 
         # Fetch and sort all candidates by level
-        all_candidates = CustomUser.objects.filter(role='candidate')
+        all_candidates = CustomUser.objects.filter(role='candidate',
+        tests__score__gt=0 #Ensure they have a score greater than 0                                      
+        )
         
 
         return render(request, 'services/all_candidate_list.html', {
@@ -138,3 +140,16 @@ def all_candidates(request):
         })
     except UnicodeDecodeError:
         return render(request, 'main/error.html', {'error_message': 'UnicodeDecodeError occurred'})
+    
+def candidate_detail(request, candidate_id):
+    """View to display the profile details of a candidate."""
+    # Fetch candidate object
+    candidate = get_object_or_404(CustomUser, id=candidate_id, role='candidate')
+
+    # Fetch associated user profile, if available
+    user_profile = UserProfile.objects.filter(user=candidate).first()
+
+    return render(request, 'services/candidate_detail.html', {
+        'candidate': candidate,
+        'user_profile': user_profile,
+    })    

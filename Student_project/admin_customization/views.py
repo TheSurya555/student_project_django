@@ -244,6 +244,15 @@ def view_student_test(request, user_id):
     
     return render(request, 'admin_customization/exam/view_student_test.html', context)
 
+@login_required
+@admin_required
+def delete_student_test(request, test_id):
+    test = get_object_or_404(Test, id=test_id)
+    test.delete()
+    messages.success(request, "Student's test deleted successfully!")
+    return redirect(reverse('examination'))
+
+
 # Admin examination view end
 
 # Admin view to add a new exam rule

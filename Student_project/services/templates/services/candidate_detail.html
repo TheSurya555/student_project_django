@@ -1,0 +1,163 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+{{ candidate.user.username }}'s Profile
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-container {
+        max-width: 100%;
+        margin: auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .profile-header {
+        position: relative;
+        text-align: center;
+        padding: 40px;
+        background-image: url("{% static 'assets/header-bg.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        border-radius: 15px 15px 0 0;
+    }
+    .profile-header img {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 5px solid white;
+        margin-top: -90px;
+    }
+    .profile-header h2 {
+        font-size: 35px;
+        font-weight: bold;
+    }
+    .profile-header p {
+        font-size: 18px;
+        margin-top: 5px;
+        color: #6d6d6d;
+    }
+    .profile-header .social-icons {
+        margin-top: 20px;
+    }
+    .profile-header .social-icons a {
+        margin: 0 8px;
+        color: #6d6d6d;
+        font-size: 24px;
+    }
+
+    .info-cards {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+    .info-card {
+        flex: 1;
+        min-width: 250px;
+        padding: 20px;
+        margin: 15px;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .info-card h4 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+    .info-card p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .action-buttons {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+
+    @media (max-width: 768px) {
+        .info-cards {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="profile-container">
+        <div class="profile-header">
+            {% if candidate.userprofile.profile_image %}
+            <img src="{{ candidate.userprofile.profile_image.url }}" alt="{{ candidate.username }}">
+            {% else %}
+            <img class="candidate-avatar" src="{% static 'assets/candidate2.jpg' %}" alt="avatar">
+            {% endif %}
+         
+            <h2>{{ candidate.first_name }} {{ candidate.last_name }}</h2>
+            <p>User Name : {{ candidate.username }}</p>
+            <p style="margin: 0; white-space: nowrap;">Level: {{ candidate.userprofile.level }}</p>
+            <p>{{ candidate.userprofile.position }}</p>
+            
+            <div class="social-icons">
+              {% for links in social_links %}
+                {% if links.platform == 'linkedin' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                {% elif links.platform == 'github' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-github"></i></a>
+                {% elif links.platform == 'twitter' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                {% elif links.platform == 'facebook' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-facebook"></i></a>
+                {% elif links.platform == 'instagram' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fab fa-instagram"></i></a>
+                {% elif links.platform == 'website' %}
+                    <a href="{{ links.link }}" target="_blank"><i class="fa-solid fa-globe"></i></a>
+                {% endif %}
+              {% endfor %}                
+            </div>
+        </div>
+
+        <div class="info-cards">
+            <div class="info-card">
+                <h4>Experience</h4>
+                <p>{{ candidate.userprofile.experience }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Address</h4>
+                <p>{{ candidate.userprofile.address }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Skills</h4>
+                <p>{{ candidate.userprofile.skills }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Languages</h4>
+                <p>{{ candidate.userprofile.languages }}</p>
+            </div>
+            <div class="info-card">
+                <h4>Education</h4>
+                <p>{{ candidate.userprofile.education }}</p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'all_candidates' %}"><button class="px-3"><span>Back to All Candidates</span></button></a>
+            {% if request.user.role == 'recruiter' %}
+            <a href="{% url 'start_chat' candidate.id %}"><button class="px-3"><span>Message Candidate</span></button></a>
+            <a href="{% url 'subscription_list' %}"><button class="px-3"><span>Pay for Candidate</span></button></a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

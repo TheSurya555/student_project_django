@@ -14,6 +14,14 @@ Edit Profile Form
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/post_creation_form.css' %}">
+<style>
+    /* input[type="checkbox"][name$="DELETE"] {
+    display: none;
+} */
+.education-form label {
+    color: #70dcc5;   
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -82,9 +90,49 @@ Edit Profile Form
                     <label class="user-label" for="experience">Experience</label>
                 </div>
                 <div class="form-group position-relative mb-3">
+                    {{ form.current_company }}
+                    <label class="user-label" for="skills">Current Company</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.current_company_position }}
+                    <label class="user-label" for="skills">Current Company Position</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.current_company_start_date }}
+                    <label class="user-label" for="skills">Current Company Start Date</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.previous_company }}
+                    <label class="user-label" for="skills">Previous Company</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.previous_company_position }}
+                    <label class="user-label" for="skills">Previous Company Position</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.previous_company_start_date }}
+                    <label class="user-label" for="skills">Previous Company Start Date</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.previous_company_end_date }}
+                    <label class="user-label" for="skills">Previous Company End Date</label>
+                </div>
+                <div class="form-group position-relative mb-3">
                     {{ form.skills }}
                     <label class="user-label" for="skills">Skills</label>
                 </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.preferred_location }}
+                    <label class="user-label" for="skills">Preferred Location</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.current_salary }}
+                    <label class="user-label" for="skills">Current Salary</label>
+                </div>
+                <div class="form-group position-relative mb-3">
+                    {{ form.expected_salary }}
+                    <label class="user-label" for="skills">Expected Salary</label>
+                </div>                
                 <div class="form-group position-relative mb-3">
                     {{ form.resume }}
                     <label class="user-label" for="resume">Upload Resume</label>
@@ -99,15 +147,18 @@ Edit Profile Form
                 <!-- Step 3: Educational Information -->
                 <div id="step3" class="step">
                     <h1>Educational Information</h1>
-                    <div class="form-group position-relative mb-3">
-                        {{ form.education }}
-                        <label class="user-label" for="education">Enter Last Exam Passed</label>
+                    {% csrf_token %}
+                    {{ education_formset.management_form }}
+                    <div id="education-forms">
+                        {% for form in education_formset %}
+                        <div class="form-group position-relative mb-3 education-form">
+                            {{ form.as_p }}
+                            
+                        </div>
+                        {% endfor %}
                     </div>
-                    <div class="form-group position-relative mb-3">
-                        {{ form.university }}
-                        <label class="user-label" for="university">University</label>
-                    </div>
-                </div>
+                    <button type="button" id="add-education-btn">Add Another Education</button> 
+                </div>   
             {% endif %}
 
             <!-- Step 4: Address Information -->
@@ -152,42 +203,42 @@ Edit Profile Form
 <script>
     var currentStep = 0;
     showStep(currentStep);
-
+    
     function showStep(step) {
         var steps = document.getElementsByClassName("step");
         steps[step].style.display = "block";
         updateProgress(step);
-
+    
         if (step === 0) {
             document.getElementById("prevBtn").style.display = "none";
         } else {
             document.getElementById("prevBtn").style.display = "inline";
         }
-
+    
         if (step === steps.length - 1) {
             document.getElementById("nextBtn").innerHTML = "Submit";
         } else {
             document.getElementById("nextBtn").innerHTML = "Next";
         }
     }
-
+    
     function nextPrev(stepChange) {
         var steps = document.getElementsByClassName("step");
         steps[currentStep].style.display = "none";
         currentStep += stepChange;
-
+    
         if (currentStep >= steps.length) {
             document.forms[0].submit();
             return false;
         }
         showStep(currentStep);
     }
-
+    
     function updateProgress(step) {
         var totalSteps = document.getElementsByClassName("step").length;
         var progress = ((step + 1) / totalSteps) * 100;
         document.querySelector(".indicator").style.height = progress + "%";
-
+    
         var sidebarSteps = document.querySelectorAll(".sidebar ul li");
         sidebarSteps.forEach((li, index) => {
             li.classList.remove("completed", "active");
@@ -195,5 +246,23 @@ Edit Profile Form
             if (index === step) li.classList.add("active");
         });
     }
+    
+    document.getElementById('add-education-btn').addEventListener('click', function () {
+        let forms = document.getElementById('education-forms');
+        let formIdx = document.querySelector('#id_form-TOTAL_FORMS').value;
+    
+        let newForm = forms.children[0].cloneNode(true);
+        newForm.querySelectorAll('input, select, textarea').forEach(function (input) {
+            input.name = input.name.replace(/-\d+-/, `-${formIdx}-`);
+            input.id = input.id.replace(/-\d+-/, `-${formIdx}-`);
+            input.value = '';
+        });
+    
+        forms.appendChild(newForm);
+    
+        document.querySelector('#id_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;
+    });
+    
+
 </script>
 {% endblock %}
