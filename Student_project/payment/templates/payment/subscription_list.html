@@ -14,7 +14,7 @@ Subscription Plans
     }
     .card {
         border: none;
-        transition: all 0.3s ease; /* Smooth transition for hover effect */
+        transition: all 0.3s ease;
     }
     .card.highlight {
         border: 2px solid #2b675f;
@@ -54,8 +54,8 @@ Subscription Plans
     .card-b:hover {
         background-color: #309F7E;
         color: white;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow effect */
-        transform: translateY(-5px); /* Slight upward movement on hover */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
     }
     .px-3 {
         background-color: #2b675f;
@@ -69,18 +69,16 @@ Subscription Plans
         background-color: #1f5046;
     }
 
-    @media(max-width: 992px) {
+    @media (max-width: 992px) {
         .card-b {
             margin-bottom: 20px;
         }
-
-
     }
-    @media(max-width: 576px) {
+    @media (max-width: 576px) {
         .card-b {
             padding: 20px;
         }
-        .card-p{
+        .card-p {
             width: 280px;
         }
         .pricing-header {
@@ -105,26 +103,59 @@ Subscription Plans
         </p>
     </div>
     <div class="row justify-content-center">
+        <!-- Subscription Cards -->
         {% for subscription in subscriptions %}
         <div class="col-lg-3 col-md-6 col-sm-12 card-p justify-content-center mt-3">
             <div class="card text-center card-b h-100 d-flex flex-column">
-              <div class="card-body card-bd flex-grow-1 d-flex flex-column">
-                <h5 class="card-title">{{ subscription.name }}</h5>
-                <p class="price"><i class="fa-solid fa-indian-rupee-sign"></i> {{ subscription.price }}</p>
-                <p>{{ subscription.description }}</p>
-                <p class="team">{{ subscription.short_content }}</p>
-                <ul style="text-align: center;">
-                    {% for feature in subscription.features_list %}
+                <div class="card-body card-bd flex-grow-1 d-flex flex-column">
+                    <h5 class="card-title">{{ subscription.name }}</h5>
+                    <p class="price"><i class="fa-solid fa-indian-rupee-sign"></i> {{ subscription.price }}</p>
+                    <p>{{ subscription.description }}</p>
+                    <p class="team">{{ subscription.short_content }}</p>
+                    <ul style="text-align: center;">
+                        {% for feature in subscription.features_list %}
                         <li>{{ feature }}</li>
-                    {% endfor %}
-                </ul>
-                <a href="{% url 'payment_page' subscription.id %}" class="mt-auto">
-                    <button class="px-3"><span>Get started</span></button>
-                </a>
-              </div>
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'payment_page' subscription.id %}" class="mt-auto">
+                        <button class="px-3"><span>Get started</span></button>
+                    </a>
+                </div>
             </div>
         </div>
         {% endfor %}
+
+        <!-- Customized Payment Card -->
+        <div class="col-lg-3 col-md-6 col-sm-12 card-p justify-content-center mt-3">
+            <div class="card text-center card-b h-100 d-flex flex-column">
+                <div class="card-body card-bd flex-grow-1 d-flex flex-column">
+                    <h5 class="card-title">Custom Payment</h5>
+                    <p class="price">Choose Your Amount</p>
+                    <p>Set your own price and start your journey with us.</p>
+                    <form method="POST" action="{% url 'custom_payment' %}">
+                        {% csrf_token %}
+                        <div class="mt-4">
+                            <label for="custom_amount" class="block text-gray-700 font-medium mb-2">Amount (₹):</label>
+                            <input
+                                type="number"
+                                name="custom_amount"
+                                id="custom_amount"
+                                class="w-100 p-3 border border-gray-300 rounded-lg focus:outline-none"
+                                placeholder="Enter custom amount"
+                                min="1"
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            class="px-3 mt-4"
+                        >
+                            <span>Get Started</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

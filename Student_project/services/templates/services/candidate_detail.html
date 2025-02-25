@@ -147,7 +147,14 @@
             </div>
             <div class="info-card">
                 <h4>Education</h4>
-                <p>{{ candidate.userprofile.education }}</p>
+                {% for education in candidate.userprofile.educations.all %}
+                    <p><strong>{{ education.education_level }}</strong> - {{ education.degree }} ({{ education.specialization }})</p>
+                    <p>{{ education.college_name }}</p>
+                    <p>Duration: {{ education.start_year }} - {% if education.end_year %}{{ education.end_year }}{% else %}Present{% endif %}</p>
+                    <hr>
+                {% empty %}
+                    <p>No education details available.</p>
+                {% endfor %}
             </div>
         </div>
 

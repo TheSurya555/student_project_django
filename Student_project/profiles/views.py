@@ -237,6 +237,47 @@ def add_project(request):
     return render(request, 'profiles/project_experience.html', {'form': form ,'profile_image_url':profile_image_url})
 
 @login_required
+def update_project(request, experience_id=None):
+    profile_image_url = None
+    user_profile = None
+
+    # Fetch user profile and profile image
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+
+    # If experience_id is provided, fetch the existing project experience
+    if experience_id:
+        project_experience = get_object_or_404(ProjectExperience, id=experience_id, user_profile=user_profile)
+    else:
+        project_experience = None
+
+    if request.method == 'POST':
+        form = ProjectExperienceForm(request.POST, instance=project_experience)
+        if form.is_valid():
+            project_experience = form.save(commit=False)
+            project_experience.user_profile = user_profile
+            project_experience.save()
+            if experience_id:
+                messages.success(request, 'Project experience updated successfully.', extra_tags='update_project')
+            else:
+                messages.success(request, 'Project experience added successfully.', extra_tags='add_project')
+            return redirect('profiles')
+        else:
+            messages.error(request, 'Error processing the form. Please check and try again.', extra_tags='project_error')
+    else:
+        form = ProjectExperienceForm(instance=project_experience)
+
+    return render(request, 'profiles/project_experience.html', {
+        'form': form,
+        'profile_image_url': profile_image_url,
+        'project_experience': project_experience
+    })            
+    
+@login_required
 def delete_project_experience(request, project_experience_id):
     project_experience = get_object_or_404(ProjectExperience, id=project_experience_id)
 
@@ -281,6 +322,18 @@ def add_social_link(request):
 
     return render(request, 'profiles/add_social_link.html', context)
 
+
+def update_social_link(request, platform):
+    social_link = get_object_or_404(SocialLink, platform=platform, user_profile=request.user.userprofile)
+
+    if request.method == 'POST':
+        new_link = request.POST.get('link')
+        if new_link:  # Ensure the input is not empty
+            social_link.link = new_link
+            social_link.save()
+            return redirect('profiles')  # Redirect after saving
+
+    return render(request, 'profiles/update_social_link.html', {'social_link': social_link})
 
 def privacy_policy_view(request):
     profile_image_url = None

@@ -255,14 +255,19 @@ Profile
                           <div class="project-card mb-4">
                               <div class="project-info">
                                   <div class="left-section">
-                                      <h5>Project 1: {{ project.title }}</h5>
+                                      <h5>Project {{project.project_number}}:: {{ project.title }}</h5>
                                       <p><strong>Contributions:</strong>{{ project.contribution }}</p>
                                   </div>
                                   <div class="right-section">
-                                      <button class="btn btn-light px-3 py-1"
+                                      {% comment %} <button class="btn btn-light px-3 py-1"
                                           style="border-radius: 20px; background-color: #e8f5e9;">
                                           Edit <i class="bi bi-pencil"></i>
-                                      </button>
+                                      </button> {% endcomment %}
+                                      <a href="{% url 'update_project' experience_id=project.id %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                      </a>
                                   </div>
                               </div>
 
@@ -401,39 +406,78 @@ Profile
                       <!-- Social Links Section -->
                       <div class="social-links-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
                           <!-- Title and Edit Button -->
-                          <div class="d-flex justify-content-between align-items-center mb-3">
-                              <h5 class="fw-bold">Social Links</h5>
-                              <button class="px-3">
-                                  <span>Edit <i class="bi bi-pencil"></i></span>
-                              </button>
-                          </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold">Social Links</h5>
+                            </div>
 
                           <!-- Links List -->
                           <div class="links-list">
                               {% for links in social_links %}
                                   {% if links.platform == 'linkedin' %}
-                                  <div class="link-item mb-3">
-                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                       <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
                                   </div>
                                   {% elif links.platform == 'github' %}
-                                  <div class="link-item mb-3">                                   
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->                                 
                                       <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-github"></i> Github</a>
+                                    <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
                                   </div>
                                   {% elif links.platform == 'twitter' %}
-                                  <div class="link-item mb-3">
-                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-twitter"></i> Twitter</a>
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-twitter"></i> Twitter</a>
+                                    <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
                                   </div>
                                   {% elif links.platform == 'facebook' %}
-                                  <div class="link-item mb-3">
-                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-facebook"></i> Facebook</a>
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-twitter"></i> Twitter</a>
+                                    <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
                                   </div>
                                   {% elif links.platform == 'instagram' %}
-                                  <div class="link-item mb-3">
-                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-instagram"></i> Instagram</a>
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-twitter"></i> Twitter</a>
+                                    <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
                                   </div>
                                   {% elif links.platform == 'website' %}
-                                  <div class="link-item mb-3">
-                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fa-solid fa-globe"></i> Website</a>
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-twitter"></i> Twitter</a>
+                                    <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
                                   </div>
                                   {% endif %}
                               {% empty %}

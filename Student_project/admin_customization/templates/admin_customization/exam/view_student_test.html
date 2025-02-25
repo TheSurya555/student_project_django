@@ -40,7 +40,7 @@ Student Test Details
                         <li class="list-group-item"><strong>Created At:</strong> {{ test.created_at|date:"d M, Y H:i" }}</li>
                     </ul>
 
-                    <!-- Section to update the test score -->
+                    <!-- Update Test Score Form -->
                     <h5 class="mt-4">Update Test Score:</h5>
                     <div class="mt-3 border p-3 rounded">
                         <form method="post" action="{% url 'update_test_score' test.id %}">
@@ -58,36 +58,42 @@ Student Test Details
                         </form>
                     </div>
 
-                    <!-- Section to display student answers -->
+                    <!-- Display Student's Answers -->
                     <h5 class="mt-4">Answers Provided:</h5>
                     <div>
-                        <ul class="list-group">
-                            {% for answer in test.answers.all %}
-                            <li class="list-group-item">
-                                <strong>Question:</strong> {{ answer.question.text|safe }} <br>
-                                <strong>Correct Answer:</strong> {{ answer.question.correct_answer|safe }} <br>
-                                <strong>Student's Answer:</strong> {{ answer.answer|safe }} <br>
-                                <strong>Is Correct:</strong> 
-                                <span class="answer-status">{{ answer.is_correct|yesno:"Yes,No" }}</span>
-    
-                                <!-- Form to update the answer status -->
-                                {% if not answer.is_correct %}
-                                <div class="mt-3 border p-3 rounded">
-                                    <form method="post" action="{% url 'view_student_test' user_id=test.user.id %}" class="answer-form">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="answer_id" value="{{ answer.id }}">
-                                        <div class="form-group">
-                                            {{ form.as_p }}
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                                    </form>
-                                </div>
-                                {% endif %}
-                            </li>
-                            {% empty %}
-                            <li class="list-group-item">No answers provided for this test.</li>
-                            {% endfor %}
-                        </ul>
+                        <form method="post" action="{% url 'view_student_test' user_id=test.user.id %}" id="answer_form">
+                            {% csrf_token %}
+                            <ul class="list-group">
+                                {% for answer in test.answers.all %}
+                                <li class="list-group-item">
+                                    <strong>Question:</strong> {{ answer.question.text|safe }} <br>
+
+                                    {% if answer.question.type == "CODE" %}
+                                    <strong>Correct Answer:</strong>
+                                    <pre>{{ answer.question.correct_answer }}</pre>
+                                    <strong>Student's Answer:</strong>
+                                    <pre>{{ answer.answer }}</pre>
+
+                                    <label for="code_score_{{ answer.id }}">Score:</label>
+                                    <input type="number" id="code_score_{{ answer.id }}" name="scores_{{ answer.id }}" 
+                                         value="{% if answer.score %}{{ answer.score.value }}{% else %} {% endif %}" max="10" />
+
+                                   
+                                    {% else %}
+                                    <strong>Correct Answer:</strong> {{ answer.question.correct_answer|safe }} <br>
+                                    <strong>Student's Answer:</strong> {{ answer.answer|safe }} <br>
+                                    <strong>Is Correct:</strong>
+                                    <select name="is_correct_{{ answer_id }}" class="form-control mt-2">
+                                        <option value="True" {% if answer.is_correct %}selected{% endif %}>Yes</option>
+                                        <option value="False" {% if not answer.is_correct %}selected{% endif %}>No</option>
+                                    </select>
+                                    <input type="hidden" name="answer_ids" value="{{ answer_id }}">
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <button type="submit" class="btn btn-primary btn-sm mt-4">Save Updates</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -101,16 +107,15 @@ Student Test Details
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.answer-form').forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the default form submission
+        // Ensure only one form submission happens
+        const answerForm = document.getElementById('answer_form');
+        if (answerForm) {
+            answerForm.addEventListener('submit', function(event) {
+                event.preventDefault();  // Prevent default form submission
 
-                var formElement = event.target;
-                var answerId = formElement.querySelector('input[name="answer_id"]').value;
-                var statusElement = formElement.closest('li').querySelector('.answer-status');
-
-                var formData = new FormData(formElement);
-                fetch(formElement.action, {
+                var formData = new FormData(answerForm);
+                
+                fetch(answerForm.action, {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -120,13 +125,17 @@ Student Test Details
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        statusElement.textContent = data.is_correct;
-                        formElement.remove(); // Remove the form after successful submission
+                        // Redirect after successful submission
+                        window.location.href = "{% url 'examination' %}";
+                    } else {
+                        console.log('Error in saving updates:', data);
+                        alert('Failed to save updates. Please try again.');
                     }
                 })
                 .catch(error => console.error('Error:', error));
             });
-        });
+        }
     });
 </script>
+
 {% endblock %}

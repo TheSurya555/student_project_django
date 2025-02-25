@@ -3611,3 +3611,128 @@ ADMIN Dashboard
     #     # Update level in profile
     #     user_profile.level = level
     #     user_profile.save()
+
+
+
+<!-- Connect With Section -->
+                  <div id="connectWith" class="content-section" style="display:none;">
+                      <h3>Connect With</h3>
+                      <div class="billing-card p-4 rounded d-flex justify-content-between align-items-center mb-4"
+                          style="border: 1px solid #e0e0e0; background-color: #fff; border-radius: 15px;">
+                          <!-- Left Side: Text -->
+                          <div>
+                              <h4 class="fw-bold mb-2">Add your social media Links</h4>
+                              <p class="text-muted mb-0">Manage your social media links to connect with world</p>
+                          </div>
+                          <!-- Right Side: Button -->
+                          <a href="{% url "add_social_link" %}">
+                              <button class="px-3">
+                                <span>Add Links</span>
+                              </button>
+                          </a>
+                      </div>
+
+                      <!-- Social Links Section -->
+                      <div class="social-links-card p-4 rounded shadow-sm" style="border: 1px solid #e0e0e0;">
+                          <!-- Title and Edit Button -->
+                          <div class="d-flex justify-content-between align-items-center mb-3">
+                              <h5 class="fw-bold">Social Links</h5>
+                              <!-- <button class="px-3">
+                                  <span>Edit <i class="bi bi-pencil"></i></span>
+                              </button> -->
+                          </div>
+
+                          <!-- Links List -->
+                          <div class="links-list">
+                              {% for links in social_links %}
+                                  {% if links.platform == 'linkedin' %}
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                       <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
+                                  </div>
+                                  {% elif links.platform == 'github' %}
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->                                 
+                                      <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-github"></i> Github</a>
+                                    <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
+                                  </div>
+                                  {% elif links.platform == 'twitter' %}
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight: bold;color: #098761;"><i class="fab fa-twitter"></i> Twitter</a>
+                                    <!-- Right Side: Edit Button -->
+                                    <a href="{% url 'update_social_link' links.platform %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                    </a>
+                                  </div>
+                                  {% elif links.platform == 'facebook' %}
+                                  <div class="link-item mb-3 d-flex justify-content-between align-items-center">
+                                    <!-- Left Side: Social Link -->
+                                    <a href="{{links.link}}" target="_blank" style="text-decoration: none; font-size: 24px; font-weight:     
+
+
+                                  <div class="right-section">
+                                      <!-- <button class="btn btn-light px-3 py-1"
+                                          style="border-radius: 20px; background-color: #e8f5e9;">
+                                          Edit <i class="bi bi-pencil"></i>
+                                      </button> -->
+                                      <a href="{% url 'update_project' experience_id=project.id %}">
+                                        <button class="px-3">
+                                            <span>Edit <i class="bi bi-pencil"></i></span>
+                                        </button>
+                                      </a>
+                                  </div>                                    
+
+@login_required
+def update_project(request, experience_id=None):
+    profile_image_url = None
+    user_profile = None
+
+    # Fetch user profile and profile image
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+
+    # If experience_id is provided, fetch the existing project experience
+    if experience_id:
+        project_experience = get_object_or_404(ProjectExperience, id=experience_id, user_profile=user_profile)
+    else:
+        project_experience = None
+
+    if request.method == 'POST':
+        form = ProjectExperienceForm(request.POST, instance=project_experience)
+        if form.is_valid():
+            project_experience = form.save(commit=False)
+            project_experience.user_profile = user_profile
+            project_experience.save()
+            if experience_id:
+                messages.success(request, 'Project experience updated successfully.', extra_tags='update_project')
+            else:
+                messages.success(request, 'Project experience added successfully.', extra_tags='add_project')
+            return redirect('profiles')
+        else:
+            messages.error(request, 'Error processing the form. Please check and try again.', extra_tags='project_error')
+    else:
+        form = ProjectExperienceForm(instance=project_experience)
+
+    return render(request, 'profiles/project_experience.html', {
+        'form': form,
+        'profile_image_url': profile_image_url,
+        'project_experience': project_experience
+    })                                  

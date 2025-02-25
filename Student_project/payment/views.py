@@ -160,22 +160,85 @@ def payment_callback(request):
     return HttpResponse("Payment callback received.")
 
 
+@login_required
+def custom_payment(request):
+    """
+    A custom payment view for handling special payment scenarios.
+    """
+    # Manually define custom price and description for the custom payment
+    custom_amount = Decimal(request.POST.get('custom_amount', '0'))
+    description = request.POST.get('description', 'Custom Payment')
+    
+    if custom_amount <= 0:
+        messages.error(request, 'Invalid amount provided.')
+        return redirect('custom_payment')
+
+    # Calculate service fee (2%) and GST (12%)
+    service_fee = custom_amount * Decimal(0)
+    gst = custom_amount * Decimal(0)
+    total_amount = custom_amount + service_fee + gst
+
+    # Create Razorpay order
+    razorpay_order = razorpay_client.order.create({
+        'amount': int(total_amount * 100),  # Convert to paise
+        'currency': 'INR',
+        'payment_capture': '1'
+    })
+    razorpay_order_id = razorpay_order['id']
+
+    # Set the callback URL
+    callback_url = request.build_absolute_uri(reverse('payment_callback'))
+
+    # Fetch profile image URL
+    profile_image_url = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
+        except UserProfile.DoesNotExist:
+            profile_image_url = None
+
+    return render(request, 'payment/custom_payment.html', {
+        'custom_amount': custom_amount,
+        'description': description,
+        'service_fee': service_fee,
+        'gst': gst,
+        'total_amount': total_amount,
+        'razorpay_order_id': razorpay_order_id,
+        'razorpay_key_id': settings.RAZORPAY_KEY_ID,
+        'callback_url': callback_url,
+        'profile_image_url': profile_image_url,
+    })
+
+
+
 
 @login_required
 def edit_billing_info(request, subscription_id):
-    profile, created = Profile.objects.get_or_create(user=request.user, defaults={
-        'full_name': '',
-        'company_name': '',
-        'country': '',
-        'state': '',
-        'address': '',
-        'city': '',
-        'postal_code': '',
-        'is_indian_citizen': False,
-        'receive_invoices_via_email': False
-    })
+    # If it's the custom payment page, handle it separately
+    if subscription_id == 'custom':
+        # Custom logic for 'custom' subscription
+        profile, created = Profile.objects.get_or_create(user=request.user, defaults={
+            'full_name': '',
+            'company_name': '',
+            'country': '',
+            'state': '',
+            'address': '',
+            'city': '',
+            'postal_code': '',
+            'is_indian_citizen': False,
+            'receive_invoices_via_email': False
+        })
+    else:
+        # Logic for handling actual subscription_id (if it's not 'custom')
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            # Handle the case where the profile doesn't exist
+            profile = Profile.objects.create(user=request.user)
 
     if request.method == 'POST':
+        # Update profile with new data from the form
         profile.full_name = request.POST.get('full_name', '')
         profile.company_name = request.POST.get('company_name', '')
         profile.country = request.POST.get('country', '')
@@ -185,14 +248,18 @@ def edit_billing_info(request, subscription_id):
         profile.postal_code = request.POST.get('postal_code', '')
         profile.is_indian_citizen = request.POST.get('is_indian_citizen') == 'yes'
         profile.receive_invoices_via_email = 'receive_invoices_via_email' in request.POST
-        
+
         profile.preferred_candidate_name = request.POST.get('preferred_candidate_name', '')
         profile.preferred_candidate_username = request.POST.get('preferred_candidate_username', '')
         profile.save()
-        
-        return redirect('payment_page', subscription_id=subscription_id)
 
-    return render(request, 'payment/edit_billing_info.html', {'profile': profile})
+        # After saving, redirect to the appropriate page (payment_page or other)
+        if subscription_id == 'custom':
+            return redirect('custom_payment')  # Redirect to custom payment page
+        else:
+            return redirect('payment_page', subscription_id=subscription_id)  # Redirect to regular payment page
+
+    return render(request, 'payment/edit_billing_info.html', {'profile': profile, 'subscription_id': subscription_id})
 
 def subscription_list(request):
     profile_image_url = None

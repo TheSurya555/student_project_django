@@ -35,21 +35,14 @@ def rules_and_regulations(request):
             profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
         except UserProfile.DoesNotExist:
             profile_image_url = None
-
-    rules = ExamRule.objects.all()
-
-    if request.method == "POST":
-        # Mark the user as having accepted the rules
-        request.session['accepted_rules'] = True  # Store in session
-        return redirect('choose_skill')  # Redirect to choose_skill after acceptance
-
+            
+    rules = ExamRule.objects.all()        
     context = {
         'rules': rules,
-        'profile_image_url': profile_image_url,
+        'profile_image_url':profile_image_url,
         'site_header': "Examination Rules and Regulations"
     }
     return render(request, 'examination/rules_and_regulations.html', context)
-
 
 @login_required
 def start_test(request, skill_id):

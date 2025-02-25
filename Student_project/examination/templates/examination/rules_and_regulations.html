@@ -41,11 +41,14 @@ Rules and Regulations
             {{ rule.description|safe }}
         </div>
         {% endfor %}
-        <!-- Proceed Button -->
-         <div class="text-center mt-5"> 
 
-             <a href="{% url 'choose_skill' %}" class=""><button class="button px-3"><span>Proceed to Test</span></button></a>
-         </div>
+        <!-- Accept and Proceed Button -->
+        <form method="POST" action="{% url 'rules_and_regulations' %}">
+            {% csrf_token %}
+            <div class="text-center mt-5">
+                <button type="submit" class="button px-3"><span>Accept and Proceed</span></button>
+            </div>
+        </form>
     </div>
     <!-- content end -->
 {% endblock %}

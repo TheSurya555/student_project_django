@@ -6,9 +6,9 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import login_required
 from talents.models import Skills
-from examination.models import Skill, Question, Test, Answer
+from examination.models import Skill, Question, Test, Answer,Score
 from django.http import HttpResponseForbidden
-from .forms import SkillForm ,Exam_SkillForm, QuestionForm, AnswerCorrectionForm,ScoreForm,ExamRulesForm
+from .forms import SkillForm ,Exam_SkillForm, QuestionForm,AnswerCorrectionForm,ScoreForm,ExamRulesForm
 from django.http import JsonResponse
 from notifications.models import Notification
 from examination.models import ExamRule
@@ -159,28 +159,22 @@ def exam_delete_skill(request, skill_id):
     messages.success(request, "Skill deleted successfully!")
     return redirect(reverse('examination'))
 
+
 @login_required
 @admin_required
 def add_question(request):
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
-            skill_id = request.POST.get('skill') 
-            skill = get_object_or_404(Skill, id=skill_id)
-            question = form.save(commit=False)
-            question.skill = skill
-            question.save()
+            form.save()
             messages.success(request, "Question added successfully!")
             return redirect(reverse('examination'))
         else:
-            messages.error(request, "Please correct the errors below.")
+            messages.error(request, f"Form submission failed: {form.errors}")
     else:
         form = QuestionForm()
 
-    context = {
-        'form': form,
-        'site_header': "Add New Question"
-    }
+    context = {'form': form, 'site_header': "Add New Question"}
     return render(request, 'admin_customization/exam/add_question.html', context)
 
 @login_required
@@ -195,16 +189,12 @@ def edit_question(request, question_id):
             messages.success(request, "Question updated successfully!")
             return redirect(reverse('examination'))
         else:
-            messages.error(request, "Please correct the errors below.")
+            messages.error(request, f"Form submission failed: {form.errors}")
     else:
         form = QuestionForm(instance=question)
 
-    context = {
-        'form': form,
-        'site_header': "Edit Question"
-    }
+    context = {'form': form, 'site_header': "Edit Question"}
     return render(request, 'admin_customization/exam/edit_question.html', context)
-
 
 @login_required
 @admin_required
@@ -214,35 +204,58 @@ def delete_question(request, question_id):
     messages.success(request, "Question deleted successfully!")
     return redirect(reverse('examination'))
 
-
 @login_required
 @admin_required
 def view_student_test(request, user_id):
-    # Fetch the test details for the specific user
     student_tests = Test.objects.filter(user_id=user_id).prefetch_related('answers')
 
-    # If no test found for the user, return a 404
+    # If no tests found, render a no tests page
     if not student_tests.exists():
         return render(request, 'admin_customization/exam/no_test_found.html', {'user_id': user_id})
 
     if request.method == 'POST':
-        form = AnswerCorrectionForm(request.POST)
-        if form.is_valid():
-            answer_id = request.POST.get('answer_id')
-            answer = get_object_or_404(Answer, id=answer_id)
-            answer.is_correct = form.cleaned_data['is_correct']
-            answer.save()
-            return JsonResponse({'success': True})
-        
-    # For GET request, render the page normally
-    form = AnswerCorrectionForm()
+        test = student_tests[0] 
+        # Loop through answers and update scores and correctness
+        for answer in test.answers.all():
+            answer_id = str(answer.id)  # Assuming the first test for simplicity
+            score_value = request.POST.get(f'scores_{answer_id}')
+            is_correct = request.POST.get(f'is_correct_{answer_id}')
+             
+            # Update score for code-based questions
+            if score_value:
+                score,created = Score.objects.get_or_create(answer=answer)
+
+                if created:
+                    # Action when a new score is created
+                    print(f"New score created for answer {answer.id}")
+                else:
+                    # Action when the score already existed
+                    print(f"Score already exists for answer {answer.id}")
+                score.value = float(score_value)
+                score.save()
+            
+            # Update is_correct for MCQ-based questions
+            if is_correct is not None:
+                answer.is_correct = is_correct == 'True'
+                answer.save()
+
+        # Recalculate the total score for the test
+        # Assuming one test per student for simplicity
+
+
+        test.calculate_total_score()  # This function will sum up the individual scores and update the test
+
+        # Redirect to the examination page after successful updates
+        return JsonResponse({'success': True, 'redirect_url': reverse('examination')})
+
+    # Context for rendering the template
     context = {
         'student_tests': student_tests,
-        'form': form,
-        'site_header': f"Tests Details for User: {student_tests[0].user.username}"
+        'site_header': f"Tests Details for User: {student_tests[0].user.username}" if student_tests else "No Tests Found",
     }
-    
+
     return render(request, 'admin_customization/exam/view_student_test.html', context)
+
 
 @login_required
 @admin_required
@@ -251,6 +264,7 @@ def delete_student_test(request, test_id):
     test.delete()
     messages.success(request, "Student's test deleted successfully!")
     return redirect(reverse('examination'))
+
 
 
 # Admin examination view end

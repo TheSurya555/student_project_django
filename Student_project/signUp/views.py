@@ -188,13 +188,16 @@ def admin_LoginView(request):
                 upass = form.cleaned_data['password']
                 user = authenticate(username=uname, password=upass)
                 if user is not None:
-                    login(request, user)
-                    if user.role == CustomUser.ADMIN:
-                        request.session['user_role'] = 'Admin'
-                        messages.success(request, 'Logged in successfully as Admin!!')
-                        return HttpResponseRedirect('/')
+                    if user.email_verified:
+                        login(request, user)
+                        if user.role == CustomUser.ADMIN:
+                            request.session['user_role'] = 'Admin'
+                            messages.success(request, 'Logged in successfully as Admin!!')
+                            return HttpResponseRedirect('/')
+                        else:
+                            messages.error(request, 'Unknown user role!!')
                     else:
-                        messages.error(request, 'Unknown user role!!')
+                        messages.error(request, 'Email is not verified. Please verify your email to log in.')
                 else:
                     messages.error(request, 'Invalid username or password!')
             else:

@@ -88,25 +88,29 @@ def reset_project_numbers(sender, instance, **kwargs):
 
 
 class EducationDetail(models.Model):
-    # EDUCATION_LEVEL_CHOICES = [
-    #     ('10th Grade', '10th Grade'),
-    #     ('12th Grade', '12th Grade'),
-    #     ('Graduation', 'Graduation'),
-    #     ('Post Graduation', 'Post Graduation'),
-    #     ('Other', 'Other'),
-    # ]choices=EDUCATION_LEVEL_CHOICES,
+    EDUCATION_LEVEL_CHOICES = [
+        ('10th Grade', '10th Grade'),
+        ('12th Grade', '12th Grade'),
+        ('Graduation', 'Graduation'),
+        ('Post Graduation', 'Post Graduation'),
+        ('Other', 'Other'),
+    ]
 
     user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='educations')
-    education_level = models.CharField(max_length=255,null=True, blank=True, verbose_name="Education Level",)
-    degree = models.CharField(max_length=255, null=True, blank=True ,verbose_name="Degree")
+    education_level = models.CharField(
+        max_length=255,
+        choices=EDUCATION_LEVEL_CHOICES,  # Dropdown choices
+        null=True, 
+        blank=True, 
+        verbose_name="Education Level"
+    )
+    degree = models.CharField(max_length=255, null=True, blank=True, verbose_name="Degree")
     specialization = models.CharField(max_length=255, null=True, blank=True, verbose_name="Specialization/Stream")
     college_name = models.CharField(max_length=255, null=True, blank=True, verbose_name="College Name")
     university = models.CharField(max_length=255, null=True, blank=True, verbose_name="University Name")
     start_year = models.PositiveIntegerField(verbose_name="Start Year")
-    end_year = models.PositiveIntegerField(null=True,blank=True,verbose_name="End Year")  # Optional for ongoing degrees
-    
-    
+    end_year = models.PositiveIntegerField(null=True, blank=True, verbose_name="End Year")  # Optional for ongoing degrees
+
     def __str__(self):
-        
         end_year_display = self.end_year or "Present"
-        return f"{end_year_display})"
+        return f"{self.education_level} - {self.degree} ({self.start_year} - {end_year_display})"

@@ -32,8 +32,6 @@ class UserProfileForm(forms.ModelForm):
         self.fields['experience'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['skills'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['languages'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
-        #self.fields['education'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
-        #self.fields['university'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['vat_id'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['profile_image'].widget.attrs.update({'class': 'input', 'type': 'file'})
         self.fields['resume'].widget.attrs.update({'class': 'input', 'type': 'file'})
@@ -176,28 +174,35 @@ class EditUserForm(forms.ModelForm):
 #eduction field
 
 class EducationDetailForm(forms.ModelForm):
-    
     class Meta:
         model = EducationDetail
-        fields = ['education_level','degree', 'specialization','university','college_name','start_year', 'end_year']
-    
+        fields = ['education_level', 'degree', 'specialization', 'university', 'college_name', 'start_year', 'end_year']
+        widgets = {
+            'start_year': forms.NumberInput(attrs={'class': 'input', 'autocomplete': 'off'}),
+            'end_year': forms.NumberInput(attrs={'class': 'input', 'autocomplete': 'off'}),
+        }
+
     def __init__(self, *args, **kwargs):
         super(EducationDetailForm, self).__init__(*args, **kwargs)
-        self.fields['education_level'].widget.attrs.update({'class': 'input','autocomplete': 'off','placeholder': 'Enter 10th,12th,Graduation,Post Graduation,Other'})
-        self.fields['degree'].widget.attrs.update({'class': 'input','autocomplete': 'off'})
+        
+        # Make education_level a dropdown
+        self.fields['education_level'].widget = forms.Select(
+            choices=EducationDetail.EDUCATION_LEVEL_CHOICES,
+            attrs={'class': 'input'}
+        )
+        
+        self.fields['degree'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['university'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['specialization'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
         self.fields['college_name'].widget.attrs.update({'class': 'input', 'autocomplete': 'off'})
-        self.fields['start_year'].widget=forms.NumberInput(attrs={'class': 'input', 'autocomplete': 'off'})
-        self.fields['end_year'].widget=forms.NumberInput(attrs={'class': 'input', 'autocomplete': 'off'})
-      
-    #End year must be greater than or equal to the start year.
+
+    # Validation: End year must be greater than or equal to start year
     def clean(self):
         cleaned_data = super().clean()
         start_year = cleaned_data.get("start_year")
         end_year = cleaned_data.get("end_year")
 
-        if end_year and end_year < start_year:
+        if end_year and start_year and end_year < start_year:
             raise forms.ValidationError("End year must be greater than or equal to the start year.")
         
         return cleaned_data

@@ -1,0 +1,168 @@
+{% extends "main/Layout.html" %}
+{% load static %}
+
+{% block title %}
+Payment Page
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment_container {
+        margin: 50px auto;
+        max-width: 1200px;
+        padding: 20px;
+        justify-content: center;
+    }
+    .billing-info, .order-summary, .preferred-candidate {
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .order-summary {
+        width: 35%;
+    }
+    .billing-info h3, .order-summary h3, .preferred-candidate h3 {
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .form-group input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        margin-right: 5px;
+    }
+    .order-summary img {
+        width: 20%;
+        height: auto;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+    .order-summary button {
+        width: 100%;
+    }
+    .pay_image {
+        background: #ddd;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    .hidden {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex payment_container">
+    <div class="d-flex flex-column">
+        <!-- Billing Information -->
+        <div class="billing-info mb-5">
+            <h3>Billing Information</h3>
+            <p>Your invoice will be issued according to the details listed here.</p>
+            <p><strong>{{ request.user.profile.full_name }}</strong></p>
+            <p>{{ request.user.profile.address }}, {{ request.user.profile.city }}, {{ request.user.profile.state }}, {{ request.user.profile.country }}</p>
+            <p>{{ request.user.profile.postal_code }}</p>
+            <a href="{% url 'edit_billing_info' 'custom' %}"><button class="px-3"><span>Edit</span></button></a>
+        </div>
+
+        <!-- Preferred Candidate Details -->
+        <div class="preferred-candidate mb-5">
+            <h3>Preferred Candidate Details</h3>
+            <form id="candidate-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="candidate_username">Candidate Username</label>
+                    <input type="text" id="candidate_username" name="candidate_username" value="{{ request.user.profile.preferred_candidate_username }}" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="candidate_name">Candidate Name</label>
+                    <input type="text" id="candidate_name" name="candidate_name" value="{{ request.user.profile.preferred_candidate_name }}" class="form-control" required>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   
+    <!-- Order Summary -->
+    <div class="order-summary" style="margin-left: 50px;">
+        <h3>Order Summary</h3>
+        <div class="d-flex align-items-center p-2 pay_image">
+            <img src="{% static 'assets/LOGOWHITE.png' %}" alt="Service Image">
+            <span>
+                <p><strong>I will edit real estate photos professionally with the best quality</strong></p>
+            </span>
+        </div>
+        <p class="d-flex justify-content-between"><strong>Price:</strong> ₹{{ custom_amount }}</p>
+        <p class="d-flex justify-content-between"><strong>Service fee (2%):</strong> ₹{{ service_fee }}</p>
+        <p class="d-flex justify-content-between"><strong>GST (12%):</strong> ₹{{ gst }}</p>
+        <hr>
+        <p class="d-flex justify-content-between"><strong>Total:</strong> ₹{{ total_amount }}</p>
+        <p>You will be charged ₹{{ total_amount }}. Total amount includes currency conversion fees.</p>
+        <form method="POST" id="razorpay-form">
+            {% csrf_token %}
+            <input type="hidden" name="razorpay_order_id" value="{{ razorpay_order_id }}">
+            <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+            <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+            <button type="button" id="rzp-button" class="px-3"><span>Confirm & Pay</span></button>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rzpButton = document.getElementById('rzp-button');
+
+        // Razorpay options
+        const options = {
+            key: '{{ razorpay_key_id }}',
+            amount: {{ total_amount|floatformat:0 }} * 100, // Convert to paise
+            currency: 'INR',
+            name: 'Talent Sprout',
+            description: 'Order Payment',
+            image: '{% static "assets/LOGOWHITE.png" %}',
+            order_id: '{{ razorpay_order_id }}',
+            handler: function (response) {
+                document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                document.getElementById('razorpay_signature').value = response.razorpay_signature;
+                document.getElementById('razorpay-form').submit();
+            },
+            prefill: {
+                name: '{{ request.user.profile.full_name }}',
+                email: '{{ request.user.email }}'
+            },
+            notes: {
+                address: '{{ request.user.profile.address }}'
+            },
+            theme: {
+                color: '#000'
+            }
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.on('payment.failed', function (response) {
+            console.log(response.error);
+            window.location.href = "{% url 'payment_failed' %}?error_code=" + response.error.code + "&error_description=" + response.error.description;
+        });
+
+        rzpButton.addEventListener('click', function () {
+            rzp.open();
+        });
+    });
+</script>
+{% endblock %}
