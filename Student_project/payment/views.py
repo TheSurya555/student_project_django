@@ -13,6 +13,7 @@ from decimal import Decimal
 import razorpay
 from notifications.signals import notify
 from profiles.models import UserProfile
+from decimal import Decimal, InvalidOperation
 
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -24,9 +25,9 @@ def payment_page(request, subscription_id):
     subscription = get_object_or_404(Subscription, id=subscription_id)
     
     subscription_price = Decimal(subscription.price)
-    service_fee = subscription_price * Decimal('0.00')
-    gst = subscription_price * Decimal('0.0')          
-    total_amount = subscription_price + service_fee + gst
+    service_fee = round(subscription_price * Decimal('0.02'), 2)
+    gst = round(subscription_price * Decimal('0.12'), 2)        
+    total_amount = round(subscription_price + service_fee + gst, 2)
 
     profile_image_url = None
     if request.user.is_authenticated:
@@ -163,53 +164,75 @@ def payment_callback(request):
 @login_required
 def custom_payment(request):
     """
-    A custom payment view for handling special payment scenarios.
+    Custom payment view for handling special payment scenarios.
     """
-    # Manually define custom price and description for the custom payment
-    custom_amount = Decimal(request.POST.get('custom_amount', '0'))
-    description = request.POST.get('description', 'Custom Payment')
+    # Retrieve session-stored amount (if available)
+    custom_amount = Decimal(request.session.get('custom_amount', 0))
     
-    if custom_amount <= 0:
-        messages.error(request, 'Invalid amount provided.')
-        return redirect('custom_payment')
+    # Recalculate GST and Service Fee
+    service_fee = round(custom_amount * Decimal('0.02'), 2)  # 2% Service Fee
+    gst = round(custom_amount * Decimal('0.12'), 2)  # 12% GST
+    total_amount = round(custom_amount + service_fee + gst, 2)  # Total
 
-    # Calculate service fee (2%) and GST (12%)
-    service_fee = custom_amount * Decimal(0)
-    gst = custom_amount * Decimal(0)
-    total_amount = custom_amount + service_fee + gst
-
-    # Create Razorpay order
-    razorpay_order = razorpay_client.order.create({
-        'amount': int(total_amount * 100),  # Convert to paise
-        'currency': 'INR',
-        'payment_capture': '1'
-    })
-    razorpay_order_id = razorpay_order['id']
-
-    # Set the callback URL
-    callback_url = request.build_absolute_uri(reverse('payment_callback'))
-
-    # Fetch profile image URL
-    profile_image_url = None
-    if request.user.is_authenticated:
-        try:
-            user_profile = UserProfile.objects.get(user=request.user)
-            profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None
-        except UserProfile.DoesNotExist:
-            profile_image_url = None
-
-    return render(request, 'payment/custom_payment.html', {
+    context = {
         'custom_amount': custom_amount,
-        'description': description,
+        'description': request.session.get('description', 'Custom Payment'),
         'service_fee': service_fee,
         'gst': gst,
         'total_amount': total_amount,
-        'razorpay_order_id': razorpay_order_id,
+        'razorpay_order_id': None,
         'razorpay_key_id': settings.RAZORPAY_KEY_ID,
-        'callback_url': callback_url,
-        'profile_image_url': profile_image_url,
-    })
+        'callback_url': request.build_absolute_uri(reverse('payment_callback')),
+        'profile_image_url': None
+    }
 
+    # Get user's profile image if available
+    try:
+        user_profile = request.user.userprofile
+        if user_profile.profile_image:
+            context['profile_image_url'] = user_profile.profile_image.url
+    except UserProfile.DoesNotExist:
+        pass
+
+    if request.method == "POST":
+        try:
+            custom_amount_str = request.POST.get('custom_amount', str(custom_amount)).strip()
+            custom_amount = Decimal(custom_amount_str) if custom_amount_str else Decimal(0)
+
+            if custom_amount <= 0:
+                messages.error(request, 'Invalid amount provided.')
+                return render(request, 'payment/custom_payment.html', context)
+
+            # ✅ Recalculate Service Fee & GST
+            service_fee = round(custom_amount * Decimal('0.02'), 2)
+            gst = round(custom_amount * Decimal('0.12'), 2)
+            total_amount = round(custom_amount + service_fee + gst, 2)
+
+            # Store values in session
+            request.session['custom_amount'] = float(custom_amount)
+            request.session['description'] = request.POST.get('description', 'Custom Payment')
+
+            # Create Razorpay order
+            razorpay_order = razorpay_client.order.create({
+                'amount': int(total_amount * 100),  # Convert to paise
+                'currency': 'INR',
+                'payment_capture': '1'
+            })
+
+            # Update context with recalculated values
+            context.update({
+                'custom_amount': custom_amount,
+                'service_fee': service_fee,
+                'gst': gst,
+                'total_amount': total_amount,
+                'razorpay_order_id': razorpay_order['id'],
+            })
+
+        except (InvalidOperation, ValueError, TypeError):
+            messages.error(request, 'Invalid input. Please enter a valid amount.')
+            return render(request, 'payment/custom_payment.html', context)
+
+    return render(request, 'payment/custom_payment.html', context)
 
 
 

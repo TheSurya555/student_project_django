@@ -153,11 +153,16 @@ Edit Profile Form
                         {% for form in education_formset %}
                         <div class="form-group position-relative mb-3 education-form">
                             {{ form.as_p }}
-                            
                         </div>
                         {% endfor %}
                     </div>
-                    <button type="button" id="add-education-btn">Add Another Education</button> 
+                    <button type="button" id="add-education-btn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Another Education
+                    </button> 
+                    
+                    <button type="button" class="btn btn-danger remove-education-btn">
+                        <i class="fas fa-trash-alt"></i> Remove
+                    </button>
                 </div>   
             {% endif %}
 
@@ -200,6 +205,9 @@ Edit Profile Form
     </div>
 </div>
 
+{%endblock %}
+
+{% block extra_js %}
 <script>
     var currentStep = 0;
     showStep(currentStep);
@@ -247,21 +255,56 @@ Edit Profile Form
         });
     }
     
-    document.getElementById('add-education-btn').addEventListener('click', function () {
-        let forms = document.getElementById('education-forms');
-        let formIdx = document.querySelector('#id_form-TOTAL_FORMS').value;
+    document.addEventListener("DOMContentLoaded", function () {
+        const educationFormsContainer = document.getElementById("education-forms");
+        const totalForms = document.querySelector("#id_form-TOTAL_FORMS");
     
-        let newForm = forms.children[0].cloneNode(true);
-        newForm.querySelectorAll('input, select, textarea').forEach(function (input) {
-            input.name = input.name.replace(/-\d+-/, `-${formIdx}-`);
-            input.id = input.id.replace(/-\d+-/, `-${formIdx}-`);
-            input.value = '';
+        document.getElementById("add-education-btn").addEventListener("click", function () {
+            let formIdx = parseInt(totalForms.value);
+            let newForm = educationFormsContainer.children[0].cloneNode(true);
+    
+            newForm.querySelectorAll("input, select, textarea").forEach(function (input) {
+                input.name = input.name.replace(/-\d+-/, `-${formIdx}-`);
+                input.id = input.id.replace(/-\d+-/, `-${formIdx}-`);
+                input.value = "";
+            });
+    
+            // Add a remove button to the cloned form
+            let removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.classList.add("btn", "btn-danger", "remove-education-btn");
+            removeBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Remove';
+            removeBtn.style.marginTop = "10px";
+    
+            newForm.appendChild(removeBtn);
+            educationFormsContainer.appendChild(newForm);
+            totalForms.value = formIdx + 1;
+    
+            updateRemoveButtons();
         });
     
-        forms.appendChild(newForm);
+        function updateRemoveButtons() {
+            let removeButtons = document.querySelectorAll(".remove-education-btn");
+            removeButtons.forEach(button => button.style.display = "inline");
     
-        document.querySelector('#id_form-TOTAL_FORMS').value = parseInt(formIdx) + 1;
+            // Hide remove button if only one form exists
+            if (removeButtons.length === 1) removeButtons[0].style.display = "none";
+        }
+    
+        document.addEventListener("click", function (event) {
+            if (event.target.closest(".remove-education-btn")) {
+                let educationForms = document.querySelectorAll(".education-form");
+                if (educationForms.length > 1) {
+                    event.target.closest(".education-form").remove();
+                    totalForms.value = document.querySelectorAll(".education-form").length;
+                }
+                updateRemoveButtons();
+            }
+        });
+    
+        updateRemoveButtons();
     });
+    
     
 
 </script>

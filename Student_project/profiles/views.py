@@ -163,7 +163,7 @@ def edit_profile_View(request):
     profile_image_url = user_profile.profile_image.url if user_profile.profile_image else None        
 
     # Create a formset for EducationDetail
-    EducationFormSet = modelformset_factory(EducationDetail, form=EducationDetailForm, extra=1, can_delete=True)
+    EducationFormSet = modelformset_factory(EducationDetail, form=EducationDetailForm, extra=0, can_delete=True)
     
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)

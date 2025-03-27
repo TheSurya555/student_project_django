@@ -205,4 +205,4 @@ class EducationDetailForm(forms.ModelForm):
         if end_year and start_year and end_year < start_year:
             raise forms.ValidationError("End year must be greater than or equal to the start year.")
         
-        return cleaned_data
+        return cleaned_data    
